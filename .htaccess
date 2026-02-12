@@ -1,0 +1,44 @@
+# Taşıt Takip - /medisa/ dizini Apache ayarları
+# ÖNEMLİ: Üst dizin (WordPress vb.) rewrite kurallarını ezer
+
+# Klasör istendiğinde index.html göster
+DirectoryIndex index.html index.php
+
+# Klasör listelemeyi kapat
+Options -Indexes
+
+# Rewrite kuralları
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /medisa/
+
+    # Gerçek dosya veya klasör varsa DOĞRUDAN SUN (üst .htaccess kurallarını ezme)
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # Dosya bulunamazsa index.html'e yönlendir (SPA fallback)
+    RewriteRule ^ index.html [L]
+</IfModule>
+
+# MIME tipleri - JS/CSS/JSON dosyalarının doğru sunulması
+<IfModule mod_mime.c>
+    AddType application/javascript .js
+    AddType text/css .css
+    AddType application/json .json
+    AddType image/svg+xml .svg
+</IfModule>
+
+# PHP dosyalarının çalışması
+<FilesMatch "\.php$">
+    SetHandler application/x-httpd-php
+</FilesMatch>
+
+# CORS izinleri (API çağrıları için)
+<IfModule mod_headers.c>
+    <FilesMatch "\.(php|json)$">
+        Header set Access-Control-Allow-Origin "*"
+        Header set Access-Control-Allow-Methods "GET, POST, OPTIONS"
+        Header set Access-Control-Allow-Headers "Content-Type"
+    </FilesMatch>
+</IfModule>

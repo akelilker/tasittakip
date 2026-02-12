@@ -1,2 +1,1 @@
-# tasittakip
-Taşıt Yönetim Sistemi
+# tasityonetim

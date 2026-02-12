@@ -1,0 +1,2453 @@
+/* =========================================
+   MEDISA KULLANICI MODÜLÜ - ANA TEMA UYUMLU
+   style-core.css değişkenleri kullanılır: --theme-color, --bg, --card-bg, --txt, --muted, --br
+   ========================================= */
+
+/* --- Scrollbar Gizleme (html/body/modal style-core'da; sadece driver-spesifik) --- */
+.driver-scroll-area, .history-list {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.driver-scroll-area::-webkit-scrollbar,
+.history-list::-webkit-scrollbar {
+  display: none;
+}
+
+/* --- DASHBOARD SAYFA YAPISI --- */
+.dashboard-page {
+  min-height: 100vh;
+  padding: 0;
+}
+
+/* Header dikey yükseklik 4px daralt (12px -> 10px) – panel ve giriş aynı */
+.dashboard-page .hero,
+.login-page .hero {
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+}
+
+.driver-dashboard-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Ana başlık (hero + driver-below-hero) sabit üstte – plaka yukarı, container çerçevesi devam */
+.driver-header-fixed {
+  flex-shrink: 0;
+  background: var(--bg);
+  z-index: 5;
+  padding: max(12px, env(safe-area-inset-top)) 4px 4px 4px;
+  box-sizing: border-box;
+  border-left: 1.2px solid var(--border-red-tech);
+  border-right: 1.2px solid var(--border-red-tech);
+}
+
+/* Ortadaki bölüm kaydırılabilir */
+.driver-scroll-area {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-top: 0 !important;
+  box-sizing: border-box;
+}
+
+/* Dashboard: footer sabit altta, her zaman üstte (modallerin üzerinde) */
+.dashboard-page #app-footer {
+  flex-shrink: 0;
+  z-index: 10002 !important;
+}
+
+.driver-content-wrap {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding-bottom: 24px;
+}
+
+.driver-content-wrap::-webkit-scrollbar {
+  display: none;
+}
+
+.hero-title-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-width: 0;
+}
+
+.hero-subtitle {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  margin: 0;
+  letter-spacing: 0.05em;
+}
+
+.driver-hero-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.driver-user-name {
+  font-size: 14px; /* +2 punto */
+  color: var(--muted);
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.driver-user-name-center {
+  flex: 1;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--txt);
+  padding: 0 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* --- Geçmiş Kayıtlar (sol) + Çıkış (sağ) - header dışında --- */
+.driver-below-hero {
+  margin-top: 6px;
+  margin-bottom: 0;
+  padding: 0 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 2px;
+}
+
+.driver-below-hero-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.driver-below-hero-row .driver-btn-history {
+  width: auto;
+  flex: none;
+  margin: 0;
+  margin-left: 4px;
+  padding: 2px;
+  background: transparent !important;
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  -webkit-appearance: none;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.driver-below-hero-row .driver-btn-history:hover,
+.driver-below-hero-row .driver-btn-history:focus,
+.driver-below-hero-row .driver-btn-history:active {
+  background: transparent !important;
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.driver-below-hero-row .driver-btn-logout {
+  flex: none;
+}
+
+/* KULLANICI PANELİ: hero içinde, ana başlığın hemen altında - h1 ile aynı format */
+.hero-title-wrap .hero-panel-subtitle {
+  font-size: 17px;
+  font-weight: 800;
+  margin: 0;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  text-align: center;
+  flex: none;
+  background: linear-gradient(to bottom,
+    #c2d4df 0%,
+    #ffffff 40%,
+    #9aadba 52%,
+    #d6e0e8 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  text-shadow: none;
+  filter: none;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Masaüstü: Kullanıcı Paneli başlığı, driver-below-hero boşluk, çerçeve kalınlığı, logo boyutu */
+@media (min-width: 769px) {
+  .hero-title-wrap .hero-panel-subtitle {
+    font-size: 17px;
+    letter-spacing: 3px;
+  }
+  .dashboard-page .hero {
+    margin-bottom: 0 !important;
+  }
+  .dashboard-page .driver-below-hero {
+    margin-top: 12px !important;
+  }
+  /* Geçmiş ve kapı simgeleri çerçeveden 4px daha içeri (masaüstü: 12px + 8px) */
+  .dashboard-page .driver-below-hero-row .driver-btn-history {
+    margin-left: 12px !important;
+  }
+  .dashboard-page .driver-below-hero-row .driver-btn-logout {
+    margin-right: 8px !important;
+  }
+  .dashboard-page .driver-header-fixed {
+    border-left-width: 1.5px;
+    border-right-width: 1.5px;
+  }
+  .dashboard-page .hero-logo,
+  .login-page .hero-logo {
+    flex: 0 0 72px !important;
+    width: 72px !important;
+    transform: translateY(-4px) !important;
+  }
+  .dashboard-page .hero-logo img,
+  .login-page .hero-logo img {
+    width: 100% !important;
+  }
+  .driver-user-name-center {
+    font-size: 14.5px;
+  }
+}
+
+/* Scroll alanı öğelerinde üst çizgi yok */
+.driver-scroll-area #loading-spinner,
+.driver-scroll-area .driver-vehicles-list,
+.driver-scroll-area .driver-empty-state {
+  border-top: none !important;
+}
+
+.driver-btn-logout {
+  padding: 6px 8px;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: var(--theme-color) !important;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.2s, transform 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.driver-btn-logout .driver-btn-logout-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.driver-btn-logout:hover {
+  color: var(--theme-color) !important;
+  background: transparent !important;
+  border: none !important;
+  transform: scale(1.08);
+}
+
+/* --- YÜKLEME --- */
+.driver-loading {
+  text-align: center;
+  padding: 48px 20px;
+}
+
+.driver-loading p {
+  margin-top: 16px;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.driver-spinner {
+  width: 44px;
+  height: 44px;
+  border: 3px solid var(--br);
+  border-top-color: var(--theme-color);
+  border-radius: 50%;
+  animation: driver-spin 0.8s linear infinite;
+  margin: 0 auto;
+}
+
+@keyframes driver-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* --- TAŞIT KARTLARI --- */
+.driver-vehicles-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-top: 0; /* Plaka header’a 12px mesafede */
+}
+
+.vehicle-card {
+  background: linear-gradient(180deg, #060d16, #08090c);
+  border: none;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2), 0 4px 16px rgba(225, 6, 27, 0.08);
+}
+
+/* İlk kart: Kullanıcı Paneli ile plaka arası 12px */
+.driver-vehicles-list .vehicle-card:first-child {
+  padding-top: 0;
+}
+
+/* Kart Başlığı (Plaka ortalı, çizgi yok) - Güncel KM 12px altında */
+.vehicle-header {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.vehicle-header h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #e5e5e5;
+  margin: 0 0 4px 0;
+}
+
+.vehicle-header p {
+  font-size: 14px;
+  color: var(--muted);
+  margin: 0;
+}
+
+/* Bilgi satırları: Yedek Anahtar, Lastik, UTTS, Muayene */
+.driver-info-rows {
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  background: rgba(15, 20, 24, 0.6);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+.driver-info-row {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+.driver-info-row:last-child {
+  margin-bottom: 0;
+}
+.driver-info-label {
+  color: rgba(255, 255, 255, 0.5);
+  margin-right: 4px;
+}
+.driver-info-value {
+  color: var(--txt);
+}
+
+/* Olay Ekle butonu */
+.driver-olay-ekle-btn {
+  width: 100%;
+  padding: 10px 16px;
+  margin-bottom: 12px;
+  background: transparent !important;
+  border: 1px solid rgba(225, 6, 27, 0.6);
+  border-radius: 8px;
+  color: #e1061b;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+.driver-olay-ekle-btn:hover {
+  background: rgba(225, 6, 27, 0.15) !important;
+}
+
+/* Olay Ekle menü modal */
+.driver-event-menu-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.driver-event-menu-btn {
+  width: 100%;
+  padding: 12px 16px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
+  color: #ccc;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.2s, background 0.2s;
+}
+.driver-event-menu-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+.driver-event-menu-btn-kaza {
+  border-color: #e1061b;
+  color: #e1061b;
+}
+.driver-event-menu-btn-kaza:hover {
+  background: rgba(225, 6, 27, 0.1);
+}
+
+/* Event modalleri: radio butonları */
+.driver-radio-group {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.driver-radio-btn {
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.4);
+  transition: color 0.2s;
+}
+.driver-radio-btn[data-value="var"],
+.driver-radio-btn[data-group="anahtar"].active[data-value="var"],
+.driver-radio-btn[data-group="lastik"].active[data-value="var"] {
+  color: #28a745;
+}
+.driver-radio-btn[data-value="yok"],
+.driver-radio-btn[data-group="anahtar"].active[data-value="yok"],
+.driver-radio-btn[data-group="lastik"].active[data-value="yok"] {
+  color: #e1061b;
+}
+.driver-radio-btn[data-value="evet"],
+.driver-radio-btn[data-group="utts"].active[data-value="evet"] {
+  color: #28a745;
+}
+.driver-radio-btn[data-value="hayir"],
+.driver-radio-btn[data-group="utts"].active[data-value="hayir"] {
+  color: #e1061b;
+}
+.driver-radio-btn.active {
+  text-decoration: underline;
+}
+
+.driver-modal-btn-secondary {
+  padding: 10px 20px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  color: var(--muted);
+  font-size: 14px;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+.driver-modal-btn-secondary:hover {
+  border-color: rgba(255, 255, 255, 0.5);
+  color: var(--txt);
+}
+
+/* Birden fazla araç: plaka satırı + sağda işaret (dropdown), liste plaka altında/ortada */
+.driver-multi-vehicle-wrap {
+  position: relative;
+}
+.driver-plate-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  margin-bottom: 12px;
+  text-align: center;
+  position: relative;
+}
+.driver-current-plaka {
+  font-size: 20px;
+  font-weight: 700;
+  color: #e5e5e5;
+  margin: 0;
+}
+.driver-plate-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  height: auto;
+  padding: 0;
+  margin-left: 0;
+  background: transparent;
+  border: none;
+  color: #e1061b;
+  cursor: pointer;
+  transition: color 0.2s, opacity 0.2s;
+}
+.driver-plate-trigger:hover {
+  color: #ff3d4a;
+  opacity: 0.95;
+}
+.driver-plate-chevron {
+  font-size: 21px;
+  line-height: 1;
+}
+.driver-plate-dropdown {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 100%;
+  margin-top: 6px;
+  min-width: 200px;
+  max-width: 90vw;
+  max-height: 240px;
+  overflow-y: auto;
+  background: var(--card-bg, #0f1418);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  z-index: 100;
+}
+.driver-plate-dropdown-item {
+  padding: 10px 14px;
+  font-size: 14px;
+  color: #e5e5e5;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  transition: background 0.15s;
+}
+.driver-plate-dropdown-item:last-child {
+  border-bottom: none;
+}
+.driver-plate-dropdown-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+.driver-cards-inner .vehicle-card.driver-card-hidden {
+  display: none !important;
+}
+.driver-multi-vehicle-wrap .vehicle-header h3 {
+  display: none;
+}
+.driver-multi-vehicle-wrap .vehicle-header {
+  margin-bottom: 8px;
+}
+
+.vehicle-card .form-group {
+  margin-bottom: 16px;
+}
+
+/* KM input, Bakım/Kaza, Ekstra Not, Kaydet – aynı genişlik (280px), yatayda hizalı */
+.vehicle-card .driver-km-input-wrap {
+  position: relative;
+  width: 100%;
+}
+.vehicle-card .driver-km-fake-placeholder {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  font-size: 16px;
+  font-family: inherit;
+  color: rgba(255, 255, 255, 0.12) !important;
+  line-height: 1;
+  white-space: nowrap;
+}
+.vehicle-card .form-group.driver-km-form,
+.vehicle-card .driver-report-actions,
+.vehicle-card .form-group.driver-ekstra-not-form,
+.vehicle-card .btn-save {
+  max-width: 280px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  width: 100%;
+  box-sizing: border-box;
+}
+.vehicle-card .driver-report-actions {
+  margin-bottom: 12px;
+}
+.vehicle-card .driver-report-btn {
+  max-width: none;
+}
+
+.vehicle-card .form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.vehicle-card .form-group input,
+.vehicle-card .form-group textarea {
+  width: 100%;
+  padding: 8px 16px;
+  background: #0f1418 !important;
+  background-color: #0f1418 !important;
+  border: none !important;
+  box-shadow: inset 0 0 0 0.5px rgba(225, 6, 27, 0.85) !important;
+  border-radius: 8px;
+  color: var(--txt);
+  font-size: 16px;
+  font-family: inherit;
+  transition: box-shadow 0.2s;
+  box-sizing: border-box;
+}
+
+.vehicle-card .form-group input {
+  padding: 5px 16px;
+}
+
+.vehicle-card .form-group input:focus,
+.vehicle-card .form-group textarea:focus {
+  outline: none;
+  box-shadow: inset 0 0 0 0.5px #e1061b !important;
+}
+
+/* KM ve Ekstra Not: gri çerçeve, tıklayınca kırmızı */
+.vehicle-card .form-group input.driver-km-input,
+.vehicle-card .form-group textarea.driver-ekstra-not {
+  box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.38) !important;
+}
+.vehicle-card .form-group input.driver-km-input:focus,
+.vehicle-card .form-group textarea.driver-ekstra-not:focus {
+  box-shadow: inset 0 0 0 0.5px #e1061b !important;
+}
+
+.vehicle-card .form-group textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* Ekstra Not: etiket ve içerik sola yaslı; tek satır, yazı girildikçe uzar, scrollbar gizli */
+.vehicle-card .form-group.driver-ekstra-not-form label {
+  text-align: left;
+}
+.vehicle-card .form-group textarea.driver-ekstra-not {
+  min-height: 1.1em;
+  height: 1.1em;
+  resize: none;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  text-align: left;
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+.vehicle-card .form-group textarea.driver-ekstra-not::placeholder {
+  color: rgba(255, 255, 255, 0.18) !important;
+  opacity: 1;
+}
+.vehicle-card .form-group textarea.driver-ekstra-not::-webkit-scrollbar {
+  display: none;
+}
+.vehicle-card .form-group textarea.driver-ekstra-not:focus::placeholder {
+  color: transparent !important;
+  opacity: 0 !important;
+}
+
+/* YENİ BUTONLAR (Bakım/Kaza Bildir) – alt alta eşit genişlik (KM input ile uyumlu) */
+.driver-report-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
+}
+
+.driver-report-item {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  flex: 1;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.driver-report-btn {
+  width: 100%;
+  min-height: 72px;
+  padding: 10px 12px;
+  background: #0f1418 !important;
+  background-color: #0f1418 !important;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 8px;
+  color: var(--txt);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, color 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  box-sizing: border-box;
+}
+
+.driver-report-btn-icon {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.driver-report-btn-text {
+  font-size: 13px;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.driver-report-btn:hover,
+.driver-report-btn:focus,
+.driver-report-btn:active {
+  border-color: #e1061b;
+  background: rgba(225, 6, 27, 0.08) !important;
+  color: var(--theme-color);
+}
+
+.driver-report-btn-bakim {
+  border-color: rgba(74, 222, 128, 0.7) !important;
+}
+
+.driver-report-btn-kaza {
+  border-color: rgba(225, 6, 27, 0.85) !important;
+}
+
+.driver-report-btn-kaza:hover,
+.driver-report-btn-kaza:focus,
+.driver-report-btn-kaza:active {
+  border-color: #e1061b !important;
+}
+
+.driver-report-item:has(.driver-report-block-kaza.show) .driver-report-btn-kaza {
+  border-color: #e1061b !important;
+  background: rgba(225, 6, 27, 0.12) !important;
+  color: #e1061b !important;
+}
+
+/* Bakım Bildir: aktifken (panel açık veya hover/focus) yeşil */
+.driver-report-btn-bakim:hover,
+.driver-report-btn-bakim:focus,
+.driver-report-btn-bakim:active,
+.driver-report-item:has(.driver-report-block-bakim.show) .driver-report-btn-bakim {
+  border-color: #4ade80 !important;
+  background: rgba(74, 222, 128, 0.12) !important;
+  color: #4ade80 !important;
+}
+
+.driver-report-block {
+  display: none;
+  margin-top: 8px;
+  margin-bottom: 0;
+  padding: 0;
+  background: none;
+  border: none;
+  border-radius: 0;
+  animation: slideDown 0.3s ease;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.driver-report-block.show {
+  display: block;
+}
+
+/* Kaza/Bakım panel açılınca içerik ekranın tamamını kullansın */
+.driver-report-item:has(.driver-report-block.show) {
+  flex-basis: 100%;
+  min-width: 0;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.driver-report-block .form-group {
+  margin-bottom: 12px;
+}
+.driver-report-block .form-group:last-child {
+  margin-bottom: 0;
+}
+
+/* Bakım paneli: etiket ortada, içerik sola yaslı, gri çerçeve varsayılan, aktifken yeşil */
+.driver-report-block-bakim .form-group label {
+  text-align: center;
+  display: block;
+  margin-bottom: 2px;
+}
+.driver-report-block-bakim .form-group input.driver-bakim-input,
+.driver-report-block-bakim .form-group textarea.driver-bakim-textarea {
+  box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.25) !important;
+  text-align: left;
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+}
+
+/* Kaza paneli: etiket ortada, içerik sola yaslı, gri çerçeve varsayılan, aktifken kırmızı */
+.driver-report-block-kaza .form-group label {
+  text-align: center;
+  display: block;
+  margin-bottom: 2px;
+}
+.driver-report-block-kaza .form-group input.driver-kaza-input,
+.driver-report-block-kaza .form-group textarea.driver-kaza-textarea {
+  box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.25) !important;
+  text-align: left;
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+}
+
+/* Bakım/Kaza Açıklama: varsayılan 1 satır, içerik uzadıkça otomatik büyür, kesilme yok */
+.driver-report-block .form-group textarea.driver-report-textarea-auto {
+  min-height: 2.2em;
+  height: 2.2em;
+  resize: none;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.driver-report-block .form-group textarea.driver-report-textarea-auto::-webkit-scrollbar {
+  display: none;
+}
+
+/* Kaza bloku: kaporta SVG container – taşma önleme, mobil uyumlu */
+.driver-kaporta-container {
+  max-height: 200px;
+  overflow: hidden;
+  margin-top: 8px;
+  margin-bottom: 4px;
+}
+.driver-kaporta-container svg {
+  max-width: 100%;
+  display: block;
+}
+.driver-report-block-kaza .driver-kaporta-label {
+  text-align: center;
+  display: block;
+  margin-bottom: 2px;
+  font-size: 12px;
+  color: var(--muted, #888);
+}
+@media (max-width: 480px) {
+  .driver-kaporta-container {
+    max-height: 180px;
+  }
+  .driver-kaporta-container .boya-legend {
+    font-size: 10px;
+  }
+}
+
+/* Bildir Butonu: çerçevesiz, arka plansız; ince yeşil metin + çok ince yeşil çerçeve */
+.btn-save {
+  display: block;
+  width: 100%;
+  padding: 8px 14px;
+  background: transparent;
+  color: rgba(74, 222, 128, 0.85);
+  border: 0.5px solid rgba(74, 222, 128, 0.5);
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 300;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.2s;
+  margin-top: 8px;
+  box-shadow: none;
+}
+
+.btn-save:hover {
+  background: rgba(74, 222, 128, 0.12);
+  color: rgba(74, 222, 128, 0.95);
+  border-color: rgba(74, 222, 128, 0.7);
+  transform: translateY(-1px);
+  box-shadow: none;
+}
+
+.btn-save:active {
+  transform: translateY(0);
+}
+
+.btn-save:disabled {
+  background: transparent;
+  color: var(--muted);
+  border-color: var(--muted);
+  cursor: not-allowed;
+  transform: none;
+}
+
+.status-message {
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.status-message.success {
+  background: rgba(74, 222, 128, 0.12);
+  border-left: 3px solid var(--green);
+  color: var(--green);
+}
+
+.status-message.error {
+  background: rgba(239, 68, 68, 0.12);
+  border-left: 3px solid var(--red);
+  color: var(--red);
+}
+
+.status-message.warning {
+  background: rgba(255, 193, 7, 0.12);
+  border-left: 3px solid #ffc107;
+  color: #ffc107;
+}
+
+/* --- BOŞ DURUM --- */
+.driver-empty-state {
+  text-align: center;
+  padding: 48px 24px;
+}
+
+.driver-empty-icon {
+  font-size: 56px;
+  margin-bottom: 16px;
+  line-height: 1;
+}
+
+.driver-empty-state h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--txt);
+  margin: 0 0 8px 0;
+}
+
+.driver-empty-state p {
+  font-size: 14px;
+  color: var(--muted);
+  margin: 0;
+}
+
+/* --- GEÇMİŞ KAYITLAR BAR --- */
+.driver-history-bar {
+  margin-top: 16px;
+  margin-bottom: 12px;
+}
+
+.driver-btn-history {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 2px;
+  background: transparent !important;
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  -webkit-appearance: none;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.driver-btn-history:hover,
+.driver-btn-history:focus,
+.driver-btn-history:active {
+  background: transparent !important;
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  opacity: 0.85;
+}
+.driver-btn-history .driver-btn-history-icon {
+  width: 22px;
+  height: 22px;
+  color: var(--txt);
+  opacity: 0.9;
+}
+.driver-btn-history:hover .driver-btn-history-icon {
+  opacity: 1;
+}
+
+/* =========================================
+   MODAL (Standart)
+   ========================================= */
+.driver-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.driver-modal.show {
+  display: flex;
+}
+
+.driver-modal-content {
+  background: var(--modal-bg, var(--bg));
+  border-radius: var(--modal-radius, 10px);
+  width: 100%;
+  max-width: min(500px, calc(100vw - 40px));
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--br);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.driver-modal .modal-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--br);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.driver-modal .modal-header h2 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--txt);
+  margin: 0;
+}
+
+.driver-modal .modal-close {
+  width: 36px;
+  height: 36px;
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  font-size: 24px;
+  cursor: pointer;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s, background 0.2s;
+}
+
+.driver-modal .modal-close:hover {
+  color: var(--theme-color);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.driver-modal .modal-body {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+  padding: 20px;
+}
+
+/* #history-modal, #edit-request-modal: Taşıtlar modalı ile aynı ayarlar */
+#history-modal.driver-modal,
+#edit-request-modal.driver-modal {
+  background: transparent !important;
+  padding: 0 !important;
+  z-index: 9999;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  pointer-events: none;
+  overflow: hidden;
+  touch-action: pan-y;
+}
+#history-modal.driver-modal.show,
+#edit-request-modal.driver-modal.show {
+  display: flex !important;
+  pointer-events: auto !important;
+}
+#edit-request-modal.driver-modal.show {
+  z-index: 10001 !important;
+}
+
+#history-modal.driver-modal::before,
+#edit-request-modal.driver-modal::before {
+  content: '';
+  position: absolute;
+  top: max(12px, env(safe-area-inset-top));
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 500px;
+  height: calc(100vh - max(12px, env(safe-area-inset-top)) - 54px);
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(5px);
+  z-index: -1;
+  pointer-events: none;
+}
+
+#history-modal .driver-modal-content,
+#history-modal .modal-container,
+#edit-request-modal .driver-modal-content,
+#edit-request-modal .modal-container {
+  background: var(--modal-bg) !important;
+  border: 0.5px solid rgba(255, 255, 255, 0.35) !important;
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.9) !important;
+  border-radius: var(--modal-radius) !important;
+  width: 100%;
+  max-width: 500px;
+  margin: max(12px, env(safe-area-inset-top)) auto 54px auto;
+  height: calc(100vh - max(12px, env(safe-area-inset-top)) - 54px);
+  max-height: calc(100vh - max(12px, env(safe-area-inset-top)) - 54px);
+  overflow: hidden;
+  overflow-x: hidden; /* Yatay kayma engelle */
+  display: flex;
+  flex-direction: column;
+  touch-action: pan-y;
+  overscroll-behavior: none;
+  overscroll-behavior-x: none;
+}
+
+#history-modal .modal-header,
+#edit-request-modal .modal-header {
+  background: linear-gradient(180deg, rgba(255, 0, 0, 0.30) 0%, rgba(255, 0, 0, 0.22) 25%, rgba(255, 0, 0, 0.16) 50%, rgba(255, 0, 0, 0.10) 75%, transparent 100%) !important;
+  padding: 2px 20px !important;
+  height: 60px !important;
+  border-bottom: none !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  position: relative;
+}
+
+#history-modal .modal-header h2,
+#edit-request-modal .modal-header h2 {
+  font-size: 17px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.05em !important;
+  color: #f0f0f0 !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+  margin: 0;
+  text-transform: uppercase;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+#history-modal .modal-close,
+#edit-request-modal .modal-close {
+  background: none !important;
+  border: none !important;
+  color: #aaa !important;
+  position: absolute !important;
+  right: 15px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  font-size: 20px !important;
+  padding: 8px !important;
+  z-index: 20;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+#history-modal .modal-close:hover,
+#edit-request-modal .modal-close:hover {
+  color: #fff !important;
+  background: transparent !important;
+}
+
+#history-modal .modal-body,
+#edit-request-modal .modal-body {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 12px !important;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+#history-modal .modal-body {
+  padding-top: 2px !important;
+}
+#history-modal .modal-body::-webkit-scrollbar,
+#edit-request-modal .modal-body::-webkit-scrollbar {
+  display: none;
+}
+
+.driver-current-km {
+  margin: 0 0 16px 0;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.driver-current-km strong {
+  color: var(--txt);
+}
+
+.driver-modal .form-group {
+  margin-bottom: 16px;
+}
+
+.driver-modal .form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.driver-modal .form-group input,
+.driver-modal .form-group textarea {
+  width: 100%;
+  padding: 8px 16px;
+  background: #0f1418 !important;
+  background-color: #0f1418 !important;
+  border: none !important;
+  box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.25) !important;
+  border-radius: 8px;
+  color: var(--txt);
+  font-size: 16px;
+  font-family: inherit;
+  transition: box-shadow 0.2s;
+  box-sizing: border-box;
+}
+
+.driver-modal .form-group input:focus,
+.driver-modal .form-group textarea:focus {
+  outline: none;
+  box-shadow: inset 0 0 0 0.5px #e1061b !important;
+}
+
+.driver-modal .form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* Düzeltme Talebi: KM input spinner gizli */
+.driver-modal .form-group input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+.driver-modal .form-group input[type="number"]::-webkit-inner-spin-button,
+.driver-modal .form-group input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.btn-submit {
+  width: 100%;
+  padding: 14px;
+  background: transparent;
+  color: var(--green);
+  border: 0.5px solid rgba(74, 222, 128, 0.5);
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+  margin-top: 8px;
+}
+
+.btn-submit:hover {
+  background: rgba(74, 222, 128, 0.12);
+  border-color: rgba(74, 222, 128, 0.7);
+  color: rgba(74, 222, 128, 0.95);
+}
+
+/* Geçmiş kayıtlar modal içi */
+.history-filters {
+  margin-bottom: 16px;
+}
+
+.history-vehicle-dropdown-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+}
+
+.history-filter-label {
+  flex-shrink: 0;
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.4;
+  vertical-align: middle;
+}
+
+.history-vehicle-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 0;
+  background: transparent;
+  border: none;
+  color: var(--txt);
+  font-size: 14px;
+  line-height: 1.4;
+  cursor: pointer;
+}
+
+.history-vehicle-trigger-text {
+  flex-shrink: 0;
+}
+
+.history-vehicle-chevron {
+  flex-shrink: 0;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1;
+}
+
+.history-vehicle-trigger.history-vehicle-trigger-open .history-vehicle-chevron {
+  color: var(--txt);
+}
+
+/* Plaka listesi: tema uyumlu koyu arka plan */
+.history-vehicle-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 6px;
+  min-width: 160px;
+  max-height: 200px;
+  overflow-y: auto;
+  background: #1e242a;
+  color: var(--txt);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+  z-index: 100;
+  scrollbar-width: thin;
+}
+
+.history-vehicle-dropdown::-webkit-scrollbar {
+  width: 6px;
+}
+.history-vehicle-dropdown::-webkit-scrollbar-track {
+  background: #151a20;
+}
+.history-vehicle-dropdown::-webkit-scrollbar-thumb {
+  background: #444;
+  border-radius: 3px;
+}
+
+.history-vehicle-option {
+  padding: 10px 14px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.15s;
+  color: var(--txt);
+}
+
+.history-vehicle-option:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.history-vehicle-option:first-child {
+  border-radius: 8px 8px 0 0;
+}
+.history-vehicle-option:last-child {
+  border-radius: 0 0 8px 8px;
+}
+
+.history-empty {
+  color: var(--muted);
+  text-align: center;
+  padding: 24px;
+  font-size: 14px;
+}
+
+.history-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Kayıt kartı: tema uyumlu koyu gri */
+.history-card {
+  background: rgba(18, 22, 28, 0.98);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 3px 16px 3px 16px;
+}
+
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.history-period {
+  font-weight: 700;
+  color: var(--theme-color);
+  font-size: 15px;
+}
+
+.history-vehicle {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.history-details p {
+  font-size: 14px;
+  color: var(--muted);
+  margin: 0;
+  padding: 0;
+  line-height: 1.3;
+}
+
+.history-details strong {
+  color: var(--txt);
+}
+
+.btn-edit-request {
+  margin-top: 8px;
+  width: 100%;
+  padding: 10px 14px;
+  background: transparent;
+  border: 1px solid var(--br);
+  border-radius: 8px;
+  color: var(--txt);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.btn-edit-request:hover {
+  background: rgba(74, 222, 128, 0.12);
+  border-color: var(--green);
+  color: var(--green);
+}
+
+/* =========================================
+   LOGIN SAYFASI (Değişiklik yok)
+   ========================================= */
+.login-page {
+  overflow-x: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  width: 100% !important;
+  max-width: 100vw !important;
+  box-sizing: border-box !important;
+  direction: ltr !important;
+}
+
+.login-page .hero {
+  margin-bottom: 0 !important;
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+}
+
+.login-page .app-container {
+  min-height: 100vh !important;
+  min-height: 100dvh !important;
+  display: flex !important;
+  flex-direction: column !important;
+  width: 100% !important;
+  max-width: 500px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  box-sizing: border-box !important;
+  min-width: 0 !important;
+  overflow-x: hidden !important;
+}
+
+.login-page .content-wrap {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  min-width: 0 !important;
+  padding-top: 0 !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+
+.login-page .content-wrap::-webkit-scrollbar {
+  display: none !important;
+}
+
+.login-page #app-footer.login-footer {
+  flex-shrink: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  min-height: 56px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: #080d16 !important;
+  border-top: 0.7px solid rgba(128, 128, 128, 0.5) !important;
+  border-left: 0.5px solid rgba(255, 255, 255, 0.20) !important;
+  border-right: 0.5px solid rgba(255, 255, 255, 0.20) !important;
+  box-shadow: 0 -10px 20px rgba(225, 6, 27, 0.16) !important;
+  box-sizing: border-box !important;
+}
+
+.login-page #app-footer.login-footer .footer-content {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  max-width: 500px !important;
+  padding: 8px 12px !important;
+  padding-bottom: max(12px, env(safe-area-inset-bottom, 0)) !important;
+  box-sizing: border-box !important;
+  font-size: 13px !important;
+  color: #bbb !important;
+  line-height: 1.4 !important;
+}
+
+.login-page #app-footer.login-footer .version {
+  color: #ccc !important;
+  font-weight: 500 !important;
+  transition: opacity 1s ease !important;
+}
+
+.login-page #app-footer.login-footer .status.status-ready {
+  color: #4ade80 !important;
+  font-weight: 600 !important;
+  transition: opacity 1s ease !important;
+}
+
+.login-page #app-footer.login-footer .brand img {
+  height: 12.5px !important;
+  width: auto !important;
+  opacity: 0.4 !important;
+  filter: drop-shadow(0 0 6px rgba(225, 6, 27, 0.4)) !important;
+  transform: scaleX(1.1) !important;
+  transition: opacity 1s ease !important;
+}
+
+.login-page #app-footer.login-footer.dimmed .version,
+.login-page #app-footer.login-footer.dimmed .version#version-display {
+  opacity: 1 !important;
+}
+
+.login-page #app-footer.login-footer.dimmed .status,
+.login-page #app-footer.login-footer.dimmed .status.status-ready,
+.login-page #app-footer.login-footer.dimmed .status.status-error {
+  opacity: 1 !important;
+}
+
+.login-page #app-footer.login-footer.dimmed .brand img {
+  opacity: 0.3 !important;
+}
+
+.login-page #app-footer.login-footer.dimmed.delayed .version,
+.login-page #app-footer.login-footer.dimmed.delayed .version#version-display {
+  opacity: 0.3 !important;
+}
+
+.login-page #app-footer.login-footer.dimmed.delayed .status,
+.login-page #app-footer.login-footer.dimmed.delayed .status.status-ready,
+.login-page #app-footer.login-footer.dimmed.delayed .status.status-error {
+  opacity: 0.3 !important;
+}
+
+.login-page #app-footer.login-footer.dimmed.delayed .brand img {
+  opacity: 0.7 !important;
+}
+
+/* Yönetim Sistemi linki - footer üstünde, sola yaslı (giriş + panel) */
+.management-system-link {
+  position: fixed;
+  bottom: calc(var(--app-footer-height, 44px) + 4px - 6px);
+  left: 50%;
+  transform: translateX(calc(-50% - 3px));
+  max-width: 500px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 6px 16px;
+  box-sizing: border-box;
+  color: rgba(225, 6, 27, 0.55);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  z-index: 9999;
+  transition: color 0.2s;
+}
+/* Masaüstü: Login başlık anasayfa ile aynı hizada (başlık aşağı kaymasın) */
+@media (min-width: 769px) {
+  .login-page .driver-header-fixed {
+    padding-top: 6px !important;
+  }
+  .login-page .hero {
+    padding-top: 8px !important;
+    padding-bottom: 10px !important;
+  }
+}
+
+@media (min-width: 769px) {
+  .management-system-link {
+    font-size: 13px;
+    transform: translateX(calc(-50% - 8px));
+  }
+}
+.management-system-link-inner {
+  display: inline-flex;
+  align-items: center;
+  transition: color 0.2s;
+}
+.management-system-link-inner:hover {
+  color: #e1061b;
+}
+.management-system-link-arrow {
+  flex-shrink: 0;
+  margin-right: 6px;
+}
+.management-system-link-text {
+  flex-shrink: 0;
+}
+
+@media (min-width: 769px) {
+  .login-page #app-footer.login-footer {
+    min-height: 0 !important;
+  }
+  .login-page #app-footer.login-footer .footer-content {
+    padding: 8px 12px !important;
+    padding-bottom: max(12px, env(safe-area-inset-bottom, 0)) !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .login-page {
+    max-width: 100% !important;
+    padding-top: max(12px, env(safe-area-inset-top)) !important;
+    padding-left: env(safe-area-inset-left, 0) !important;
+    padding-right: env(safe-area-inset-right, 0) !important;
+  }
+  .login-page .app-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+  /* Giriş formu yatayda ortalı */
+  .login-page .content-wrap.driver-content-wrap.driver-scroll-area {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+  }
+  .login-page .login-container {
+    max-width: min(400px, 100%) !important;
+    width: 100% !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    box-sizing: border-box !important;
+  }
+  .login-form .form-group input {
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  .login-page #app-footer.login-footer {
+    padding-bottom: max(20px, env(safe-area-inset-bottom, 0)) !important;
+    box-shadow: 0 -9px 22px rgba(225, 6, 27, 0.35) !important;
+    border-top: 1px solid rgba(128, 128, 128, 0.5) !important;
+    border-left: none !important;
+    border-right: none !important;
+  }
+  .login-page #app-footer.login-footer .footer-content {
+    padding-bottom: max(20px, calc(env(safe-area-inset-bottom, 0) + 12px)) !important;
+  }
+}
+
+.login-container {
+  width: 100%;
+  max-width: 400px;
+  min-width: 0;
+  margin-top: 0;
+  margin-left: auto;
+  margin-right: auto;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 40px 30px;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+.login-card-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--txt);
+  text-align: center;
+  margin: 0 0 24px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.login-form .form-group {
+  margin-bottom: 20px;
+  min-width: 0;
+}
+
+.login-form .form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.login-form .form-group input {
+  width: 100%;
+  max-width: 100%;
+  padding: 8px 16px;
+  background: #0f1418 !important;
+  background-color: #0f1418 !important;
+  border: none !important;
+  box-shadow: inset 0 0 0 0.5px rgba(225, 6, 27, 0.85) !important;
+  border-radius: 8px;
+  color: var(--txt);
+  font-size: 16px;
+  transition: box-shadow 0.2s;
+  box-sizing: border-box;
+}
+
+.login-form {
+  min-width: 0;
+  width: 100%;
+}
+
+.login-form .form-group input:-webkit-autofill,
+.login-form .form-group input:-webkit-autofill:hover,
+.login-form .form-group input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 30px #0f1418 inset, inset 0 0 0 0.5px rgba(225, 6, 27, 0.85) !important;
+  box-shadow: inset 0 0 0 0.5px rgba(225, 6, 27, 0.85) !important;
+  -webkit-text-fill-color: var(--txt) !important;
+  background: #0f1418 !important;
+  background-color: #0f1418 !important;
+  border: none !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* İlk yükleme / boş / invalid durumda da ince kırmızı çerçeve (beyaz fallback önleme) */
+.login-form .form-group input:invalid,
+.login-form .form-group input:placeholder-shown {
+  box-shadow: inset 0 0 0 0.5px rgba(225, 6, 27, 0.85) !important;
+}
+
+.login-form .form-group input:focus {
+  outline: none;
+  box-shadow: inset 0 0 0 0.5px #e1061b !important;
+}
+
+.login-form .form-group input::placeholder {
+  color: rgba(255, 255, 255, 0.35) !important;
+  opacity: 1;
+}
+
+.form-group-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.form-group-checkbox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.form-group-checkbox label {
+  font-size: 14px;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+/* Beni Hatırla: gri arka plan + kırmızı çerçeve (masaüstü + mobil) */
+.login-page .form-group-checkbox input[type="checkbox"] {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  background: #0f1418 !important;
+  background-color: #0f1418 !important;
+  border: none !important;
+  box-shadow: inset 0 0 0 0.5px rgba(225, 6, 27, 0.6) !important;
+  border-radius: 4px;
+}
+.login-page .form-group-checkbox input[type="checkbox"]:checked {
+  background: #0f1418 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23e1061b' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E") center/55% no-repeat !important;
+  box-shadow: inset 0 0 0 0.5px #e1061b !important;
+}
+
+.error-message {
+  background: rgba(239, 68, 68, 0.12);
+  border-left: 3px solid var(--red);
+  padding: 12px;
+  border-radius: 4px;
+  color: var(--red);
+  font-size: 14px;
+  margin-bottom: 20px;
+  display: none;
+}
+
+.error-message.show {
+  display: block;
+}
+
+.btn-login {
+  width: 100%;
+  padding: 12px;
+  background: transparent;
+  color: var(--green);
+  border: 1px solid #1a5d35; /* GÜNCELLENDİ: Solid koyu yeşil */
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 300;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-login:hover {
+  background: rgba(74, 222, 128, 0.12);
+  color: var(--green);
+  border-color: rgba(74, 222, 128, 0.7);
+  transform: translateY(-1px);
+}
+
+.btn-login:disabled {
+  background: transparent;
+  color: #666;
+  border-color: #555;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* =========================================
+   RESPONSIVE
+   ========================================= */
+@media (max-width: 480px) {
+  .hero-subtitle {
+    font-size: 15px;
+    letter-spacing: 0.05em;
+  }
+  .hero-title-wrap .hero-panel-subtitle {
+    font-size: 19px; /* h1 (23px) - 2pt */
+  }
+  .driver-user-name {
+    display: none;
+  }
+  .vehicle-header h3 {
+    font-size: 18px;
+  }
+}
+/* === MOBİL İYİLEŞTİRMELER 2026.01.31 === */
+
+/* Güncel KM etiketi sola yaslı, harfler arası 2px boşluk */
+.vehicle-card .form-group.driver-km-form label {
+  text-align: left !important;
+  letter-spacing: 2px;
+}
+
+/* Geçmiş simgesi büyüt */
+.driver-btn-history .driver-btn-history-icon {
+  width: 24px !important;
+  height: 24px !important;
+}
+
+/* Çıkış butonu büyüt */
+.driver-btn-logout {
+  font-size: 14px !important;
+}
+
+/* KM input yükseklik (4px daraltıldı), placeholder ve metin sola yaslı, sağdaki spin simgeleri gizli */
+.vehicle-card .form-group input.driver-km-input,
+.vehicle-card .form-group input.driver-km-input:invalid,
+.vehicle-card .form-group input.driver-km-input:placeholder-shown {
+  padding: 5px 16px !important;
+  text-align: left !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.7) !important;
+  box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.38) !important;
+}
+.vehicle-card .form-group input.driver-km-input:focus {
+  box-shadow: inset 0 0 0 0.5px #e1061b !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.7) !important;
+}
+.vehicle-card .form-group input.driver-km-input::placeholder,
+.vehicle-card .form-group input.driver-km-input::-webkit-input-placeholder,
+.vehicle-card .form-group input.driver-km-input::-moz-placeholder {
+  color: rgba(255, 255, 255, 0.15) !important;
+  opacity: 1;
+}
+
+.vehicle-card .form-group input.driver-km-input:-webkit-autofill,
+.vehicle-card .form-group input.driver-km-input:-webkit-autofill:hover,
+.vehicle-card .form-group input.driver-km-input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 30px #0f1418 inset !important;
+  box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.38) !important;
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.7) !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Bakım/Kaza butonları yükseklik (4px daraltıldı) */
+.driver-report-btn {
+  padding: 6px 12px !important;
+}
+
+/* Bakım paneli input/textarea: odakta yeşil çerçeve, metin beyaz */
+.vehicle-card .form-group input.driver-bakim-input:focus,
+.vehicle-card .form-group textarea.driver-bakim-textarea:focus {
+  box-shadow: inset 0 0 0 0.5px #4ade80 !important;
+  color: var(--txt) !important;
+  -webkit-text-fill-color: var(--txt) !important;
+  outline: none !important;
+}
+.vehicle-card .form-group input.driver-bakim-input:focus::placeholder,
+.vehicle-card .form-group textarea.driver-bakim-textarea:focus::placeholder {
+  color: transparent !important;
+  opacity: 0 !important;
+}
+
+/* Kaza paneli input/textarea: odakta kırmızı çerçeve, metin beyaz */
+.vehicle-card .form-group input.driver-kaza-input:focus,
+.vehicle-card .form-group textarea.driver-kaza-textarea:focus {
+  box-shadow: inset 0 0 0 0.5px #e1061b !important;
+  color: var(--txt) !important;
+  -webkit-text-fill-color: var(--txt) !important;
+  outline: none !important;
+}
+.vehicle-card .form-group input.driver-kaza-input:focus::placeholder,
+.vehicle-card .form-group textarea.driver-kaza-textarea:focus::placeholder {
+  color: transparent !important;
+  opacity: 0 !important;
+}
+
+/* #history-modal, #edit-request-modal mobil: Taşıtlar modalı ile uyumlu */
+@media (max-width: 640px) {
+  #history-modal.driver-modal,
+  #edit-request-modal.driver-modal {
+    padding: 0 !important;
+    align-items: stretch !important;
+    justify-content: center !important;
+    overflow: hidden !important;
+    overscroll-behavior: none !important;
+  }
+  #history-modal.driver-modal::before,
+  #edit-request-modal.driver-modal::before {
+    max-width: 100% !important;
+    width: 100%;
+    height: calc(100vh - 98px);
+    top: 0;
+    left: 0;
+    transform: none;
+  }
+  #history-modal .modal-header h2,
+  #edit-request-modal .modal-header h2 {
+    font-size: 21px !important;
+    letter-spacing: 0.2em !important;
+  }
+
+  /* 6. Mobil modal – style-core.css ile uyumlu (footer + 8px boşluk) */
+  #history-modal .driver-modal-content,
+  #history-modal .modal-container,
+  #edit-request-modal .driver-modal-content,
+  #edit-request-modal .modal-container {
+    max-width: 100% !important;
+    width: 100% !important;
+    margin-top: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    margin-bottom: calc(var(--modal-margin-bottom-mobile, 52px) + env(safe-area-inset-bottom, 0)) !important;
+    height: calc(100vh - var(--modal-margin-bottom-mobile, 52px) - env(safe-area-inset-bottom, 0)) !important;
+    height: calc(100dvh - var(--modal-margin-bottom-mobile, 52px) - env(safe-area-inset-bottom, 0)) !important;
+    max-height: calc(100vh - var(--modal-margin-bottom-mobile, 52px) - env(safe-area-inset-bottom, 0)) !important;
+    max-height: calc(100dvh - var(--modal-margin-bottom-mobile, 52px) - env(safe-area-inset-bottom, 0)) !important;
+    background: #080d16 !important;
+    border-radius: 0 !important;
+    border: 0.7px solid rgba(255, 255, 255, 0.35) !important;
+    border-top: none !important;
+    padding-top: env(safe-area-inset-top, 0) !important;
+    overflow: hidden !important;
+    overflow-x: hidden !important;
+    touch-action: pan-y !important;
+    overscroll-behavior: none !important;
+    overscroll-behavior-x: none !important;
+  }
+
+  /* Modal header: safe-area için üst padding */
+  #history-modal .modal-header,
+  #edit-request-modal .modal-header {
+    padding-top: calc(2px + env(safe-area-inset-top, 0)) !important;
+  }
+
+  /* modal-body: sadece dikey scroll, yatay kayma yok */
+  #history-modal .modal-body,
+  #edit-request-modal .modal-body {
+    overflow-x: hidden !important;
+    touch-action: pan-y !important;
+    overscroll-behavior: none !important;
+    overscroll-behavior-x: none !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Mobil arka plan tüm sayfalarla aynı (#080d16) */
+  .dashboard-page .driver-header-fixed,
+  .dashboard-page .driver-scroll-area {
+    background: #080d16 !important;
+  }
+  .dashboard-page .vehicle-card {
+    background: #080d16 !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25) !important;
+  }
+  .dashboard-page #app-footer {
+    background: #080d16 !important;
+    border-top: 1px solid rgba(128, 128, 128, 0.5) !important;
+    box-shadow: 0 -9px 22px rgba(225, 6, 27, 0.35) !important;
+  }
+
+  /* Ana başlık çerçevesi – mobilde border + kırmızı ışıklar (login ile uyumlu) */
+  .dashboard-page .driver-header-fixed {
+    border-left-width: 1.2px !important;
+    border-right-width: 1.2px !important;
+  }
+  .dashboard-page .hero {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45), 0 4px 24px rgba(225, 6, 27, 0.18) !important;
+  }
+
+  /* Çerçevelere yan boşluk – elemanlar çerçeveye yakın */
+  .dashboard-page .driver-scroll-area {
+    padding-left: 4px !important;
+    padding-right: 4px !important;
+  }
+
+  /* Elemanlar yatay genişlik artır – çerçeveye yaklaş */
+  .dashboard-page .vehicle-card {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+  .dashboard-page .vehicle-card .form-group.driver-km-form,
+  .dashboard-page .vehicle-card .driver-report-actions,
+  .dashboard-page .vehicle-card .form-group.driver-ekstra-not-form,
+  .dashboard-page .vehicle-card .btn-save,
+  .dashboard-page .driver-report-item {
+    max-width: 100% !important;
+  }
+
+  /* Geçmiş simgesi 2px aşağı */
+  .dashboard-page .driver-btn-history .driver-btn-history-icon {
+    transform: translateY(2px) !important;
+  }
+
+  /* Çıkış butonu: kapı simgesi */
+  .dashboard-page .driver-btn-logout .driver-btn-logout-icon {
+    width: 28px !important;
+    height: 28px !important;
+  }
+
+  /* Vehicle card içi: elementler arası +3px (12→15) */
+  .dashboard-page .vehicle-card .form-group {
+    margin-bottom: 15px !important;
+  }
+  .dashboard-page .vehicle-card .driver-report-actions {
+    margin-bottom: 15px !important;
+    gap: 15px !important;
+  }
+  .dashboard-page .driver-report-block {
+    margin-top: 0 !important;
+  }
+  .dashboard-page .vehicle-card .btn-save {
+    margin-top: calc(15px + 2em) !important;
+  }
+
+  /* Gri çerçevelere parlaklık (sadece varsayılan, focus kırmızı/yeşil kalır) */
+  .dashboard-page .vehicle-card .form-group input.driver-km-input:not(:focus),
+  .dashboard-page .vehicle-card .form-group input.driver-km-input:invalid:not(:focus),
+  .dashboard-page .vehicle-card .form-group textarea.driver-ekstra-not:not(:focus) {
+    box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.48) !important;
+  }
+  .dashboard-page .vehicle-card .form-group input.driver-km-input,
+  .dashboard-page .vehicle-card .form-group input.driver-km-input:focus {
+    color: rgba(255, 255, 255, 0.7) !important;
+    -webkit-text-fill-color: rgba(255, 255, 255, 0.7) !important;
+  }
+  .dashboard-page .vehicle-card .form-group input.driver-km-input::placeholder,
+  .dashboard-page .vehicle-card .form-group input.driver-km-input::-webkit-input-placeholder,
+  .dashboard-page .vehicle-card .form-group input.driver-km-input::-moz-placeholder {
+    color: rgba(255, 255, 255, 0.12) !important;
+    opacity: 1;
+  }
+  .dashboard-page .driver-report-btn {
+    border-color: rgba(255, 255, 255, 0.35) !important;
+  }
+  .dashboard-page .driver-report-btn-bakim {
+    border-color: rgba(74, 222, 128, 0.7) !important;
+  }
+  .dashboard-page .driver-report-btn-kaza {
+    border-color: rgba(225, 6, 27, 0.85) !important;
+  }
+  .dashboard-page .driver-report-block .form-group input:not(:focus),
+  .dashboard-page .driver-report-block .form-group textarea:not(:focus) {
+    box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.35) !important;
+  }
+
+  /* Not input: placeholder yatay+dikey ortalı, içerik sola (aşağı yukarı kayma önleme) */
+  .dashboard-page .vehicle-card .form-group textarea.driver-ekstra-not {
+    line-height: 1.4 !important;
+    padding: 0.35em 16px !important;
+    box-sizing: border-box !important;
+  }
+  .dashboard-page .vehicle-card .form-group textarea.driver-ekstra-not::placeholder {
+    font-size: 15px !important;
+    color: rgba(255, 255, 255, 0.14) !important;
+    opacity: 1;
+  }
+  .dashboard-page .vehicle-card .form-group textarea.driver-ekstra-not:placeholder-shown,
+  .dashboard-page .vehicle-card .form-group textarea.driver-ekstra-not:not(:placeholder-shown) {
+    text-align: left !important;
+  }
+
+  /* 1. İsim/şifre ekranı – tüm metinler +1pt */
+  .login-form .form-group label {
+    font-size: 17px !important;
+  }
+  .form-group-checkbox label {
+    font-size: 17px !important;
+  }
+  .login-form .form-group input {
+    font-size: 17px !important;
+  }
+  .login-page .error-message {
+    font-size: 15px !important;
+  }
+  .login-page .btn-login {
+    font-size: 16px !important;
+  }
+  .login-page .login-card-title,
+  .login-page .hero h1 {
+    font-size: 24px !important;
+  }
+  .login-page .hero-panel-subtitle {
+    font-size: 20px !important;
+  }
+  .login-page #app-footer.login-footer .footer-content {
+    font-size: 14px !important;
+  }
+
+  /* 2. Kullanıcı paneli – tüm metinler +1pt */
+  .dashboard-page .vehicle-card .form-group label {
+    font-size: 16px !important;
+  }
+  .dashboard-page .vehicle-card .form-group input,
+  .dashboard-page .vehicle-card .form-group textarea {
+    font-size: 17px !important;
+  }
+  .dashboard-page .vehicle-header h3 {
+    font-size: 20px !important;
+  }
+  .dashboard-page .vehicle-header p {
+    font-size: 15px !important;
+  }
+  .dashboard-page .driver-report-btn {
+    font-size: 15px !important;
+  }
+  .dashboard-page .vehicle-card .btn-save {
+    font-size: 16px !important;
+  }
+  .dashboard-page .hero-title-wrap .hero-panel-subtitle {
+    font-size: 20px !important;
+  }
+  .dashboard-page .hero h1 {
+    font-size: 24px !important;
+  }
+  .dashboard-page .driver-report-block .form-group label,
+  .dashboard-page .driver-report-block .form-group input,
+  .dashboard-page .driver-report-block .form-group textarea {
+    font-size: 15px !important;
+  }
+  .dashboard-page .history-period {
+    font-size: 16px !important;
+  }
+  .dashboard-page .history-vehicle {
+    font-size: 15px !important;
+  }
+  .dashboard-page .history-details p {
+    font-size: 15px !important;
+  }
+  .dashboard-page .btn-edit-request {
+    font-size: 16px !important;
+  }
+  #history-modal .modal-header h2,
+  #edit-request-modal .modal-header h2 {
+    font-size: 22px !important;
+  }
+  #history-modal .history-filter-label,
+  #history-modal .history-vehicle-trigger {
+    font-size: 15px !important;
+  }
+  #edit-request-modal .form-group label {
+    font-size: 14px !important;
+  }
+  #edit-request-modal .form-group input,
+  #edit-request-modal .form-group textarea {
+    font-size: 17px !important;
+  }
+  #edit-request-modal .btn-submit {
+    font-size: 17px !important;
+  }
+
+  /* 3. İnput ve buton dikey yükseklik +4px (login + panel) */
+  .login-form .form-group input {
+    padding: 14px 16px !important;
+  }
+  .login-page .btn-login {
+    padding: 16px !important;
+  }
+  .form-group-checkbox input[type="checkbox"] {
+    width: 22px !important;
+    height: 22px !important;
+  }
+  .dashboard-page .vehicle-card .form-group input.driver-km-input {
+    padding: 7px 16px !important;
+  }
+  .dashboard-page .vehicle-card .form-group textarea {
+    padding: 12px 16px !important;
+  }
+  .dashboard-page .vehicle-card .form-group textarea.driver-ekstra-not {
+    min-height: calc(1.4em + 13px) !important;
+    height: calc(1.4em + 13px) !important;
+  }
+  .dashboard-page .driver-report-btn {
+    padding: 10px 12px !important;
+  }
+  .dashboard-page .vehicle-card .btn-save {
+    padding: 12px 14px !important;
+  }
+  .dashboard-page .driver-report-block .form-group input,
+  .dashboard-page .driver-report-block .form-group textarea {
+    padding: 10px 10px !important;
+  }
+  .dashboard-page .driver-report-block .form-group textarea.driver-report-textarea-auto {
+    min-height: 2.6em !important;
+    height: 2.6em !important;
+  }
+  #edit-request-modal .form-group input,
+  #edit-request-modal .form-group textarea {
+    padding: 12px 16px !important;
+  }
+  #edit-request-modal .btn-submit {
+    padding: 18px !important;
+  }
+
+  /* 3. Beni Hatırla checkbox mobilde 22px (base'de zaten gri + kırmızı) */
+  .login-page .form-group-checkbox input[type="checkbox"] {
+    width: 22px !important;
+    height: 22px !important;
+  }
+
+  /* 4. Footer stil birleştirme - login anasayfa mobil ile aynı (kırmızı ışık) */
+  .login-page #app-footer.login-footer {
+    min-height: 0 !important;
+    padding-bottom: 0 !important;
+    box-shadow: 0 -9px 22px rgba(225, 6, 27, 0.35) !important;
+    border-top: 1px solid rgba(128, 128, 128, 0.5) !important;
+    border-left: none !important;
+    border-right: none !important;
+  }
+  .login-page #app-footer.login-footer .footer-content {
+    padding: 8px 12px !important;
+    padding-bottom: max(12px, env(safe-area-inset-bottom, 0)) !important;
+  }
+
+  /* 5. Login header = panel ile aynı (driver-header-fixed zaten uygulanıyor) */
+  .login-page .driver-header-fixed {
+    border-left: 1.2px solid var(--border-red-tech) !important;
+    border-right: 1.2px solid var(--border-red-tech) !important;
+    padding-left: 5px !important;
+    padding-right: 5px !important;
+  }
+  .login-page .driver-scroll-area {
+    padding-left: 4px !important;
+    padding-right: 4px !important;
+    padding-top: 12px !important;
+  }
+
+  /* 7. History etiketleri arası 3px boşluk */
+  .history-details p + p {
+    margin-top: 3px !important;
+  }
+
+  /* Foto 4: Kullanıcı adı-plaka arası boşluk yarıya (12px -> 6px) */
+  .dashboard-page .driver-vehicles-list {
+    margin-top: -6px !important;
+  }
+  .dashboard-page .driver-multi-vehicle-wrap .driver-plate-row {
+    margin-bottom: 6px !important;
+  }
+
+  /* Foto 4: KM input dikey yükseklik %15 daralsın */
+  .dashboard-page .vehicle-card .form-group input.driver-km-input,
+  .dashboard-page .vehicle-card .form-group input.driver-km-input:invalid,
+  .dashboard-page .vehicle-card .form-group input.driver-km-input:placeholder-shown {
+    padding: 4px 16px !important;
+  }
+
+  /* Foto 4: Bakım/Kaza – tıklanmamış durumda da genişlemiş genişlikte (layout shift yok) */
+  .dashboard-page .driver-report-actions {
+    flex-direction: column !important;
+  }
+  .dashboard-page .driver-report-item {
+    flex: none;
+    width: 100%;
+  }
+  .dashboard-page .driver-report-btn {
+    min-height: 61px !important;
+    padding: 5px 12px !important;
+  }
+
+  /* Foto 4: Kaza/bakım tıklayınca gelen inputların dikey yükseklikleri %10 daralsın */
+  .dashboard-page .driver-report-block .form-group input,
+  .dashboard-page .driver-report-block .form-group textarea {
+    padding: 8px 10px !important;
+  }
+  .dashboard-page .driver-report-block .form-group textarea.driver-report-textarea-auto {
+    min-height: 2em !important;
+    height: 2em !important;
+  }
+
+  /* Mobil: h1 boyut ve harf aralığı */
+  .hero-title-wrap h1,
+  .login-page .hero h1,
+  .dashboard-page .hero h1 {
+    font-size: 23px !important;
+    letter-spacing: 2.5px !important;
+  }
+
+}
+
+/* Masaüstü (641px+): Bakım/Kaza butonları – 66px yükseklik, 2px dikey boşluk (mobil kurallardan sonra uygulanması için ayrı blok) */
+@media (min-width: 641px) {
+  /* Geçmiş Kayıtlarım: Düzeltme Talep Et butonu metni 3pt küçük */
+  .dashboard-page .btn-edit-request {
+    font-size: 12px !important;
+  }
+  .dashboard-page .driver-report-btn {
+    padding: 2px 12px !important;
+    min-height: 66px !important;
+  }
+  /* Not input: masaüstü 0.9cm yükseklik */
+  .dashboard-page .vehicle-card .form-group textarea.driver-ekstra-not {
+    min-height: 0.9cm !important;
+    height: 0.9cm !important;
+  }
+  /* Bildir butonu: masaüstü bir satır kadar aşağı */
+  .dashboard-page .vehicle-card .btn-save {
+    margin-top: calc(16px + 1em) !important;
+  }
+}
+
+/* --- iOS PWA: Kullanıcı Paneli ve Giriş Sayfası - çentiklere uyumlu çerçeve --- */
+@media (max-width: 768px) and (display-mode: standalone) {
+  /* iOS PWA: html/body safe-area padding */
+  html {
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left) !important;
+    box-sizing: border-box !important;
+  }
+  body.dashboard-page,
+  body.login-page {
+    padding: 0 !important;
+    min-height: 100vh !important;
+    min-height: 100dvh !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Dashboard ve Login: ana container iOS kıvrımlarına uyumlu */
+  .dashboard-page .app-container.driver-dashboard-container,
+  .login-page .app-container.driver-dashboard-container {
+    border-radius: 38px !important;
+    overflow: hidden !important;
+    border-top: 1.2px solid var(--border-red-tech) !important;
+    border-left: 1px solid var(--border-red-tech) !important;
+    border-right: 1px solid var(--border-red-tech) !important;
+    box-shadow: 0 2px 14px rgba(225, 6, 27, 0.1) !important;
+    min-height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom)) !important;
+    min-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom)) !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+  }
+
+  /* Content-wrap: iOS PWA'da ekstra safe-area padding kaldır */
+  .dashboard-page .driver-scroll-area,
+  .login-page .content-wrap.driver-content-wrap {
+    padding-top: 0 !important;
+  }
+
+  /* Header sabit, çentik üstüne */
+  .dashboard-page .driver-header-fixed,
+  .login-page .driver-header-fixed {
+    padding-top: 0 !important;
+    border-top-left-radius: 38px !important;
+    border-top-right-radius: 38px !important;
+    border-left: none !important;
+    border-right: none !important;
+  }
+
+  /* Footer: kenarlar ekrana sıfır */
+  .dashboard-page #app-footer,
+  .login-page #app-footer.login-footer {
+    max-width: 100% !important;
+    border-left: none !important;
+    border-right: none !important;
+    padding-bottom: env(safe-area-inset-bottom, 0) !important;
+  }
+  .dashboard-page #app-footer .footer-content,
+  .login-page #app-footer.login-footer .footer-content {
+    max-width: 100% !important;
+    padding-bottom: max(12px, env(safe-area-inset-bottom)) !important;
+  }
+
+  /* Modal'lar: iOS PWA – footer + 8px boşluk */
+  #history-modal .driver-modal-content,
+  #history-modal .modal-container,
+  #edit-request-modal .driver-modal-content,
+  #edit-request-modal .modal-container {
+    margin: 0 !important;
+    margin-bottom: calc(var(--modal-margin-bottom-mobile, 52px) + env(safe-area-inset-bottom, 0)) !important;
+    height: calc(100vh - var(--modal-margin-bottom-mobile, 52px) - env(safe-area-inset-bottom, 0)) !important;
+    height: calc(100dvh - var(--modal-margin-bottom-mobile, 52px) - env(safe-area-inset-bottom, 0)) !important;
+    max-height: calc(100vh - var(--modal-margin-bottom-mobile, 52px) - env(safe-area-inset-bottom, 0)) !important;
+    max-height: calc(100dvh - var(--modal-margin-bottom-mobile, 52px) - env(safe-area-inset-bottom, 0)) !important;
+  }
+}
+
+/* --- h1 Metalik Gradient (anasayfa ile aynı) --- */
+.hero-title-wrap h1,
+.login-page .hero h1,
+.dashboard-page .hero h1 {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  text-align: center;
+  background: linear-gradient(to bottom,
+    #c2d4df 0%,
+    #ffffff 40%,
+    #9aadba 52%,
+    #d6e0e8 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  text-shadow: none;
+  filter: none;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  line-height: 1.6;
+  margin: 0;
+}

@@ -1,0 +1,1341 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Taşıt Yönetim Sistemi</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700;800&display=swap" rel="stylesheet"></noscript>
+
+    <!-- İkonlar: icon klasörü (masaüstü sekme, PWA, iOS aynı set) -->
+    <link rel="icon" type="image/svg+xml" href="./icon/favicon.svg">
+    <link rel="shortcut icon" type="image/svg+xml" href="./icon/favicon.svg">
+    <link rel="apple-touch-icon" href="./icon/apple-touch-icon.svg">
+    <link rel="apple-touch-icon" sizes="180x180" href="./icon/apple-touch-icon.svg">
+    <link rel="apple-touch-icon" sizes="192x192" href="./icon/icon-192.svg">
+    <link rel="apple-touch-icon" sizes="512x512" href="./icon/icon-512.svg">
+    <link rel="manifest" href="./manifest.json">
+
+    <!-- PWA: tema rengi (masaüstü sekme çubuğu, mobil status bar, iOS) -->
+    <meta name="theme-color" content="#080d16">
+    <meta name="msapplication-TileColor" content="#080d16">
+    <!-- Mobil web app -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <!-- iOS PWA -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Medisa Taşıt">
+
+    <!-- Critical CSS - Loading Screen (CSS-only 6s timeout ile otomatik kapanır, JS gelmese bile) -->
+    <style>
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #080d16;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            opacity: 1;
+            transition: opacity 0.3s ease;
+            animation: autoHideLoading 6s forwards;
+        }
+        #loading-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        #loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(225, 6, 27, 0.3);
+            border-top-color: #e1061b;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        /* JS calismasa bile 6s sonra loading screen kaybolur */
+        @keyframes autoHideLoading {
+            0%, 85% { opacity: 1; pointer-events: auto; }
+            100% { opacity: 0; pointer-events: none; visibility: hidden; }
+        }
+    </style>
+
+    <!-- CSS Preload + Async Load -->
+    <link rel="preload" href="style-core.css?v=20260203" as="style">
+    <link rel="stylesheet" href="style-core.css?v=20260203" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="style-core.css?v=20260203"></noscript>
+    
+    <link rel="preload" href="kayit.css?v=20260126" as="style">
+    <link rel="stylesheet" href="kayit.css?v=20260126" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="kayit.css?v=20260126"></noscript>
+    
+    <link rel="preload" href="tasitlar.css?v=20260117" as="style">
+    <link rel="stylesheet" href="tasitlar.css?v=20260117" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="tasitlar.css?v=20260117"></noscript>
+    
+    <link rel="preload" href="raporlar.css?v=20260207" as="style">
+    <link rel="stylesheet" href="raporlar.css?v=20260207" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="raporlar.css?v=20260207"></noscript>
+    
+    <link rel="preload" href="ayarlar.css?v=20260117" as="style">
+    <link rel="stylesheet" href="ayarlar.css?v=20260117" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="ayarlar.css?v=20260117"></noscript>
+</head>
+<body>
+
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+        <div id="loading-spinner"></div>
+    </div>
+
+    <div class="app-container">
+        
+        <main class="content-wrap">
+            
+            <div class="hero">
+                <div class="hero-logo">
+                    <img src="icon/logo-header2.svg" alt="MEDISA Logo">
+                </div>
+                <h1>TAŞIT YÖNETİM SİSTEMİ</h1>
+                <div class="hero-spacer"></div>
+                <div class="animated-line"></div>
+            </div>
+
+            <div class="icons-row">
+                <button class="icon-btn" onclick="toggleNotifications(event)">
+                     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                    </svg>
+                </button>
+                <div id="notifications-dropdown" class="settings-dropdown">
+                     <button disabled>Bildirim Yok</button>
+                </div>
+
+                <button class="icon-btn" onclick="toggleSettingsMenu(event)">
+                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                    </svg>
+                </button>
+                <div id="settings-menu" class="settings-dropdown">
+                    <button onclick="openBranchManagement()">Şube Yönetimi</button>
+                    <button onclick="openUserManagement()">Kullanıcı Yönetimi</button>
+                    <div class="has-submenu-wrapper" onmouseenter="showDataSubmenu()" onmouseleave="hideDataSubmenu(event)">
+                        <button class="has-submenu" onclick="openDataManagement(event)" onpointerdown="openDataManagement(event)">
+                            Veri Yönetimi
+                        </button>
+                        <div id="data-submenu" class="settings-submenu" onmouseenter="showDataSubmenu()" onmouseleave="hideDataSubmenu(event)">
+                            <button onclick="exportData()">Yedek Al</button>
+                            <button onclick="importData()">Yedekten Geri Yükle</button>
+                        </div>
+                    </div>
+                    <button onclick="clearCache()" class="cache-clear-btn">🗑️ Önbellek Temizle</button>
+                </div>
+            </div>
+
+            <div id="main-menu" class="menu-container">
+                <button class="menu-btn" onclick="openVehicleModal()">
+                    <div class="ttl">TAŞIT KAYIT İŞLEMLERİ</div>
+                </button>
+                <button class="menu-btn" onclick="openVehiclesView()">
+                    <div class="ttl">TAŞITLAR</div>
+                </button>
+                <button class="menu-btn" onclick="openReportsView()">
+                    <div class="ttl">RAPORLAR</div>
+                </button>
+            </div>
+
+            <div id="view-mount-point"></div>
+
+        </main>
+
+        <div id="vehicle-modal" class="modal-overlay">
+            <div class="modal-container">
+                <div class="modal-header">
+                    <h2>TAŞIT KAYIT İŞLEMLERİ</h2>
+                    <button class="modal-close" onclick="closeVehicleModal()">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="modal-columns">
+                        <div class="modal-column-left">
+                            <div class="form-section-inline" style="margin-bottom: 7px;">
+                                <label class="form-label" for="vehicle-type-otomobil">Taşıt Tipi</label>
+                                <div class="vehicle-type-group">
+                                    <button type="button" id="vehicle-type-otomobil" class="vehicle-type-btn" data-type="otomobil" title="Otomobil / SUV">
+                                        <img src="icon/otomobil.svg" alt="Otomobil" />
+                                    </button>
+                                    <button class="vehicle-type-btn" data-type="minivan" title="Küçük Ticari">
+                                        <img src="icon/kucuk-ticari.svg" alt="Küçük Ticari" />
+                                    </button>
+                                    <button class="vehicle-type-btn" data-type="kamyon" title="Büyük Ticari">
+                                        <img src="icon/buyuk-ticari.svg" alt="Büyük Ticari" />
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="form-section">
+                                <label class="form-label" for="vehicle-plate">Plaka</label>
+                                <input type="text" id="vehicle-plate" class="form-input" placeholder="34 ABC 123" maxlength="15">
+                            </div>
+                            <div class="form-section">
+                                <label class="form-label" for="vehicle-year">Üretim Yılı</label>
+                                <input type="number" id="vehicle-year" class="form-input" placeholder="2026" min="1950" max="2030" inputmode="numeric">
+                            </div>
+                            <div class="form-section">
+                                <label class="form-label" for="vehicle-brand-model">Marka / Model</label>
+                                <input type="text" id="vehicle-brand-model" class="form-input" placeholder="Hyundai Elantra">
+                            </div>
+                            <div class="form-section">
+                                <label class="form-label" for="vehicle-km">Km (Alındığı Tarih)</label>
+                                <input type="text" id="vehicle-km" class="form-input" placeholder="50.000" inputmode="numeric" pattern="[0-9]*">
+                            </div>
+                            <div class="form-section-inline">
+                                <label class="form-label" for="sanziman-manuel">Şanzıman Tipi</label>
+                                <div class="radio-group">
+                                    <button type="button" id="sanziman-manuel" class="radio-btn" data-value="manuel">Manuel</button>
+                                    <button class="radio-btn" data-value="otomatik">Otomatik</button>
+                                </div>
+                            </div>
+                            <div class="form-section-inline">
+                                <label class="form-label" for="tramer-var">Tramer Kaydı</label>
+                                <div class="radio-group">
+                                    <button type="button" id="tramer-var" class="radio-btn" data-value="var">Var</button>
+                                    <button type="button" class="radio-btn" data-value="yok">Yok</button>
+                                </div>
+                            </div>
+                            <div class="form-section">
+                                <div id="tramer-records-container" style="display:none; margin-top:6px;"></div>
+                            </div>
+                            <div class="form-section-inline">
+                                <label class="form-label" for="boya-var">Boya / Değişen</label>
+                                <div class="radio-group">
+                                    <button type="button" id="boya-var" class="radio-btn" data-value="var">Var</button>
+                                    <button type="button" class="radio-btn" data-value="yok">Yok</button>
+                                </div>
+                            </div>
+                            <div class="form-section">
+                                <div id="boya-parts-container" style="display:none; margin-top:6px;"></div>
+                            </div>
+                        </div>
+
+                        <div class="modal-column-right">
+                            <div class="form-section">
+                                <label class="form-label" for="vehicle-sigorta-date">Sigorta Bitiş Tarihi</label>
+                                <input type="date" id="vehicle-sigorta-date" class="form-input" inputmode="numeric">
+                            </div>
+                            <div class="form-section">
+                                <label class="form-label" for="vehicle-kasko-date">Kasko Bitiş Tarihi</label>
+                                <input type="date" id="vehicle-kasko-date" class="form-input" inputmode="numeric">
+                            </div>
+                            <div class="form-section">
+                                <label class="form-label" for="vehicle-muayene-date">Muayene Bitiş Tarihi</label>
+                                <input type="date" id="vehicle-muayene-date" class="form-input" inputmode="numeric">
+                            </div>
+                            <div class="form-section-inline">
+                                <label class="form-label" for="yedek-anahtar-var">Yedek Anahtar</label>
+                                <div class="radio-group">
+                                    <button type="button" id="yedek-anahtar-var" class="radio-btn" data-value="var">Var</button>
+                                    <button type="button" class="radio-btn" data-value="yok">Yok</button>
+                                </div>
+                            </div>
+                            <div class="form-section">
+                                <label class="form-label" for="anahtar-nerede" style="display:none;">Anahtar nerede</label>
+                                <input type="text" class="form-input" placeholder="Nerede?" style="display:none;" id="anahtar-nerede">
+                            </div>
+                            <div class="form-section-inline">
+                                <label class="form-label" for="kredi-var">Kredi / Rehin Var mı?</label>
+                                <div class="radio-group">
+                                    <button type="button" id="kredi-var" class="radio-btn" data-value="var" data-group="kredi">Var</button>
+                                    <button type="button" class="radio-btn" data-value="yok" data-group="kredi">Yok</button>
+                                </div>
+                            </div>
+                            <div class="form-section">
+                                <label class="form-label" for="kredi-detay" style="display:none;">Kredi detay</label>
+                                <textarea class="form-input" rows="2" placeholder="Detay Ekleyin" style="display:none;" id="kredi-detay"></textarea>
+                            </div>
+                            <div class="form-section">
+                                <label class="form-label" for="vehicle-branch-select">Tahsis Edilen Şube</label>
+                                <select id="vehicle-branch-select" class="form-input">
+                                    <option value="">Seçiniz</option>
+                                </select>
+                            </div>
+                            <div class="form-section">
+                                <label class="form-label" for="vehicle-price">Taşıtın Alım Bedeli</label>
+                                <input type="text" id="vehicle-price" class="form-input" placeholder="150.000 TL" inputmode="numeric">
+                            </div>
+                            <div class="form-section">
+                                <label class="form-label" for="vehicle-notes">Notlar</label>
+                                <textarea id="vehicle-notes" class="form-input notes-auto-expand" rows="1" placeholder="Ek bilgiler..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-buttons">
+                        <button class="btn-save" onclick="saveVehicleRecord()">Kaydet</button>
+                        <button class="btn-cancel" onclick="closeVehicleModal()">Vazgeç</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="vehicles-modal" class="modal-overlay tasitlar-modal-overlay" onclick="if(event.target === this) { event.stopPropagation(); }">
+          <div class="modal-container" onclick="event.stopPropagation();">
+            <div class="modal-header"><h2>TAŞITLAR</h2><button class="modal-close" onclick="event.stopPropagation(); event.preventDefault(); closeVehiclesModal(event); return false;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button></div>
+            <div class="modal-body"><div id="vehicles-modal-content"></div></div>
+          </div>
+        </div>
+
+        <div id="vehicle-detail-modal" class="modal-overlay tasitlar-modal-overlay" onclick="if(event.target === this) { event.stopPropagation(); event.preventDefault(); return false; }">
+          <div class="modal-container" onclick="event.stopPropagation();">
+            <div class="modal-header">
+              <h2>TAŞIT DETAYI</h2>
+              <button class="modal-close" onclick="closeAllModals();">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div id="vehicle-detail-content">
+                <div class="detail-plate"></div>
+                <div class="detail-brand-year-row">
+                  <div class="detail-brand-year"></div>
+                </div>
+                <div class="vehicle-detail-columns">
+                  <div class="vehicle-detail-left"></div>
+                  <div class="vehicle-detail-right"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="branch-modal" class="modal-overlay ayarlar-modal-overlay">
+            <div class="modal-container" onclick="if(event.target.closest('.ayarlar-back-btn')) { event.stopPropagation(); closeBranchManagement(); var m=document.getElementById('settings-menu'); if(m)m.classList.add('open'); }">
+                <div class="modal-header">
+                    <h2>ŞUBE YÖNETİMİ</h2>
+                    <button class="modal-close" onclick="closeBranchManagement()">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                <div class="ayarlar-back-bar">
+                    <button type="button" class="ayarlar-back-btn" aria-label="Ayarlar">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                    </button>
+                    <span class="ayarlar-back-label">Ayarlar</span>
+                </div>
+                <div class="modal-body">
+                    <div style="padding: 16px;">
+                        <button onclick="openBranchFormModal()" class="settings-add-text-btn user-add-btn" style="margin-bottom: 16px;">+ Yeni Şube</button>
+                        <div id="branch-list"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="branch-form-modal" class="modal-overlay ayarlar-modal-overlay">
+            <div class="modal-container">
+                <div class="modal-header">
+                    <h2>YENİ ŞUBE EKLE</h2>
+                    <button class="modal-close" onclick="closeBranchFormModal()">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                <div class="ayarlar-back-bar">
+                    <button type="button" class="ayarlar-back-btn" aria-label="Şube Yönetimi" onclick="closeBranchFormModal()">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                    </button>
+                    <span class="ayarlar-back-label">Şube Yönetimi</span>
+                </div>
+                <div class="modal-body">
+                    <form id="branch-form" style="padding: 16px;">
+                        <input type="hidden" id="branch-id">
+                        <div class="form-section">
+                            <label class="form-label" for="branch-name">Şube Adı</label>
+                            <input type="text" id="branch-name" class="form-input" placeholder="Şube adı" required>
+                        </div>
+                        <div class="form-section">
+                            <label class="form-label" for="branch-city">Şehir</label>
+                            <input type="text" id="branch-city" class="form-input" placeholder="Şehir">
+                        </div>
+                        <div class="settings-form-buttons">
+                            <button type="button" class="settings-btn-save" onclick="saveBranch()">Kaydet</button>
+                            <button type="button" class="settings-btn-cancel" onclick="closeBranchFormModal()">Vazgeç</button>
+                            <button type="button" class="settings-btn-delete" onclick="deleteBranch(document.getElementById('branch-id').value)" id="branch-delete-btn" style="display: none;">Sil</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div id="user-modal" class="modal-overlay ayarlar-modal-overlay">
+            <div class="modal-container" onclick="if(event.target.closest('.ayarlar-back-btn')) { event.stopPropagation(); closeUserManagement(); var m=document.getElementById('settings-menu'); if(m)m.classList.add('open'); }">
+                <div class="modal-header">
+                    <h2>KULLANICI YÖNETİMİ</h2>
+                    <button class="modal-close" onclick="closeUserManagement()">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                <div class="ayarlar-back-bar">
+                    <button type="button" class="ayarlar-back-btn" aria-label="Ayarlar">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                    </button>
+                    <span class="ayarlar-back-label">Ayarlar</span>
+                </div>
+                <div class="modal-body">
+                    <div style="padding: 16px;">
+                        <button onclick="openUserFormModal()" class="settings-add-text-btn user-add-btn" style="margin-bottom: 16px;">+ Yeni Kullanıcı</button>
+                        <div id="user-list"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="user-form-modal" class="modal-overlay ayarlar-modal-overlay">
+            <div class="modal-container">
+                <div class="modal-header">
+                    <h2>YENİ KULLANICI EKLE</h2>
+                    <button class="modal-close" onclick="closeUserFormModal()">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                <div class="ayarlar-back-bar">
+                    <button type="button" class="ayarlar-back-btn" aria-label="Kullanıcı Yönetimi" onclick="closeUserFormModal()">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                    </button>
+                    <span class="ayarlar-back-label">Kullanıcı Yönetimi</span>
+                </div>
+                <div class="modal-body">
+                    <form id="user-form" class="user-form-inner">
+                        <input type="hidden" id="user-id">
+                        <div class="form-section">
+                            <label class="form-label" for="user-name">Ad Soyad</label>
+                            <input type="text" id="user-name" class="form-input" placeholder="Ad Soyad" required>
+                        </div>
+                        <div class="form-section">
+                            <label class="form-label" for="user-branch">Şube</label>
+                            <select id="user-branch" class="form-input" required>
+                                <option value="">Şube Seçin</option>
+                            </select>
+                        </div>
+                        <div class="form-section">
+                            <label class="form-label" for="user-phone">Telefon</label>
+                            <input type="text" id="user-phone" class="form-input" placeholder="Telefon">
+                        </div>
+                        <div class="form-section">
+                            <label class="form-label" for="user-email">E-posta</label>
+                            <input type="email" id="user-email" class="form-input" placeholder="E-posta">
+                        </div>
+                        <div class="form-section">
+                            <label class="form-label" for="user-role">Görev Tanımı</label>
+                            <select id="user-role" class="form-input">
+                                <option value="admin">Yönetici</option>
+                                <option value="sales">Satış Temsilcisi</option>
+                                <option value="driver">Şoför</option>
+                            </select>
+                        </div>
+                        <div class="form-section">
+                            <label class="form-label" for="user-username">Kullanıcı Adı (portal girişi)</label>
+                            <input type="text" id="user-username" class="form-input" placeholder="Plaka veya kullanıcı adı" autocomplete="username">
+                        </div>
+                        <div class="form-section">
+                            <label class="form-label" for="user-password">Şifre (portal girişi)</label>
+                            <input type="password" id="user-password" class="form-input" placeholder="Şifre" autocomplete="new-password">
+                        </div>
+                        <div class="form-section form-section-vehicles">
+                            <span id="user-vehicles-label" class="form-label" style="display:block;">Atanacak Taşıt</span>
+                            <div class="user-vehicles-dropdown-wrap">
+                                <div id="user-vehicles-trigger" class="user-vehicles-trigger" tabindex="0" role="combobox" aria-labelledby="user-vehicles-label" onclick="if(window.toggleUserVehiclesDropdown) window.toggleUserVehiclesDropdown()">Taşıt seçin</div>
+                                <div id="user-vehicles-dropdown" class="user-vehicles-dropdown" style="display:none;">
+                                    <div class="user-vehicles-search-wrap">
+                                        <span class="user-vehicles-search-icon">🔍</span>
+                                        <input type="text" id="user-vehicles-search" class="user-vehicles-search-input" placeholder="Plaka" oninput="if(window.handleUserVehiclesSearch) window.handleUserVehiclesSearch(this.value)">
+                                    </div>
+                                    <div id="user-vehicles-container" class="user-vehicles-checkbox-list"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="settings-form-buttons">
+                            <button type="button" class="settings-btn-save" onclick="saveUser()">Kaydet</button>
+                            <button type="button" class="settings-btn-cancel" onclick="closeUserFormModal()">Vazgeç</button>
+                            <button type="button" class="settings-btn-delete" onclick="deleteUser(document.getElementById('user-id').value)" id="user-delete-btn" style="display: none;">Sil</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div id="data-management-modal" class="modal-overlay ayarlar-modal-overlay">
+            <div class="modal-container" onclick="if(event.target.closest('.ayarlar-back-btn')) { event.stopPropagation(); closeDataManagement(); var m=document.getElementById('settings-menu'); if(m)m.classList.add('open'); }">
+                <div class="modal-header">
+                    <h2>VERİ YÖNETİMİ</h2>
+                    <button class="modal-close" onclick="closeDataManagement()">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                <div class="ayarlar-back-bar">
+                    <button type="button" class="ayarlar-back-btn" aria-label="Ayarlar">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                    </button>
+                    <span class="ayarlar-back-label">Ayarlar</span>
+                </div>
+                <div class="modal-body">
+                    <div class="data-management-actions">
+                        <button onclick="exportData()" class="data-management-text-btn">Yedek Al</button>
+                        <button onclick="importData()" class="data-management-text-btn">Yedekten Geri Yükle</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="reports-modal" class="modal-overlay">
+            <div class="modal-container">
+                <div class="modal-header">
+                    <h2>RAPORLAR</h2>
+                    <button class="modal-close" onclick="closeReportsModal()">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                <div id="reports-list-header-actions" class="reports-list-header-actions" aria-hidden="true"></div>
+
+                <div class="modal-body" id="reports-body">
+                    <div id="view-stok" class="report-view active">
+                        <div id="stok-branch-grid" class="stok-branch-grid"></div>
+                        <div id="stok-list-container" class="stok-list-container" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <a href="driver/" class="user-panel-link" title="Kullanıcı Paneli">
+        <span class="user-panel-link-inner">
+            <span class="user-panel-link-text">Kullanıcı Paneli</span>
+            <svg class="user-panel-link-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+        </span>
+    </a>
+
+    <footer id="app-footer">
+        <div class="footer-content">
+            <span class="version" id="version-display">v78.1</span>
+            <span class="brand"><img src="icon/logo-footer.svg" alt="MEDISA" style="height: 12.5px; width: auto;"></span>
+            <span class="status status-ready">● Sistem Hazır</span>
+        </div>
+    </footer>
+
+        <!-- Önbellek Temizleme Onay Modalı -->
+        <div id="cache-confirm-modal" class="modal-overlay ayarlar-modal-overlay">
+            <div class="modal-container" style="max-width: 400px; height: 210px;" onclick="event.stopPropagation();">
+                <div class="modal-header">
+                    <h2>ÖNBELLEK TEMİZLEME</h2>
+                    <button class="modal-close" onclick="closeCacheConfirmModal()">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                <div class="modal-body" onclick="event.stopPropagation();">
+                    <p id="cache-confirm-message" style="color: #ccc; font-size: 14px; line-height: 1.6; margin-bottom: 18px; text-align: center;"></p>
+                    <div style="display: flex; gap: 10px; justify-content: center;">
+                        <button type="button" class="modal-btn-confirm modal-btn--sm" onclick="event.stopPropagation(); confirmCacheClear();">Evet</button>
+                        <button type="button" class="modal-btn-cancel modal-btn--sm" onclick="event.stopPropagation(); closeCacheConfirmModal();">Hayır</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bilgi Modalı (Alert yerine) -->
+        <div id="info-modal" class="modal-overlay ayarlar-modal-overlay">
+            <div class="modal-container">
+                <div class="modal-header">
+                    <h2>BİLGİ</h2>
+                    <button class="modal-close" onclick="closeInfoModal()">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p id="info-message"></p>
+                    <div style="display: flex; justify-content: center; margin-top: auto;">
+                        <button onclick="closeInfoModal()">Tamam</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tescil Tarihi Onay Modalı -->
+        <div id="tescil-tarih-confirm-modal" class="modal-overlay ayarlar-modal-overlay">
+            <div class="modal-container" style="max-width: 400px; height: 190px;" onclick="event.stopPropagation();">
+                <div class="modal-header">
+                    <h2>TESCİL TARİHİ ONAY</h2>
+                    <button class="modal-close" onclick="cancelOnay()">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                <div class="modal-body" onclick="event.stopPropagation();">
+                    <p id="tescil-confirm-message" style="color: #ccc; font-size: 14px; line-height: 1.6; margin-bottom: 20px; text-align: center;"></p>
+                    <div style="display: flex; gap: 10px; justify-content: center;">
+                        <button type="button" class="modal-btn-confirm modal-btn--sm" onclick="event.stopPropagation(); confirmOnay();">Evet</button>
+                        <button type="button" class="modal-btn-cancel modal-btn--sm" onclick="event.stopPropagation(); cancelOnay();">Hayır</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tescil Tarihi Giriş Modalı -->
+        <div id="tescil-tarih-input-modal" class="modal-overlay ayarlar-modal-overlay">
+            <div class="modal-container" style="max-width: 400px; height: 220px;" onclick="event.stopPropagation();">
+                <div class="modal-header">
+                    <h2>TESCİL TARİHİ</h2>
+                    <button class="modal-close" onclick="cancelTescilTarihi()">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                <div class="modal-body" onclick="event.stopPropagation();">
+                    <div style="text-align: center; margin-bottom: 16px;">
+                        <label for="tescil-tarih-input" style="color: #ccc; font-size: 14px; display: block; margin-bottom: 8px;">Tescil Tarihi:</label>
+                        <div class="tescil-input-wrapper" style="position: relative; display: flex; align-items: center; justify-content: center;">
+                            <input type="text" id="tescil-tarih-input" class="form-input" placeholder="gg/aa/yyyy" maxlength="10" inputmode="numeric" style="width: 140px; text-align: center;">
+                            <span id="tescil-tarih-overlay" class="tescil-tarih-overlay" style="position: absolute; pointer-events: none; white-space: nowrap; font-size: 14px; font-family: inherit; line-height: 1; color: #e0e0e0;"></span>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 10px; justify-content: center;">
+                        <button type="button" class="tescil-tarih-kaydet-btn modal-btn-cancel modal-btn--sm" onclick="event.stopPropagation(); saveTescilTarihi();">Kaydet</button>
+                        <button type="button" class="tescil-tarih-vazgec-btn modal-btn-confirm modal-btn--sm" onclick="event.stopPropagation(); cancelTescilTarihi();">Vazgeç</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Olay Ekleme Modal'ları -->
+        <!-- Event Menu Modal (Olay seçim menüsü) -->
+        <div id="event-menu-modal" class="modal-overlay tasitlar-modal-overlay ayarlar-modal-overlay olay-ekle-modal" onclick="if(event.target === this) { event.stopPropagation(); event.preventDefault(); return false; }">
+            <div class="modal-container" onclick="event.stopPropagation();">
+                <div class="modal-header">
+                    <h2>OLAY EKLE</h2>
+                    <button class="modal-close" onclick="closeAllModals();">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                <div class="modal-body" onclick="event.stopPropagation();">
+                    <div id="event-menu-list" style="display: flex; flex-direction: column; gap: 8px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bakım Ekle Modal -->
+        <div id="bakim-ekle-modal" class="modal-overlay tasitlar-modal-overlay ayarlar-modal-overlay olay-ekle-modal" onclick="if(event.target === this) { event.stopPropagation(); event.preventDefault(); return false; }">
+            <div class="modal-container" onclick="event.stopPropagation();">
+                <div class="modal-header">
+                    <h2>BAKIM BİLGİSİ EKLE</h2>
+                    <button class="modal-close" onclick="closeAllModals();">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                <div style="padding: 8px 16px; display: flex; align-items: center; gap: 8px;">
+                    <button onclick="openEventModal('menu', window.currentDetailVehicleId)" style="background: transparent; border: none; color: #ccc; cursor: pointer; display: flex; align-items: center; gap: 4px; padding: 0;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 12H5M12 19l-7-7 7-7"/>
+                        </svg>
+                    </button>
+                    <span class="active-branch-title" style="color: #999; font-weight: 700; font-size: 13.5px;">Olay Ekle</span>
+                </div>
+                <div class="modal-body" onclick="event.stopPropagation();">
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <div>
+                            <label for="bakim-tarih" style="color: #ccc; font-size: 14px; display: block; margin-bottom: 3px;">Tarih (gg.aa.yyyy):</label>
+                            <input type="date" id="bakim-tarih" class="form-input" style="width: 20%;">
+                        </div>
+                        <div>
+                            <label for="bakim-islemler" style="color: #ccc; font-size: 14px; display: block; margin-bottom: 3px;">Yapılan İşlemler:</label>
+                            <textarea id="bakim-islemler" class="form-input" rows="3" placeholder="Yapılan işlemleri yazın" style="width: 100%;"></textarea>
+                        </div>
+                        <div>
+                            <label for="bakim-servis" style="color: #ccc; font-size: 14px; display: block; margin-bottom: 3px;">İşlemi Yapan Servis:</label>
+                            <input type="text" id="bakim-servis" class="form-input" placeholder="Servis adı" style="width: 100%;">
+                        </div>
+                        <div>
+                            <label for="bakim-kisi" style="color: #ccc; font-size: 14px; display: block; margin-bottom: 3px;">Taşıtı Bakıma Götüren Kişi:</label>
+                            <input type="text" id="bakim-kisi" class="form-input" placeholder="Kişi adı" style="width: 100%;">
+                        </div>
+                        <div>
+                            <label for="bakim-km" style="color: #ccc; font-size: 14px; display: block; margin-bottom: 3px;">Km:</label>
+                            <input type="text" id="bakim-km" class="form-input" placeholder="50.000" inputmode="numeric" style="width: 100%;">
+                        </div>
+                        <div>
+                            <label for="bakim-tutar" style="color: #ccc; font-size: 14px; display: block; margin-bottom: 3px;">Tutar (TL):</label>
+                            <input type="text" id="bakim-tutar" class="form-input" placeholder="2.500" inputmode="numeric" style="width: 100%;">
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
+                        <button type="button" class="modal-btn-cancel" onclick="event.stopPropagation(); saveBakimEvent();">Kaydet</button>
+                        <button type="button" class="modal-btn-confirm" onclick="event.stopPropagation(); closeEventModal('bakim');">Vazgeç</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Kaza Ekle Modal -->
+        <div id="kaza-ekle-modal" class="modal-overlay tasitlar-modal-overlay ayarlar-modal-overlay olay-ekle-modal" onclick="if(event.target === this) { event.stopPropagation(); event.preventDefault(); return false; }">
+            <div class="modal-container" onclick="event.stopPropagation();">
+                <div class="modal-header">
+                    <h2>KAZA BİLGİSİ EKLE</h2>
+                    <button class="modal-close" onclick="closeAllModals();">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                <div style="padding: 8px 16px; display: flex; align-items: center; gap: 8px;">
+                    <button onclick="openEventModal('menu', window.currentDetailVehicleId)" style="background: transparent; border: none; color: #ccc; cursor: pointer; display: flex; align-items: center; gap: 4px; padding: 0;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 12H5M12 19l-7-7 7-7"/>
+                        </svg>
+                    </button>
+                    <span class="active-branch-title" style="color: #999; font-weight: 700; font-size: 13.5px;">Olay Ekle</span>
+                </div>
+                <div class="modal-body" onclick="event.stopPropagation();">
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <div style="display: flex; flex-direction: column; align-items: flex-start; margin-top: -40px;">
+                            <label for="kaza-tarih" style="color: #ccc; font-size: 14px; display: block; margin-bottom: 3px; text-align: left;">Tarih (gg.aa.yyyy):</label>
+                            <input type="date" id="kaza-tarih" class="form-input" style="width: 50%; max-width: 150px;">
+                        </div>
+                        <div>
+                            <label for="kaza-surucu" style="color: #ccc; font-size: 14px; display: block; margin-bottom: 3px;">Kullanıcı:</label>
+                            <input type="text" id="kaza-surucu" class="form-input" placeholder="Kullanıcı adı" style="width: 100%;">
+                        </div>
+                        <div>
+                            <label for="kaza-tutar" style="color: #ccc; font-size: 14px; display: block; margin-bottom: 3px;">Hasar Tutarı (TL):</label>
+                            <input type="text" id="kaza-tutar" class="form-input" placeholder="5.000" inputmode="numeric" style="width: 100%;">
+                        </div>
+                        <div>
+                            <span id="kaza-kaporta-label" style="color: #ccc; font-size: 14px; display: block; margin-bottom: 3px;">Hasar Gören Parça (Kaporta Şeması):</span>
+                            <div id="kaza-kaporta-container" role="group" aria-labelledby="kaza-kaporta-label" style="margin-top: 3px; margin-bottom: 8px; overflow: hidden;"></div>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 10px; justify-content: center; margin-top: 0px;">
+                        <button type="button" class="modal-btn-cancel" onclick="event.stopPropagation(); saveKazaEvent();">Kaydet</button>
+                        <button type="button" class="modal-btn-confirm" onclick="event.stopPropagation(); closeEventModal('kaza');">Vazgeç</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sigorta Güncelle Modal -->
+        <div id="sigorta-guncelle-modal" class="modal-overlay tasitlar-modal-overlay ayarlar-modal-overlay olay-ekle-modal" onclick="if(event.target === this) { event.stopPropagation(); event.preventDefault(); return false; }">
+            <div class="modal-container" onclick="event.stopPropagation();">
+                <div class="modal-header">
+                    <h2>SİGORTA BİLGİSİ GÜNCELLE</h2>
+                    <button class="modal-close" onclick="closeAllModals();">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                <div style="padding: 8px 16px; display: flex; align-items: center; gap: 8px;">
+                    <button onclick="openEventModal('menu', window.currentDetailVehicleId)" style="background: transparent; border: none; color: #ccc; cursor: pointer; display: flex; align-items: center; gap: 4px; padding: 0;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 12H5M12 19l-7-7 7-7"/>
+                        </svg>
+                    </button>
+                    <span class="active-branch-title" style="color: #999; font-weight: 700; font-size: 13.5px;">Olay Ekle</span>
+                </div>
+                <div class="modal-body" onclick="event.stopPropagation();">
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <div>
+                            <label for="sigorta-tarih" style="color: #ccc; font-size: 14px; display: block; margin-bottom: 3px;">Tarih (gg.aa.yyyy):</label>
+                            <input type="date" id="sigorta-tarih" class="form-input" style="width: 20%;">
+                        </div>
+                        <div>
+                            <label for="sigorta-firma" style="color: #ccc; font-size: 14px; display: block; margin-bottom: 3px;">Sigorta Firması:</label>
+                            <input type="text" id="sigorta-firma" class="form-input" placeholder="Firma adı" style="width: 100%;">
+                        </div>
+                        <div>
+                            <label for="sigorta-acente" style="color: #ccc; font-size: 14px; display: block; margin-bottom: 3px;">Yaptırılan Acente:</label>
+                            <input type="text" id="sigorta-acente" class="form-input" placeholder="Acente adı" style="width: 100%;">
+                        </div>
+                        <div>
+                            <label for="sigorta-iletisim" style="color: #ccc; font-size: 14px; display: block; margin-bottom: 3px;">Acente İletişim No:</label>
+                            <input type="text" id="sigorta-iletisim" class="form-input" placeholder="Telefon numarası" style="width: 100%;">
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
+                        <button type="button" class="modal-btn-cancel" onclick="event.stopPropagation(); updateSigortaInfo();">Kaydet</button>
+                        <button type="button" class="modal-btn-confirm" onclick="event.stopPropagation(); closeEventModal('sigorta');">Vazgeç</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Kasko Güncelle Modal -->
+        <div id="kasko-guncelle-modal" class="modal-overlay tasitlar-modal-overlay ayarlar-modal-overlay olay-ekle-modal" onclick="if(event.target === this) { event.stopPropagation(); event.preventDefault(); return false; }">
+            <div class="modal-container" onclick="event.stopPropagation();">
+                <div class="modal-header">
+                    <h2>KASKO BİLGİSİ GÜNCELLE</h2>
+                    <button class="modal-close" onclick="closeAllModals();">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                <div style="padding: 8px 16px; display: flex; align-items: center; gap: 8px;">
+                    <button onclick="openEventModal('menu', window.currentDetailVehicleId)" style="background: transparent; border: none; color: #ccc; cursor: pointer; display: flex; align-items: center; gap: 4px; padding: 0;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 12H5M12 19l-7-7 7-7"/>
+                        </svg>
+                    </button>
+                    <span class="active-branch-title" style="color: #999; font-weight: 700; font-size: 13.5px;">Olay Ekle</span>
+                </div>
+                <div class="modal-body" onclick="event.stopPropagation();">
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <div>
+                            <label for="kasko-tarih" style="color: #ccc; font-size: 14px; display: block; margin-bottom: 3px;">Tarih (gg.aa.yyyy):</label>
+                            <input type="date" id="kasko-tarih" class="form-input" style="width: 20%;">
+                        </div>
+                        <div>
+                            <label for="kasko-firma" style="color: #ccc; font-size: 14px; display: block; margin-bottom: 3px;">Sigorta Firması:</label>
+                            <input type="text" id="kasko-firma" class="form-input" placeholder="Firma adı" style="width: 100%;">
+                        </div>
+                        <div>
+                            <label for="kasko-acente" style="color: #ccc; font-size: 14px; display: block; margin-bottom: 3px;">Yaptırılan Acente:</label>
+                            <input type="text" id="kasko-acente" class="form-input" placeholder="Acente adı" style="width: 100%;">
+                        </div>
+                        <div>
+                            <label for="kasko-iletisim" style="color: #ccc; font-size: 14px; display: block; margin-bottom: 3px;">Acente İletişim No:</label>
+                            <input type="text" id="kasko-iletisim" class="form-input" placeholder="Telefon numarası" style="width: 100%;">
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
+                        <button type="button" class="modal-btn-cancel" onclick="event.stopPropagation(); updateKaskoInfo();">Kaydet</button>
+                        <button type="button" class="modal-btn-confirm" onclick="event.stopPropagation(); closeEventModal('kasko');">Vazgeç</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Muayene Güncelle Modal -->
+        <div id="muayene-guncelle-modal" class="modal-overlay tasitlar-modal-overlay ayarlar-modal-overlay olay-ekle-modal" onclick="if(event.target === this) { event.stopPropagation(); event.preventDefault(); return false; }">
+            <div class="modal-container" onclick="event.stopPropagation();">
+                <div class="modal-header">
+                    <h2>MUAYENE BİLGİSİ GÜNCELLE</h2>
+                    <button class="modal-close" onclick="closeAllModals();">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                <div style="padding: 8px 16px; display: flex; align-items: center; gap: 8px;">
+                    <button onclick="openEventModal('menu', window.currentDetailVehicleId)" style="background: transparent; border: none; color: #ccc; cursor: pointer; display: flex; align-items: center; gap: 4px; padding: 0;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 12H5M12 19l-7-7 7-7"/>
+                        </svg>
+                    </button>
+                    <span class="active-branch-title" style="color: #999; font-weight: 700; font-size: 13.5px;">Olay Ekle</span>
+                </div>
+                <div class="modal-body" onclick="event.stopPropagation();">
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <div>
+                            <label for="muayene-tarih" style="color: #ccc; font-size: 14px; display: block; margin-bottom: 3px;">Yaptırılan Tarih (gg.aa.yyyy):</label>
+                            <input type="date" id="muayene-tarih" class="form-input" style="width: 20%;">
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
+                        <button type="button" class="modal-btn-cancel" onclick="event.stopPropagation(); updateMuayeneInfo();">Kaydet</button>
+                        <button type="button" class="modal-btn-confirm" onclick="event.stopPropagation(); closeEventModal('muayene');">Vazgeç</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Anahtar Güncelle Modal -->
+        <div id="anahtar-guncelle-modal" class="modal-overlay tasitlar-modal-overlay ayarlar-modal-overlay olay-ekle-modal" onclick="if(event.target === this) { event.stopPropagation(); event.preventDefault(); return false; }">
+            <div class="modal-container" onclick="event.stopPropagation();">
+                <div class="modal-header">
+                    <h2>YEDEK ANAHTAR BİLGİSİ GÜNCELLE</h2>
+                    <button class="modal-close" onclick="closeAllModals();">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                <div style="padding: 8px 16px; display: flex; align-items: center; gap: 8px;">
+                    <button onclick="openEventModal('menu', window.currentDetailVehicleId)" style="background: transparent; border: none; color: #ccc; cursor: pointer; display: flex; align-items: center; gap: 4px; padding: 0;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 12H5M12 19l-7-7 7-7"/>
+                        </svg>
+                    </button>
+                    <span class="active-branch-title" style="color: #999; font-weight: 700; font-size: 13.5px;">Olay Ekle</span>
+                </div>
+                <div class="modal-body" onclick="event.stopPropagation();">
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <div>
+                            <label for="anahtar-durum-var" style="color: #ccc; font-size: 14px; display: block; margin-bottom: 8px;">Durum:</label>
+                            <div class="radio-group" style="display: flex; gap: 8px; justify-content: flex-start;">
+                                <button type="button" id="anahtar-durum-var" class="radio-btn" data-value="var" style="background: transparent; border: none; color: #28a745; padding: 0; cursor: pointer; font-weight: 600; font-size: 16px;">Var</button>
+                                <button type="button" class="radio-btn" data-value="yok" style="background: transparent; border: none; color: #e1061b; padding: 0; cursor: pointer; font-weight: 600; font-size: 16px;">Yok</button>
+                            </div>
+                        </div>
+                        <div id="anahtar-detay-wrapper" style="display: none;">
+                            <label for="anahtar-detay-event" style="color: #ccc; font-size: 14px; display: block; margin-bottom: 8px;">Açıklama:</label>
+                            <input type="text" id="anahtar-detay-event" class="form-input" placeholder="Anahtar nerede?" style="width: 100%;">
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
+                        <button type="button" class="modal-btn-cancel" onclick="event.stopPropagation(); updateAnahtarInfo();">Kaydet</button>
+                        <button type="button" class="modal-btn-confirm" onclick="event.stopPropagation(); closeEventModal('anahtar');">Vazgeç</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Kredi/Rehin Güncelle Modal -->
+        <div id="kredi-guncelle-modal" class="modal-overlay tasitlar-modal-overlay ayarlar-modal-overlay olay-ekle-modal" onclick="if(event.target === this) { event.stopPropagation(); event.preventDefault(); return false; }">
+            <div class="modal-container" onclick="event.stopPropagation();">
+                <div class="modal-header">
+                    <h2>KREDİ/REHİN BİLGİSİ GÜNCELLE</h2>
+                    <button class="modal-close" onclick="closeAllModals();">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                <div style="padding: 8px 16px; display: flex; align-items: center; gap: 8px;">
+                    <button onclick="openEventModal('menu', window.currentDetailVehicleId)" style="background: transparent; border: none; color: #ccc; cursor: pointer; display: flex; align-items: center; gap: 4px; padding: 0;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 12H5M12 19l-7-7 7-7"/>
+                        </svg>
+                    </button>
+                    <span class="active-branch-title" style="color: #999; font-weight: 700; font-size: 13.5px;">Olay Ekle</span>
+                </div>
+                <div class="modal-body" onclick="event.stopPropagation();">
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <div>
+                            <label for="kredi-durum-var" style="color: #ccc; font-size: 14px; display: block; margin-bottom: 8px;">Durum:</label>
+                            <div class="radio-group" style="display: flex; gap: 8px; justify-content: flex-start;">
+                                <button type="button" id="kredi-durum-var" class="radio-btn" data-value="var" style="background: transparent; border: none; color: #e1061b; padding: 0; cursor: pointer; font-weight: 600; font-size: 16px;">Var</button>
+                                <button type="button" class="radio-btn" data-value="yok" style="background: transparent; border: none; color: #28a745; padding: 0; cursor: pointer; font-weight: 600; font-size: 16px;">Yok</button>
+                            </div>
+                        </div>
+                        <div id="kredi-detay-wrapper-event" style="display: none;">
+                            <label for="kredi-detay-event" style="color: #ccc; font-size: 14px; display: block; margin-bottom: 8px;">Açıklama:</label>
+                            <input type="text" id="kredi-detay-event" class="form-input" placeholder="Kredi/Rehin detayı" style="width: 100%;">
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
+                        <button type="button" class="modal-btn-cancel" onclick="event.stopPropagation(); updateKrediInfo();">Kaydet</button>
+                        <button type="button" class="modal-btn-confirm" onclick="event.stopPropagation(); closeEventModal('kredi');">Vazgeç</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Km Güncelle Modal -->
+        <div id="km-guncelle-modal" class="modal-overlay tasitlar-modal-overlay olay-ekle-modal" onclick="if(event.target === this) { event.stopPropagation(); event.preventDefault(); return false; }">
+            <div class="modal-container" onclick="event.stopPropagation();">
+                <div class="modal-header">
+                    <h2>KM BİLGİSİ GÜNCELLE</h2>
+                    <button class="modal-close" onclick="closeAllModals();">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                <div style="padding: 8px 16px; display: flex; align-items: center; gap: 8px;">
+                    <button onclick="openEventModal('menu', window.currentDetailVehicleId)" style="background: transparent; border: none; color: #ccc; cursor: pointer; display: flex; align-items: center; gap: 4px; padding: 0;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 12H5M12 19l-7-7 7-7"/>
+                        </svg>
+                    </button>
+                    <span class="active-branch-title" style="color: #999; font-weight: 700; font-size: 13.5px;">Olay Ekle</span>
+                </div>
+                <div class="modal-body" onclick="event.stopPropagation();">
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <div>
+                            <label for="km-guncelle-input" style="color: #ccc; font-size: 14px; display: block; margin-bottom: 8px;">Güncel Km Bilgisi Girin:</label>
+                            <input type="text" id="km-guncelle-input" class="form-input" placeholder="150.000" inputmode="numeric" style="width: 100%;">
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
+                        <button type="button" class="modal-btn-cancel" onclick="event.stopPropagation(); updateKmInfo();">Kaydet</button>
+                        <button type="button" class="modal-btn-confirm" onclick="event.stopPropagation(); closeEventModal('km');">Vazgeç</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Yazlık/Kışlık Lastik Durumu Güncelle Modal -->
+        <div id="lastik-guncelle-modal" class="modal-overlay tasitlar-modal-overlay olay-ekle-modal" onclick="if(event.target === this) { event.stopPropagation(); event.preventDefault(); return false; }">
+            <div class="modal-container" onclick="event.stopPropagation();">
+                <div class="modal-header">
+                    <h2>YAZLIK/KIŞLIK LASTİK DURUMU GÜNCELLE</h2>
+                    <button class="modal-close" onclick="closeAllModals();">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                <div style="padding: 8px 16px; display: flex; align-items: center; gap: 8px;">
+                    <button onclick="openEventModal('menu', window.currentDetailVehicleId)" style="background: transparent; border: none; color: #ccc; cursor: pointer; display: flex; align-items: center; gap: 4px; padding: 0;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 12H5M12 19l-7-7 7-7"/>
+                        </svg>
+                    </button>
+                    <span class="active-branch-title" style="color: #999; font-weight: 700; font-size: 13.5px;">Olay Ekle</span>
+                </div>
+                <div class="modal-body" onclick="event.stopPropagation();">
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <div>
+                            <label for="lastik-durum-var" style="color: #ccc; font-size: 14px; display: block; margin-bottom: 8px;">Durum:</label>
+                            <div class="radio-group" style="display: flex; gap: 8px; justify-content: flex-start;">
+                                <button type="button" id="lastik-durum-var" class="radio-btn" data-value="var" style="background: transparent; border: none; color: #28a745; padding: 0; cursor: pointer; font-weight: 600; font-size: 14px;">Var</button>
+                                <button type="button" class="radio-btn" data-value="yok" style="background: transparent; border: none; color: #e1061b; padding: 0; cursor: pointer; font-weight: 600; font-size: 14px;">Yok</button>
+                            </div>
+                        </div>
+                        <div id="lastik-adres-wrapper-event" style="display: none;">
+                            <label for="lastik-adres-event" style="color: #ccc; font-size: 14px; display: block; margin-bottom: 8px;">Adres:</label>
+                            <input type="text" id="lastik-adres-event" class="form-input" placeholder="Lastik adresi" style="width: 100%;">
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
+                        <button type="button" class="modal-btn-cancel" onclick="event.stopPropagation(); updateLastikInfo();">Kaydet</button>
+                        <button type="button" class="modal-btn-confirm" onclick="event.stopPropagation(); closeEventModal('lastik');">Vazgeç</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- UTTS Bilgisi Güncelle Modal -->
+        <div id="utts-guncelle-modal" class="modal-overlay tasitlar-modal-overlay olay-ekle-modal" onclick="if(event.target === this) { event.stopPropagation(); event.preventDefault(); return false; }">
+            <div class="modal-container" onclick="event.stopPropagation();">
+                <div class="modal-header">
+                    <h2>UTTS BİLGİSİ GÜNCELLE</h2>
+                    <button class="modal-close" onclick="closeAllModals();">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                <div style="padding: 8px 16px; display: flex; align-items: center; gap: 8px;">
+                    <button onclick="openEventModal('menu', window.currentDetailVehicleId)" style="background: transparent; border: none; color: #ccc; cursor: pointer; display: flex; align-items: center; gap: 4px; padding: 0;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 12H5M12 19l-7-7 7-7"/>
+                        </svg>
+                    </button>
+                    <span class="active-branch-title" style="color: #999; font-weight: 700; font-size: 13.5px;">Olay Ekle</span>
+                </div>
+                <div class="modal-body" onclick="event.stopPropagation();">
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <div>
+                            <label for="utts-evet" style="color: #ccc; font-size: 14px; display: block; margin-bottom: 8px;">UTTS Tanımlandı mı:</label>
+                            <div class="radio-group" style="display: flex; gap: 8px; justify-content: flex-start;">
+                                <button type="button" id="utts-evet" class="radio-btn" data-value="evet" onclick="event.stopPropagation(); this.closest('.radio-group').querySelectorAll('.radio-btn').forEach(b => b.classList.remove('active')); this.classList.add('active');" style="background: transparent; border: none; color: #28a745; padding: 0; cursor: pointer; font-weight: 600; font-size: 16px;">Evet</button>
+                                <button class="radio-btn" data-value="hayir" onclick="event.stopPropagation(); this.closest('.radio-group').querySelectorAll('.radio-btn').forEach(b => b.classList.remove('active')); this.classList.add('active');" style="background: transparent; border: none; color: #e1061b; padding: 0; cursor: pointer; font-weight: 600; font-size: 16px;">Hayır</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
+                        <button type="button" class="modal-btn-cancel" onclick="event.stopPropagation(); updateUTTSInfo();">Kaydet</button>
+                        <button type="button" class="modal-btn-confirm" onclick="event.stopPropagation(); closeEventModal('utts');">Vazgeç</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Taşıt Takip Cihaz Bilgisi Güncelle Modal -->
+        <div id="takip-cihaz-guncelle-modal" class="modal-overlay tasitlar-modal-overlay olay-ekle-modal" onclick="if(event.target === this) { event.stopPropagation(); }">
+            <div class="modal-container" onclick="event.stopPropagation();">
+                <div class="modal-header">
+                    <h2>TAŞIT TAKİP CİHAZ BİLGİSİ GÜNCELLE</h2>
+                    <button class="modal-close" onclick="closeAllModals();">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                <div style="padding: 8px 16px; display: flex; align-items: center; gap: 8px;">
+                    <button onclick="openEventModal('menu', window.currentDetailVehicleId)" style="background: transparent; border: none; color: #ccc; cursor: pointer; display: flex; align-items: center; gap: 4px; padding: 0;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 12H5M12 19l-7-7 7-7"/>
+                        </svg>
+                    </button>
+                    <span class="active-branch-title" style="color: #999; font-weight: 700; font-size: 13.5px;">Olay Ekle</span>
+                </div>
+                <div class="modal-body" onclick="event.stopPropagation();">
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <div>
+                            <label for="takip-evet" style="color: #ccc; font-size: 14px; display: block; margin-bottom: 8px;">Takip Cihazı Montajı:</label>
+                            <div class="radio-group" style="display: flex; gap: 8px; justify-content: flex-start;">
+                                <button type="button" id="takip-evet" class="radio-btn" data-value="evet" onclick="event.stopPropagation(); this.closest('.radio-group').querySelectorAll('.radio-btn').forEach(b => b.classList.remove('active')); this.classList.add('active');" style="background: transparent; border: none; color: #28a745; padding: 0; cursor: pointer; font-weight: 600; font-size: 16px;">Evet</button>
+                                <button class="radio-btn" data-value="hayir" onclick="event.stopPropagation(); this.closest('.radio-group').querySelectorAll('.radio-btn').forEach(b => b.classList.remove('active')); this.classList.add('active');" style="background: transparent; border: none; color: #e1061b; padding: 0; cursor: pointer; font-weight: 600; font-size: 16px;">Hayır</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
+                        <button type="button" class="modal-btn-cancel" onclick="event.stopPropagation(); updateTakipCihazInfo();">Kaydet</button>
+                        <button type="button" class="modal-btn-confirm" onclick="event.stopPropagation(); closeEventModal('takip');">Vazgeç</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Şube Değişikliği Modal -->
+        <div id="sube-degisiklik-modal" class="modal-overlay tasitlar-modal-overlay ayarlar-modal-overlay olay-ekle-modal" onclick="if(event.target === this) { event.stopPropagation(); }">
+            <div class="modal-container" onclick="event.stopPropagation();">
+                <div class="modal-header">
+                    <h2>ŞUBE DEĞİŞİKLİĞİ</h2>
+                    <button class="modal-close" onclick="closeAllModals();">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                <div style="padding: 8px 16px; display: flex; align-items: center; gap: 8px;">
+                    <button onclick="openEventModal('menu', window.currentDetailVehicleId)" style="background: transparent; border: none; color: #ccc; cursor: pointer; display: flex; align-items: center; gap: 4px; padding: 0;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 12H5M12 19l-7-7 7-7"/>
+                        </svg>
+                    </button>
+                    <span class="active-branch-title" style="color: #999; font-weight: 700; font-size: 13.5px;">Olay Ekle</span>
+                </div>
+                <div class="modal-body" onclick="event.stopPropagation();">
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <div>
+                            <label for="sube-select" class="sube-degisiklik-label" style="color: #ccc; font-size: 14px; display: block;">Yeni Şube:</label>
+                            <select id="sube-select" class="form-input" style="width: 100%;">
+                                <option value="">Şube Seçiniz</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
+                        <button type="button" class="modal-btn-cancel" onclick="event.stopPropagation(); updateSubeDegisiklik();">Kaydet</button>
+                        <button type="button" class="modal-btn-confirm" onclick="event.stopPropagation(); closeEventModal('sube');">Vazgeç</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Kullanıcı Atama/Değişikliği Modal -->
+        <div id="kullanici-atama-modal" class="modal-overlay tasitlar-modal-overlay olay-ekle-modal" onclick="if(event.target === this) { event.stopPropagation(); }">
+            <div class="modal-container" onclick="event.stopPropagation();">
+                <div class="modal-header">
+                    <h2>KULLANICI ATAMA/DEĞİŞİKLİĞİ BİLGİSİ GÜNCELLE</h2>
+                    <button class="modal-close" onclick="closeAllModals();">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                <div style="padding: 8px 16px; display: flex; align-items: center; gap: 8px;">
+                    <button onclick="openEventModal('menu', window.currentDetailVehicleId)" style="background: transparent; border: none; color: #ccc; cursor: pointer; display: flex; align-items: center; gap: 4px; padding: 0;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 12H5M12 19l-7-7 7-7"/>
+                        </svg>
+                    </button>
+                    <span class="active-branch-title" style="color: #999; font-weight: 700; font-size: 13.5px;">Olay Ekle</span>
+                </div>
+                <div class="modal-body" onclick="event.stopPropagation();">
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <div>
+                            <label for="kullanici-select" style="color: #ccc; font-size: 14px; display: block; margin-bottom: 3px;">Kullanıcı:</label>
+                            <select id="kullanici-select" class="form-input" style="width: 100%;">
+                                <option value="">Kullanıcı Seçiniz</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
+                        <button type="button" class="modal-btn-cancel" onclick="event.stopPropagation(); updateKullaniciAtama();">Kaydet</button>
+                        <button type="button" class="modal-btn-confirm" onclick="event.stopPropagation(); closeEventModal('kullanici');">Vazgeç</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Satış/Pert Modal -->
+        <div id="satis-pert-modal" class="modal-overlay tasitlar-modal-overlay ayarlar-modal-overlay olay-ekle-modal" onclick="if(event.target === this) { event.stopPropagation(); }">
+            <div class="modal-container" onclick="event.stopPropagation();">
+                <div class="modal-header">
+                    <h2>SATIŞ/PERT BİLDİRİMİ</h2>
+                    <button class="modal-close" onclick="closeAllModals();">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                <div style="padding: 8px 16px; display: flex; align-items: center; gap: 8px;">
+                    <button onclick="openEventModal('menu', window.currentDetailVehicleId)" style="background: transparent; border: none; color: #ccc; cursor: pointer; display: flex; align-items: center; gap: 4px; padding: 0;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 12H5M12 19l-7-7 7-7"/>
+                        </svg>
+                    </button>
+                    <span class="active-branch-title" style="color: #999; font-weight: 700; font-size: 13.5px;">Olay Ekle</span>
+                </div>
+                <div class="modal-body" onclick="event.stopPropagation();">
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <div>
+                            <label for="satis-tarih" style="color: #ccc; font-size: 14px; display: block; margin-bottom: 8px;">Satış/Pert Tarihi (gg.aa.yyyy):</label>
+                            <input type="date" id="satis-tarih" class="form-input" style="width: 100%;">
+                        </div>
+                        <div>
+                            <label for="satis-tutar" style="color: #ccc; font-size: 14px; display: block; margin-bottom: 8px;">Satış Tutarı (Opsiyonel):</label>
+                            <input type="text" id="satis-tutar" class="form-input" placeholder="150.000 TL" inputmode="numeric" style="width: 100%;">
+                        </div>
+                        <div>
+                            <label for="satis-aciklama" style="color: #ccc; font-size: 14px; display: block; margin-bottom: 8px;">Açıklama:</label>
+                            <textarea id="satis-aciklama" class="form-input" rows="3" placeholder="Açıklama" style="width: 100%;"></textarea>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
+                        <button type="button" class="modal-btn-cancel" onclick="event.stopPropagation(); saveSatisPert();">Kaydet</button>
+                        <button type="button" class="modal-btn-confirm" onclick="event.stopPropagation(); closeEventModal('satis');">Vazgeç</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tarihçe Modal -->
+        <div id="vehicle-history-modal" class="modal-overlay tasitlar-modal-overlay ayarlar-modal-overlay" onclick="if(event.target === this) { event.stopPropagation(); }">
+            <div class="modal-container" onclick="event.stopPropagation();">
+                <div class="modal-header" style="border-bottom: none; justify-content: center; position: relative;">
+                    <h2 style="flex: 1; text-align: center; margin: 0;">TARİHÇE</h2>
+                    <button class="modal-close" onclick="closeAllModals();" style="position: absolute; right: 20px;"> 
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                <div style="padding: 8px 16px; display: flex; align-items: center; gap: 8px;">
+                    <button onclick="event.stopPropagation(); closeVehicleHistoryModal(); if (window.currentDetailVehicleId) showVehicleDetail(window.currentDetailVehicleId);" style="background: transparent; border: none; color: #ccc; cursor: pointer; display: flex; align-items: center; gap: 4px; padding: 0;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 12H5M12 19l-7-7 7-7"/>
+                        </svg>
+                    </button>
+                    <span class="active-branch-title" style="color: #999; font-weight: 700; font-size: 13.5px;">Taşıt Detayları</span>
+                </div>
+                <div class="modal-body">
+                    <div id="history-tabs" style="display: flex; align-items: center; justify-content: center; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+                        <button class="history-tab active" data-tab="bakim" onclick="switchHistoryTab('bakim')" style="flex: 1; background: transparent; border: none; color: #ccc; padding: 8px 12px 4px 12px; cursor: pointer; font-weight: normal; font-size: 12px; border-bottom: 2px solid transparent; text-align: center;">Bakım Geçmişi</button>
+                        <button class="history-tab" data-tab="kaza" onclick="switchHistoryTab('kaza')" style="flex: 1; background: transparent; border: none; color: #ccc; padding: 8px 12px 4px 12px; cursor: pointer; font-weight: normal; font-size: 12px; border-bottom: 2px solid transparent; text-align: center;">Kaza Geçmişi</button>
+                        <button class="history-tab" data-tab="km" onclick="switchHistoryTab('km')" style="flex: 1; background: transparent; border: none; color: #ccc; padding: 8px 12px 4px 12px; cursor: pointer; font-weight: normal; font-size: 12px; border-bottom: 2px solid transparent; text-align: center;">Km Güncelle</button>
+                        <button class="history-tab" data-tab="sube" onclick="switchHistoryTab('sube')" style="flex: 1; background: transparent; border: none; color: #ccc; padding: 8px 12px 4px 12px; cursor: pointer; font-weight: normal; font-size: 12px; border-bottom: 2px solid transparent; text-align: center;">Şube/Kullanıcı Geçmişi</button>
+                    </div>
+                    <div id="history-content"></div>
+                </div>
+            </div>
+        </div>
+
+    <!-- INLINE KRITIK JS: Harici script dosyaları 404 olsa bile loading screen kapanır -->
+    <script>
+    (function(){
+      // 1. Loading screen'i kapat (DOM hazır olunca veya 4s timeout)
+      function hideLoading() {
+        var ls = document.getElementById('loading-screen');
+        if (ls && !ls.classList.contains('hidden')) {
+          ls.classList.add('hidden');
+          ls.style.animation = 'none';
+          setTimeout(function(){ ls.style.display = 'none'; }, 350);
+        }
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', hideLoading);
+      } else {
+        hideLoading();
+      }
+      window.addEventListener('load', hideLoading);
+      setTimeout(hideLoading, 4000);
+
+      // 2. CSS async load fallback: onerror durumunda media='all' yap (print kalmayı önle)
+      document.querySelectorAll('link[rel="stylesheet"][media="print"]').forEach(function(link){
+        if (!link.onload) {
+          link.onload = function(){ this.media = 'all'; };
+        }
+        link.onerror = function(){
+          // CSS 404 olursa print modunda kalmasın, yine de dene
+          this.media = 'all';
+        };
+      });
+
+      // 3. Harici script yükleme hatası tespiti (konsola yaz, kullanıcıyı bilgilendir)
+      window.addEventListener('error', function(e){
+        if (e.target && e.target.tagName === 'SCRIPT' && e.target.src) {
+          console.warn('[Medisa] Script yüklenemedi:', e.target.src);
+          hideLoading(); // Script 404 ise loading'i kapat
+        }
+      }, true);
+    })();
+    </script>
+
+    <!-- ExcelJS lazy load - sadece gerektiğinde yüklenecek -->
+    <script defer src="data-manager.js?v=20260211"></script>
+    <script defer src="script-core.js?v=20260211"></script>
+    <script defer src="kayit.js?v=20260211"></script>
+    <script defer src="tasitlar.js?v=20260211"></script>
+    <script defer src="raporlar.js?v=20260211"></script>
+    <script defer src="ayarlar.js?v=20260211"></script>
+</body>
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+
+<html lang="tr" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Kullanıcı Girişi - Medisa</title>
+    <link rel="icon" type="image/svg+xml" href="../icon/favicon.svg">
+    <link rel="apple-touch-icon" href="../icon/apple-touch-icon.svg">
+    <link rel="apple-touch-icon" sizes="180x180" href="../icon/apple-touch-icon.svg">
+    <link rel="apple-touch-icon" sizes="192x192" href="../icon/icon-192.svg">
+    <link rel="apple-touch-icon" sizes="512x512" href="../icon/icon-512.svg">
+    <link rel="manifest" href="../manifest.json">
+    <meta name="theme-color" content="#080d16">
+    <meta name="msapplication-TileColor" content="#080d16">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Kullanıcı Girişi - Medisa">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style-core.css?v=81">
+    <link rel="stylesheet" href="driver-style.css?v=81">
+    <style>
+      /* Input stilleri - en yüksek öncelik (box-shadow ile ince çerçeve, koyu tema) */
+      .login-form .form-group input,
+      .login-form .form-group input[type="text"],
+      .login-form .form-group input[type="password"] {
+        background: #0f1418 !important;
+        background-color: #0f1418 !important;
+        border: none !important;
+        box-shadow: inset 0 0 0 0.5px rgba(225, 6, 27, 0.85) !important;
+      }
+      .login-form .form-group input:focus {
+        box-shadow: inset 0 0 0 0.5px #e1061b !important;
+      }
+      .login-form .form-group input:-webkit-autofill,
+      .login-form .form-group input:-webkit-autofill:hover,
+      .login-form .form-group input:-webkit-autofill:focus {
+        -webkit-box-shadow: 0 0 0 30px #0f1418 inset, inset 0 0 0 0.5px rgba(225, 6, 27, 0.85) !important;
+        box-shadow: inset 0 0 0 0.5px rgba(225, 6, 27, 0.85) !important;
+        -webkit-text-fill-color: #f0f0f0 !important;
+        background: #0f1418 !important;
+        background-color: #0f1418 !important;
+        border: none !important;
+        transition: background-color 5000s ease-in-out 0s;
+      }
+    </style>
+</head>
+<body class="login-page">
+    <div class="app-container driver-dashboard-container">
+        <div class="driver-header-fixed">
+            <div class="hero">
+                <div class="hero-logo">
+                    <img src="../icon/logo-header2.svg" alt="MEDISA Logo" class="logo-small">
+                </div>
+                <div class="hero-title-wrap">
+                    <h1>TAŞIT YÖNETİM SİSTEMİ</h1>
+                    <p class="driver-panel-subtitle hero-panel-subtitle">KULLANICI GİRİŞİ</p>
+                </div>
+                <div class="hero-spacer"></div>
+            </div>
+        </div>
+        <main class="content-wrap driver-content-wrap driver-scroll-area">
+            <div class="login-container">
+                <form id="login-form" class="login-form">
+                    <div class="form-group">
+                        <label for="username">Kullanıcı Adı</label>
+                        <input 
+                            type="text" 
+                            id="username" 
+                            name="username"
+                            placeholder="Örn: Savaş" 
+                            required 
+                            autocomplete="username"
+                            readonly>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Şifre</label>
+                        <input 
+                            type="password" 
+                            id="password" 
+                            name="password"
+                            placeholder="••••••" 
+                            required
+                            autocomplete="current-password"
+                            readonly>
+                    </div>
+                    
+                    <div class="form-group-checkbox">
+                        <input type="checkbox" id="remember" name="remember">
+                        <label for="remember">Beni Hatırla</label>
+                    </div>
+                    
+                    <div id="error-message" class="error-message"></div>
+                    
+                    <button type="submit" class="btn-login" id="login-btn">
+                        <span class="btn-text">Giriş Yap</span>
+                        <span class="btn-loader" style="display: none;">⏳</span>
+                    </button>
+                </form>
+            </div>
+        </main>
+        <a href="../" class="management-system-link" title="Yönetim Sistemi">
+            <span class="management-system-link-inner">
+                <svg class="management-system-link-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 6 9 12 15 18"></polyline>
+                </svg>
+                <span class="management-system-link-text">Yönetim Sistemi</span>
+            </span>
+        </a>
+        <footer id="app-footer" class="login-footer">
+            <div class="footer-content">
+                <span class="version" id="version-display">v78.2</span>
+                <span class="brand"><img src="../icon/logo-footer.svg" alt="MEDISA" style="height: 12.5px; width: auto;"></span>
+                <span class="status status-ready">● Sistem Hazır</span>
+            </div>
+        </footer>
+    </div>
+    <script defer src="driver-script.js"></script>
+</body>
+</html>

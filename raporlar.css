@@ -1,0 +1,1830 @@
+/* =========================================
+RAPORLAR MODAL CSS - FINAL (PWA FIX & DESKTOP 52PX)
+========================================= */
+
+/* Modal Overlay */
+#reports-modal.modal-overlay {
+display: none !important;
+position: fixed;
+top: 0; left: 0; right: 0; bottom: 0;
+background: transparent;
+z-index: 9999;
+flex-direction: column;
+justify-content: flex-start;
+align-items: center;
+pointer-events: none;
+padding: 0;
+height: 100vh;
+overflow: hidden;
+touch-action: pan-y;
+}
+
+#reports-modal.modal-overlay.active,
+#reports-modal.modal-overlay.open {
+display: flex !important;
+}
+
+/* Karartma */
+#reports-modal.modal-overlay::before {
+content: ‘’;
+position: absolute;
+top: max(12px, env(safe-area-inset-top));
+left: 50%;
+transform: translateX(-50%);
+width: 100%;
+max-width: 500px;
+/* Masaüstü: footer rezervi style-core.css’ten (tek kaynak) */
+height: calc(100vh - max(12px, env(safe-area-inset-top)) - var(–modal-margin-bottom-desktop));
+background: rgba(0, 0, 0, 0.85);
+backdrop-filter: blur(5px);
+z-index: -1;
+pointer-events: none;
+}
+
+/* #reports-modal container: ortak kurallar style-core.css’te; sayfa özel header/body burada */
+
+/* === HEADER === */
+#reports-modal .modal-header {
+background: linear-gradient(180deg, rgba(255, 0, 0, 0.30) 0%, rgba(255, 0, 0, 0.22) 25%, rgba(255, 0, 0, 0.16) 50%, rgba(255, 0, 0, 0.10) 75%, transparent 100%);
+padding: 2px 20px;
+height: 60px;
+display: flex;
+justify-content: center;
+align-items: center;
+flex-shrink: 0;
+position: relative;
+/* Üst çerçeve: kırmızı gradient container çerçevesini ezmesin diye header kendi çizgisini çizer */
+border-top: 0.5px solid rgba(255, 255, 255, 0.35);
+border-bottom: none !important;
+border-top-left-radius: var(–modal-radius, 10px);
+border-top-right-radius: var(–modal-radius, 10px);
+}
+
+/* BAŞLIK */
+#reports-modal .modal-header h2 {
+font-size: 17px !important;
+font-weight: 600 !important;
+letter-spacing: 0.05em !important; /* Masaüstü */
+color: #f0f0f0 !important;
+text-shadow: none !important;
+opacity: 1 !important;
+margin: 0;
+}
+
+#reports-modal .modal-close {
+background: none;
+border: none;
+color: #aaa;
+cursor: pointer;
+position: absolute;
+right: 15px;
+font-size: 20px;
+}
+#reports-modal .modal-close:hover { color: #fff; }
+
+/* === BODY === */
+#reports-modal .modal-body {
+flex: 1;
+overflow-y: auto;
+padding: 16px;
+padding-bottom: 40px; /* Chrome fix: Logoların kesilmemesi için artırıldı */
+color: #ccc;
+/* scrollbar gizleme: style-core.css’teki .modal-body kuralı kullanılır */
+}
+
+/* Header altı slot: masaüstü + mobil sol ok + Detay Ekleme burada görünür */
+#reports-modal .reports-list-header-actions {
+display: none;
+flex-shrink: 0;
+padding: 0;
+background: transparent;
+}
+#reports-modal .reports-list-header-actions:not(:empty) {
+display: flex;
+flex-shrink: 0;
+align-items: center;
+padding: 8px 16px;
+background: transparent;
+}
+#reports-modal .reports-list-header-actions .stok-controls-row-1 {
+display: flex;
+align-items: center;
+gap: 8px;
+width: 100%;
+}
+#reports-modal .reports-list-header-actions .stok-back-btn,
+#reports-modal .reports-list-header-actions .stok-detail-add-btn {
+margin: 0;
+}
+/* Raporlar: sol ok – hem stok-back-btn hem back-btn (sunucu cache) icin */
+#reports-modal .stok-back-btn,
+#reports-modal .back-btn,
+#reports-modal .modal-back-bar .back-btn {
+background: transparent !important;
+background-color: transparent !important;
+-webkit-appearance: none !important;
+appearance: none !important;
+border: none !important;
+box-shadow: none !important;
+outline: none !important;
+display: inline-flex !important;
+align-items: center !important;
+justify-content: center !important;
+padding: 4px !important;
+color: #999 !important;
+cursor: pointer !important;
+}
+#reports-modal .stok-back-btn:hover,
+#reports-modal .back-btn:hover,
+#reports-modal .modal-back-bar .back-btn:hover {
+color: #fff !important;
+background: transparent !important;
+outline: none !important;
+box-shadow: none !important;
+}
+/* Raporlar: sol ok wrapper (sunucu cache DOM) */
+#reports-modal .modal-back-bar {
+all: unset !important;
+display: inline-flex !important;
+align-items: center !important;
+gap: 4px !important;
+background: none !important;
+}
+/* Raporlar: ok yanindaki etiket (sunucu cache DOM) */
+#reports-modal .back-label {
+font-size: 14px;
+font-weight: 600;
+color: #ccc;
+}
+/* Row-1: sol ok ile metin ayni satirda */
+#reports-modal .reports-list-header-actions .stok-controls-row-1,
+#reports-modal .stok-controls-row-1 {
+display: flex !important;
+align-items: center !important;
+flex-wrap: nowrap !important;
+gap: 6px !important;
+}
+/* Liste görünümünde ilk satır (sol ok + Detay Ekleme) header slotunda; listede gizle */
+#stok-list-container .stok-list-top-controls .stok-controls-row-1 {
+display: none !important;
+}
+
+/* === TAB (SEKME) YAPISI === */
+.reports-tab-header {
+display: flex;
+background: rgba(0, 0, 0, 0.3);
+padding: 4px;
+border-bottom: none;
+flex-shrink: 0;
+}
+
+.tab-btn {
+flex: 1;
+background: transparent;
+border: none;
+color: #888;
+padding: 10px 0;
+font-size: 14px; /* 13px + 1 punto (1px) */
+font-weight: 600;
+cursor: pointer;
+transition: color 0.3s ease, border-bottom-color 0.3s ease, background 0.3s ease;
+border-bottom: 2px solid transparent;
+}
+
+.tab-btn.active {
+color: #fff;
+border-bottom: 2px solid #e1061b;
+background: rgba(255, 255, 255, 0.02);
+}
+
+.tab-btn:hover:not(.active) {
+color: #ccc;
+}
+
+/* === İÇERİK ALANI === */
+.report-view {
+padding: 10px 0;
+animation: fadeIn 0.3s ease;
+display: none;
+}
+
+.report-view.active {
+display: block;
+}
+
+@keyframes fadeIn {
+from {
+opacity: 0;
+transform: translateY(5px);
+}
+to {
+opacity: 1;
+transform: translateY(0);
+}
+}
+
+/* === ÖZET KARTLAR === */
+.report-summary-grid {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 12px;
+margin-bottom: 16px;
+}
+
+.report-card {
+background: rgba(255, 255, 255, 0.03);
+border: 1px solid rgba(255, 255, 255, 0.08);
+border-radius: 10px;
+padding: 15px;
+text-align: center;
+display: flex;
+flex-direction: column;
+}
+
+.report-card.warning {
+border-color: rgba(255, 165, 0, 0.3);
+background: rgba(255, 165, 0, 0.05);
+}
+
+.report-card.danger {
+border-color: rgba(225, 6, 27, 0.3);
+background: rgba(225, 6, 27, 0.05);
+}
+
+.report-card.info {
+border-color: rgba(59, 130, 246, 0.3);
+background: rgba(59, 130, 246, 0.05);
+}
+
+.report-card .count {
+font-size: 24px;
+font-weight: 800;
+color: #fff;
+margin-bottom: 2px;
+}
+
+.report-card .label {
+font-size: 11px;
+color: #aaa;
+letter-spacing: 0.5px;
+text-transform: uppercase;
+}
+
+/* === FİLTRELER VE ARAMA === */
+.report-filters,
+.search-box-wrapper {
+display: flex;
+gap: 10px;
+margin-bottom: 12px;
+}
+
+.report-filters select,
+.search-box-wrapper input {
+flex: 1;
+background: #151515;
+border: 1px solid #333;
+color: #fff;
+padding: 10px;
+border-radius: 8px;
+font-size: 13px;
+outline: none;
+}
+
+.report-filters select:focus,
+.search-box-wrapper input:focus {
+border-color: #e1061b;
+}
+
+.report-filters select option {
+background-color: #080d16;
+color: #e0e0e0;
+}
+
+/* === LİSTE YAPISI === */
+.report-list-header {
+display: flex;
+justify-content: space-between;
+padding: 0 8px 8px 8px;
+font-size: 11px;
+color: #666;
+font-weight: 700;
+text-transform: uppercase;
+border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.report-list-container {
+display: flex;
+flex-direction: column;
+gap: 6px;
+padding-top: 8px;
+padding-bottom: 40px;
+}
+
+/* === LİSTE SATIRI KARTI === */
+.report-row {
+background: rgba(255, 255, 255, 0.03);
+border: 1px solid rgba(255, 255, 255, 0.05);
+border-radius: 8px;
+padding: 8px 12px;
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+
+.report-row-info {
+display: flex;
+flex-direction: column;
+}
+
+.report-row-title {
+font-size: 13px;
+font-weight: 600;
+color: #eee;
+}
+
+.report-row-subtitle {
+font-size: 11px;
+color: #888;
+margin-top: 1px;
+}
+
+.report-row-status {
+font-size: 11px;
+padding: 4px 8px;
+border-radius: 4px;
+background: rgba(255, 255, 255, 0.1);
+color: #fff;
+font-weight: 500;
+}
+
+.status-red {
+background: rgba(225, 6, 27, 0.2);
+color: #ffcccc;
+}
+
+.status-green {
+background: rgba(74, 222, 128, 0.2);
+color: #ccffdd;
+}
+
+/* === STOK SEKME GRID YAPISI === */
+.stok-branch-grid {
+display: flex;
+flex-wrap: wrap;
+gap: 8px;
+align-content: start;
+justify-content: center;
+margin-bottom: 16px;
+}
+
+.stok-branch-card {
+aspect-ratio: 1 / 1;
+min-height: 0;
+width: calc((100% - (4 * 8px)) / 5);
+max-width: calc((100% - (4 * 8px)) / 5);
+flex: 0 0 calc((100% - (4 * 8px)) / 5);
+background: rgba(255, 255, 255, 0.02);
+border: 1px solid rgba(255, 255, 255, 0.30);
+border-radius: 8px;
+padding: 4px;
+text-align: center;
+cursor: pointer;
+transition: border-color 0.2s, box-shadow 0.2s;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+overflow: hidden;
+box-sizing: border-box;
+}
+
+.stok-branch-card.all-card {
+border-color: rgba(255, 255, 255, 0.30);
+}
+
+/* Hover sadece gerçek hover destekleyen cihazlarda (mobilde yapışan hover = büyümüş kutu görünümü olmasın) */
+@media (hover: hover) {
+.stok-branch-card:hover {
+border-color: rgba(255, 255, 255, 0.6);
+transform: scale(1.1);
+z-index: 5;
+}
+}
+
+.stok-branch-card.active {
+border-color: #e1061b;
+background: rgba(225, 6, 27, 0.1);
+}
+
+.stok-branch-name {
+font-size: 13px;
+font-weight: 600;
+color: #e0e0e0;
+margin-bottom: 4px;
+}
+
+.stok-branch-count {
+font-size: 12px;
+color: #888;
+}
+
+/* === STOK LİSTE GÖRÜNÜMÜ === */
+/* Yatay kaydırma: sadece içerik taşınca (overflow-x: auto); çubuk belirginliği minimum */
+.stok-list-container {
+width: 100%;
+overflow-x: auto;
+overflow-y: visible;
+-webkit-overflow-scrolling: touch;
+scrollbar-width: thin;
+scrollbar-color: rgba(128, 128, 128, 0.35) transparent;
+}
+
+.stok-list-container::-webkit-scrollbar {
+height: 4px;
+}
+
+.stok-list-container::-webkit-scrollbar-track {
+background: transparent;
+border-radius: 2px;
+}
+
+.stok-list-container::-webkit-scrollbar-thumb {
+background: rgba(128, 128, 128, 0.35);
+border-radius: 2px;
+}
+
+.stok-list-container::-webkit-scrollbar-thumb:hover {
+background: rgba(128, 128, 128, 0.5);
+}
+
+.stok-list-table {
+width: 100%;
+min-width: 800px;
+border-collapse: separate;
+border-spacing: 0;
+}
+
+.stok-list-header {
+position: sticky;
+top: 0;
+background: #080d16;
+z-index: 10;
+border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.stok-list-header-row {
+display: flex;
+background: rgba(255, 255, 255, 0.03);
+gap: 0;
+}
+
+.stok-list-header-cell {
+padding: 6px 4px;
+font-size: 11px;
+font-weight: 700;
+color: #888;
+text-transform: uppercase;
+text-align: center;
+white-space: normal;
+word-wrap: break-word;
+border-right: 1px solid rgba(255, 255, 255, 0.05);
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 2px;
+line-height: 1.1;
+transition: background 0.2s;
+}
+
+.stok-list-header-cell {
+cursor: move;
+}
+
+.stok-list-header-cell:hover {
+background: rgba(255, 255, 255, 0.05);
+}
+
+.stok-list-header-cell.drag-over {
+border-left: 2px solid #4ade80;
+border-right: 2px solid #4ade80;
+background: rgba(74, 222, 128, 0.1);
+}
+
+.stok-header-text {
+flex: 1;
+text-align: center;
+word-wrap: break-word;
+overflow-wrap: break-word;
+line-height: 1.2;
+}
+
+.stok-list-header-cell:last-child {
+border-right: none;
+}
+
+.stok-sortable-header {
+cursor: pointer;
+user-select: none;
+transition: color 0.2s;
+}
+
+.stok-sortable-header:hover {
+color: #ccc;
+}
+
+.stok-sort-icon {
+font-size: 9px;
+color: #666;
+transition: color 0.2s;
+display: inline-block;
+width: 10px;
+text-align: center;
+}
+
+.stok-sortable-header:hover .stok-sort-icon {
+color: #999;
+}
+
+.stok-sort-icon.active {
+color: #e1061b;
+}
+
+.stok-list-row {
+display: flex;
+border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+transition: background 0.2s;
+gap: 0;
+min-height: 32px;
+}
+
+.stok-list-row:hover {
+background: rgba(255, 255, 255, 0.02);
+}
+
+.stok-list-cell {
+padding: 4px 4px;
+font-size: 11px;
+color: #ccc;
+text-align: center;
+white-space: normal;
+word-wrap: break-word;
+overflow-wrap: break-word;
+border-right: 1px solid rgba(255, 255, 255, 0.05);
+display: flex;
+align-items: center;
+justify-content: center;
+overflow: hidden;
+line-height: 1.2;
+}
+
+.stok-list-cell:last-child {
+border-right: none;
+}
+
+/* Sütun genişlikleri - 8 sütun sığacak şekilde optimize edildi */
+.stok-list-header-cell[data-col=“sira”],
+.stok-list-cell[data-col=“sira”] {
+width: 20px;
+min-width: 20px;
+max-width: 20px;
+justify-content: center;
+padding: 4px 2px;
+}
+
+.stok-list-header-cell[data-col=“sube”],
+.stok-list-cell[data-col=“sube”] {
+width: 65px;
+min-width: 65px;
+}
+
+.stok-list-header-cell[data-col=“yil”],
+.stok-list-cell[data-col=“yil”] {
+width: auto;
+min-width: 35px;
+max-width: 45px;
+justify-content: center;
+padding: 4px 3px;
+}
+
+.stok-list-header-cell[data-col=“marka”] {
+width: 90px;
+min-width: 90px;
+justify-content: center;
+}
+
+.stok-list-cell[data-col=“marka”] {
+width: 90px;
+min-width: 90px;
+justify-content: flex-start;
+text-align: left;
+}
+
+.stok-list-header-cell[data-col=“plaka”],
+.stok-list-cell[data-col=“plaka”] {
+width: 80px;
+min-width: 80px;
+justify-content: center;
+}
+
+.stok-list-header-cell[data-col=“sanziman”],
+.stok-list-cell[data-col=“sanziman”] {
+width: 55px;
+min-width: 55px;
+justify-content: center;
+}
+
+.stok-list-header-cell[data-col=“km”] {
+width: auto;
+min-width: 50px;
+max-width: 70px;
+justify-content: center;
+padding: 6px 3px;
+}
+
+.stok-list-cell[data-col=“km”] {
+width: auto;
+min-width: 50px;
+max-width: 70px;
+justify-content: flex-start;
+text-align: left;
+padding: 4px 3px;
+}
+
+/* Detay sütunları */
+.stok-list-header-cell[data-col=“sigorta”],
+.stok-list-cell[data-col=“sigorta”],
+.stok-list-header-cell[data-col=“kasko”],
+.stok-list-cell[data-col=“kasko”],
+.stok-list-header-cell[data-col=“muayene”],
+.stok-list-cell[data-col=“muayene”] {
+width: 70px;
+min-width: 70px;
+justify-content: center;
+}
+
+.stok-list-header-cell[data-col=“kredi”],
+.stok-list-cell[data-col=“kredi”],
+.stok-list-header-cell[data-col=“lastik”],
+.stok-list-cell[data-col=“lastik”],
+.stok-list-header-cell[data-col=“utts”],
+.stok-list-cell[data-col=“utts”],
+.stok-list-header-cell[data-col=“takip”],
+.stok-list-cell[data-col=“takip”],
+.stok-list-header-cell[data-col=“tramer”],
+.stok-list-cell[data-col=“tramer”],
+.stok-list-header-cell[data-col=“boya”],
+.stok-list-cell[data-col=“boya”] {
+width: 60px;
+min-width: 60px;
+justify-content: center;
+}
+
+.stok-list-header-cell[data-col=“kullanici”],
+.stok-list-cell[data-col=“kullanici”] {
+width: 80px;
+min-width: 80px;
+justify-content: center;
+}
+
+.stok-list-header-cell[data-col=“tescil”],
+.stok-list-cell[data-col=“tescil”] {
+width: 70px;
+min-width: 70px;
+justify-content: center;
+}
+
+/* === DETAY EKLEME BUTONU === */
+.stok-list-top-controls {
+display: flex;
+flex-direction: column;
+gap: 12px;
+margin-bottom: 12px;
+padding-top: 16px;
+overflow: visible;
+position: relative;
+}
+/* Tarih satırı: row-1 header’da; üst kesilme önlendi; tarih ile yazıcı/büyüteç satırı arası 2px */
+#stok-list-container .stok-list-top-controls {
+padding-top: 4px; /* Daha yukarı ama kesilmeden */
+margin-bottom: 2px;
+}
+#stok-list-container .stok-list-top-controls .stok-controls-row-2 {
+margin-top: 0 !important; /* -28px kesiliyordu, sıfırlandı */
+}
+
+/* Masaüstü: Sol ok bir satır yukarı; detay menü buton altında, tarih ile yer değiştir */
+@media (min-width: 641px) {
+.report-view {
+padding: 1px 0;
+}
+/* Sol ok + Detay Ekleme satırı modal başlığına daha yakın; Detay Ekleme–butonlar arası boşluk yarıya */
+#reports-modal .reports-list-header-actions:not(:empty) {
+padding-top: 4px !important;
+padding-bottom: 1px !important;
+}
+#reports-body:has(#stok-list-container .stok-list-top-controls) {
+padding-top: 9px !important;
+}
+#stok-list-container .stok-list-top-controls {
+padding-top: 0 !important;
+margin-bottom: 0 !important;
+overflow: visible;
+}
+#stok-list-container:has(.stok-list-top-controls) > .stok-list-container {
+margin-top: 12px !important;
+}
+/* Row-2 içinde: export + tarih üst satır, detay menü tam genişlik alt satır */
+#stok-list-container .stok-list-top-controls > .stok-controls-row-1 { order: 0; }
+#stok-list-container .stok-list-top-controls > .stok-controls-row-2 { order: 2 !important; margin-top: -16px !important; padding-top: 14px !important; display: flex !important; flex-wrap: wrap !important; justify-content: space-between !important; align-items: flex-end !important; gap: 6px; }
+#stok-list-container .stok-controls-row-2 > .stok-export-controls { order: 0; }
+#stok-list-container .stok-controls-row-2 > .stok-detail-menu { order: 1 !important; flex-basis: 100% !important; width: 100% !important; }
+#stok-list-container .stok-controls-row-2 > .stok-date-range-controls { order: 0; }
+#stok-list-container .stok-controls-row-2 .stok-export-controls { padding-bottom: 0 !important; margin-bottom: 0 !important; align-items: flex-end !important; }
+#stok-list-container .stok-controls-row-2 .stok-export-left { align-items: flex-end !important; margin-top: -11px !important; }
+#stok-list-container .stok-controls-row-2 .stok-export-btn,
+#stok-list-container .stok-controls-row-2 .stok-print-btn,
+#stok-list-container .stok-controls-row-2 .stok-search-wrap { min-height: 38px !important; box-sizing: border-box !important; }
+#stok-list-container .stok-controls-row-2 .stok-search-wrap { position: relative; display: flex; align-items: flex-end; }
+#stok-list-container .stok-controls-row-2 .stok-search-wrap .stok-search-btn {
+font-size: 18px !important;
+min-height: 38px !important;
+display: flex;
+align-items: center;
+justify-content: center;
+box-sizing: border-box;
+}
+#stok-list-container .stok-controls-row-2 .stok-date-range-controls { margin-left: auto; margin-top: 0 !important; padding-bottom: 0 !important; margin-bottom: 8px !important; align-items: flex-end !important; }
+#stok-list-container .stok-controls-row-2 .stok-date-input-group { margin-bottom: 0 !important; padding-bottom: 0 !important; }
+#stok-list-container .stok-controls-row-2 .stok-date-input-group label { padding-top: 4px !important; }
+#stok-list-container .stok-controls-row-2 .stok-search-container.open {
+position: absolute;
+top: 100%;
+left: 0;
+width: 250px;
+margin-top: 4px;
+height: auto;
+min-height: 0;
+justify-content: flex-start;
+}
+/* Detay butonları açıkken liste ile arası 12px (masaüstü: detay ekle–tablo boşluğu 12px ile uyumlu) */
+#stok-list-container:has(.stok-list-top-controls .stok-detail-menu-open) > .stok-list-container {
+margin-top: 12px !important;
+}
+}
+
+/* Masaüstü: İki satırlık layout */
+.stok-controls-row-1 {
+display: flex;
+align-items: center;
+gap: 8px;
+justify-content: flex-start;
+width: 100%;
+}
+
+.stok-controls-row-2 {
+display: flex;
+justify-content: flex-end;
+width: 100%;
+margin-top: -28px; /* Bir satır yukarı alındı - tarih alanları row-1 ile aynı hizada */
+}
+
+#stok-list-container .stok-controls-row-2 > .stok-detail-menu {
+flex-basis: 100%;
+width: 100%;
+order: 1;
+}
+
+.stok-back-btn {
+background: transparent;
+border: none;
+color: #999;
+cursor: pointer;
+padding: 4px;
+display: inline-flex;
+align-items: center;
+justify-content: center;
+transition: color 0.2s;
+margin-top: 0;
+}
+
+.stok-back-btn svg {
+width: 20px;
+height: 20px;
+}
+
+.stok-back-btn:hover {
+color: #fff;
+}
+
+.stok-detail-add-btn {
+background: transparent;
+border: none;
+color: #888;
+padding: 0 4px;
+font-size: 12px;
+font-weight: 600;
+cursor: pointer;
+transition: transform 0.2s ease, color 0.2s ease;
+white-space: nowrap;
+flex-shrink: 0;
+line-height: 1;
+display: flex;
+align-items: center;
+margin-top: 0;
+}
+
+.stok-detail-add-btn:hover {
+transform: scale(1.1);
+color: #aaa;
+}
+
+.stok-detail-add-btn.active {
+color: #4ade80;
+transform: scale(1.1);
+}
+
+.stok-detail-menu {
+display: none;
+gap: 4px;
+flex-wrap: wrap;
+align-items: center;
+flex: 1;
+min-width: 0;
+width: 100%;
+margin-left: 0;
+margin-top: 8px;
+}
+.stok-detail-menu.stok-detail-menu-open {
+display: flex;
+}
+
+.stok-date-range-controls {
+display: flex;
+flex-direction: row;
+gap: 8px;
+margin-bottom: 0;
+padding: 0;
+align-items: center;
+margin-left: auto;
+margin-top: 0; /* Row-2 seviyesinde margin-top kullanılıyor */
+}
+
+.stok-date-input-group {
+display: flex;
+flex-direction: column;
+gap: 4px;
+width: auto;
+flex: 1;
+margin-top: 0;
+}
+
+.stok-date-input-group label {
+font-size: 10px;
+color: #888;
+font-weight: 600;
+text-transform: uppercase;
+text-align: center; /* Etiketleri ortala */
+line-height: 1.3;
+padding-top: 2px; /* Üst kesilme önleme */
+}
+
+.stok-date-input {
+background: #151515;
+border: 1px solid #333;
+color: #ccc !important;
+padding: 1.2px 32px 1.2px 8px; /* Sağ padding takvim simgesi için */
+border-radius: 6px;
+font-size: 13px;
+outline: none;
+transition: border-color 0.2s;
+height: auto;
+line-height: 1.3;
+text-align: right; /* Masaüstü için sağa yasla */
+/* Çift görünüm önleme */
+-webkit-appearance: none;
+appearance: none;
+}
+
+/* Date input’lar için webkit düzeltmeleri - çift görünüm önleme */
+.stok-date-input::-webkit-datetime-edit {
+color: #ccc !important;
+-webkit-text-fill-color: #ccc !important;
+padding: 0 !important;
+margin: 0 !important;
+width: 100% !important;
+box-sizing: border-box !important;
+overflow: hidden !important;
+text-overflow: ellipsis !important;
+}
+
+.stok-date-input::-webkit-datetime-edit-fields-wrapper {
+color: #ccc !important;
+-webkit-text-fill-color: #ccc !important;
+padding: 0 !important;
+margin: 0 !important;
+width: 100% !important;
+box-sizing: border-box !important;
+overflow: hidden !important;
+}
+
+/* Placeholder çift görünümünü önle */
+.stok-date-input::-webkit-datetime-edit-text {
+color: #ccc !important;
+-webkit-text-fill-color: #ccc !important;
+}
+
+.stok-date-input::-webkit-datetime-edit-month-field,
+.stok-date-input::-webkit-datetime-edit-day-field,
+.stok-date-input::-webkit-datetime-edit-year-field {
+color: #ccc !important;
+-webkit-text-fill-color: #ccc !important;
+padding: 0 !important;
+overflow: hidden !important;
+text-overflow: ellipsis !important;
+}
+
+.stok-date-input::-webkit-calendar-picker-indicator {
+filter: invert(1);
+opacity: 0.6;
+cursor: pointer;
+}
+
+/* Başlangıç tarihi input: bitiş tarihi gibi normal çalışıyor */
+#stok-date-start {
+color: #ccc !important;
+-webkit-text-fill-color: #ccc !important;
+}
+
+#stok-date-start::-webkit-datetime-edit {
+color: #ccc !important;
+-webkit-text-fill-color: #ccc !important;
+}
+
+#stok-date-start::-webkit-datetime-edit-fields-wrapper {
+color: #ccc !important;
+-webkit-text-fill-color: #ccc !important;
+}
+
+/* Bitiş tarihi input - değer varken görünsün */
+#stok-date-end {
+color: #ccc !important;
+-webkit-text-fill-color: #ccc !important;
+}
+
+#stok-date-end:not(:placeholder-shown),
+#stok-date-end[value]:not([value=””]) {
+color: #ccc !important;
+-webkit-text-fill-color: #ccc !important;
+}
+
+#stok-date-end::-webkit-datetime-edit {
+color: #ccc !important;
+-webkit-text-fill-color: #ccc !important;
+padding: 0 !important;
+margin: 0 !important;
+}
+
+#stok-date-end::-webkit-datetime-edit-fields-wrapper {
+color: #ccc !important;
+-webkit-text-fill-color: #ccc !important;
+padding: 0 !important;
+margin: 0 !important;
+}
+
+.stok-date-has-value {
+color: #ccc !important;
+-webkit-text-fill-color: #ccc !important;
+}
+
+.stok-date-has-value::-webkit-datetime-edit {
+color: #ccc !important;
+-webkit-text-fill-color: #ccc !important;
+padding: 0 !important;
+margin: 0 !important;
+}
+
+.stok-date-has-value::-webkit-datetime-edit-fields-wrapper {
+color: #ccc !important;
+-webkit-text-fill-color: #ccc !important;
+padding: 0 !important;
+margin: 0 !important;
+}
+
+.stok-date-input:focus {
+border-color: #e1061b;
+}
+
+.stok-export-controls {
+display: flex;
+gap: 8px;
+margin-bottom: 0;
+padding: 0 4px;
+justify-content: space-between;
+align-items: center;
+position: relative;
+}
+
+.stok-export-left {
+display: flex;
+gap: 8px;
+align-items: center;
+}
+
+.stok-export-btn,
+.stok-print-btn,
+.stok-search-btn {
+background: transparent;
+border: none;
+color: #888;
+padding: 8px;
+font-size: 13px;
+cursor: pointer;
+transition: color 0.2s, background 0.2s;
+display: flex;
+align-items: center;
+justify-content: center;
+line-height: 1;
+}
+
+.stok-print-btn {
+font-size: 18px !important; /* Yazıcı simgesi büyütüldü (13px -> 18px) */
+}
+
+.excel-icon {
+display: inline-flex;
+align-items: center;
+justify-content: center;
+width: 20px;
+height: 20px;
+background: #217346;
+color: #fff;
+font-weight: 700;
+font-size: 12px;
+border-radius: 3px;
+font-family: Arial, sans-serif;
+transition: transform 0.2s, background 0.2s;
+}
+
+.stok-export-btn:hover .excel-icon {
+transform: scale(1.1);
+background: #2a8a55;
+}
+
+.stok-export-btn:hover,
+.stok-print-btn:hover,
+.stok-search-btn:hover {
+color: #fff;
+transform: scale(1.1);
+}
+.stok-print-btn:hover,
+.stok-search-btn:hover {
+transform: scale(1.15);
+}
+
+/* Arama kutusu */
+.stok-search-container {
+width: 0;
+height: 100%;
+background: transparent;
+overflow: hidden;
+transition: width 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+display: flex;
+align-items: center;
+justify-content: flex-end;
+padding: 0;
+z-index: 20;
+}
+
+.stok-search-container.open {
+width: 250px;
+}
+
+.stok-search-input {
+width: 100%;
+background: #151515;
+border: 1px solid #333;
+color: #fff;
+padding: 8px 12px;
+border-radius: 6px;
+font-size: 13px;
+outline: none;
+transition: border-color 0.2s;
+margin-top: 4px; /* Büyüteçe basınca açılan input – ikonlarla hiza (masaüstü PWA) */
+box-sizing: border-box;
+}
+
+.stok-search-input:focus {
+border-color: #e1061b;
+}
+
+.stok-search-input::placeholder {
+color: #666;
+}
+
+.stok-detail-menu-item {
+display: flex;
+align-items: center;
+gap: 4px;
+transition: opacity 0.2s;
+}
+
+.stok-detail-menu-item.draggable {
+cursor: move;
+}
+
+.stok-detail-menu-item.draggable:hover {
+opacity: 0.8;
+}
+
+.stok-detail-menu-item.drag-over {
+border-top: 2px solid #4ade80;
+margin-top: 2px;
+}
+
+.stok-detail-menu-btn {
+background: rgba(255, 255, 255, 0.05);
+border: 1px solid rgba(255, 255, 255, 0.2);
+color: #ccc;
+padding: 6px 10px;
+border-radius: 4px;
+font-size: 10px;
+font-weight: 600;
+cursor: pointer;
+transition: background 0.2s, color 0.2s, border-color 0.2s;
+white-space: nowrap;
+width: 74px;
+text-align: center;
+flex-shrink: 0;
+overflow: hidden;
+display: flex;
+align-items: center;
+justify-content: center;
+}
+
+.stok-detail-menu-btn span {
+font-size: 10px;
+transition: font-size 0.2s;
+overflow: hidden;
+text-overflow: ellipsis;
+max-width: 100%;
+}
+
+.stok-detail-menu-btn:hover {
+background: rgba(255, 255, 255, 0.1);
+border-color: rgba(255, 255, 255, 0.3);
+}
+
+.stok-detail-menu-btn.active {
+background: rgba(74, 222, 128, 0.2);
+border-color: rgba(74, 222, 128, 0.5);
+color: #4ade80;
+}
+
+/* === KULLANICI SEKME STİLLERİ === */
+
+/* Kullanıcı Liste Item */
+.kullanici-list-item {
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 8px 16px;
+border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+background: rgba(255, 255, 255, 0.02);
+cursor: pointer;
+transition: background 0.2s;
+}
+
+.kullanici-list-item:hover {
+background: rgba(255, 255, 255, 0.05);
+}
+
+.kullanici-list-item-left {
+flex: 1;
+}
+
+.kullanici-list-item-name {
+font-size: 13px;
+font-weight: 600;
+color: #f0f0f0;
+}
+
+.kullanici-list-item-right {
+text-align: right;
+display: flex;
+flex-direction: column;
+align-items: flex-end;
+gap: 4px;
+}
+
+.kullanici-list-item-plate {
+font-size: 12px;
+font-weight: 700;
+color: #fff;
+background: #000;
+padding: 2px 6px;
+border-radius: 3px;
+border: 1px solid #333;
+}
+
+.kullanici-list-item-brand {
+font-size: 11px;
+color: #aaa;
+}
+
+/* Kullanıcı Liste Top Controls */
+.kullanici-list-top-controls {
+display: flex;
+align-items: center;
+gap: 12px;
+padding: 12px 16px;
+border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.kullanici-export-controls {
+display: flex;
+align-items: center;
+gap: 8px;
+margin-left: auto;
+}
+
+.kullanici-export-right {
+display: flex;
+align-items: center;
+gap: 8px;
+}
+
+/* Kullanıcı Detay Grid */
+.kullanici-detail-header {
+padding: 12px 16px;
+border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.kullanici-detail-grid {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 20px;
+padding: 20px;
+}
+
+.kullanici-detail-left,
+.kullanici-detail-right {
+display: flex;
+flex-direction: column;
+}
+
+.kullanici-detail-section {
+background: rgba(255, 255, 255, 0.02);
+border: 1px solid rgba(255, 255, 255, 0.1);
+border-radius: 8px;
+padding: 16px;
+}
+
+.kullanici-detail-section-title {
+font-size: 14px;
+font-weight: 700;
+color: #f0f0f0;
+margin-bottom: 16px;
+padding-bottom: 8px;
+border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.kullanici-detail-row {
+display: flex;
+flex-direction: column;
+gap: 4px;
+margin-bottom: 12px;
+}
+
+.kullanici-detail-row:last-child {
+margin-bottom: 0;
+}
+
+.kullanici-detail-label {
+font-size: 12px;
+color: #888;
+font-weight: 600;
+}
+
+.kullanici-detail-value {
+font-size: 14px;
+color: #f0f0f0;
+}
+
+/* Kullanıcı Events List */
+.kullanici-events-list {
+display: flex;
+flex-direction: column;
+gap: 12px;
+max-height: 500px;
+overflow-y: auto;
+}
+
+.kullanici-event-item {
+background: rgba(255, 255, 255, 0.03);
+border: 1px solid rgba(255, 255, 255, 0.1);
+border-radius: 6px;
+padding: 12px;
+transition: background 0.2s;
+}
+
+.kullanici-event-item:hover {
+background: rgba(255, 255, 255, 0.05);
+}
+
+.kullanici-event-header {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 8px;
+}
+
+.kullanici-event-type {
+font-size: 12px;
+font-weight: 700;
+color: #e1061b;
+text-transform: uppercase;
+}
+
+.kullanici-event-date {
+font-size: 11px;
+color: #888;
+}
+
+.kullanici-event-vehicle {
+font-size: 12px;
+color: #aaa;
+margin-bottom: 4px;
+}
+
+.kullanici-event-details {
+font-size: 12px;
+color: #ccc;
+line-height: 1.4;
+}
+
+/* — MOBİL TEK BLOK (max-width: 640px) - .cursorrules uyumlu — */
+@media (max-width: 640px) {
+/* Kontrast + Modal */
+.report-card {
+border-color: rgba(255, 255, 255, 0.4) !important;
+background: rgba(255, 255, 255, 0.03) !important;
+padding: 3px !important;
+border-radius: 8px !important;
+}
+.report-card .count {
+color: #ffffff !important;
+font-size: 21px;
+}
+.report-card .label {
+color: rgba(255, 255, 255, 0.85) !important;
+font-size: 11px;
+}
+.stok-branch-item {
+border-color: rgba(255, 255, 255, 0.35) !important;
+}
+.stok-branch-item:hover {
+border-color: rgba(255, 255, 255, 0.5) !important;
+}
+/* Raporlar modal mobil: ortak ölçü style-core’da (.modal-overlay .modal-container) */
+#reports-modal .modal-header h2 {
+color: #ffffff !important;
+font-size: 22px !important;
+letter-spacing: 0.2em !important;
+text-shadow: none !important;
+}
+#reports-modal .modal-close { font-size: 21px; }
+#reports-modal .modal-container {
+overflow-x: hidden !important;
+touch-action: pan-y !important;
+overscroll-behavior: none !important;
+overscroll-behavior-x: none !important;
+}
+#reports-modal.modal-overlay::before {
+max-width: 100% !important;
+width: 100%;
+height: 100%;
+top: 0;
+left: 0;
+transform: none;
+}
+#reports-modal .modal-body {
+padding-bottom: 40px !important;
+}
+.report-summary-grid {
+grid-template-columns: 1fr;
+gap: 10px;
+}
+.report-filters { flex-direction: column; }
+.report-list-header { font-size: 13px !important; }
+.report-row-title { font-size: 15px !important; }
+.report-row-subtitle { font-size: 13px !important; }
+.report-row-status { font-size: 13px !important; }
+.tab-btn { font-size: 16px !important; }
+.report-filters select,
+.search-box-wrapper input { font-size: 15px !important; }
+
+/* Stok grid + liste */
+.stok-branch-grid { gap: 6px; }
+.stok-branch-card {
+width: calc((100% - (2 * 6px)) / 3);
+max-width: calc((100% - (2 * 6px)) / 3);
+flex: 0 0 calc((100% - (2 * 6px)) / 3);
+padding: 3px;
+}
+/* Mobil: hover büyümesi olmasın (ilk açılışta bir kutu büyümüş kalmasın) */
+.stok-branch-card:not(.active) {
+transform: none !important;
+}
+.stok-branch-name { font-size: 14px; }
+.stok-branch-count { font-size: 13px; }
+
+/* === MOBİL LİSTE İYİLEŞTİRMELERİ === */
+
+/* Liste container - sağ sol boşluk 1px’e düşürüldü */
+.stok-list-container {
+margin-left: 1px !important;
+margin-right: 1px !important;
+padding-left: 0 !important;
+padding-right: 0 !important;
+}
+
+/* Başlıklar - 1.5 punto büyütüldü (13px -> 14.5px) */
+.stok-list-header-cell {
+font-size: 14.5px !important;
+padding: 5px 3px;
+}
+
+/* İçerik - 1 punto büyütüldü (13px -> 14px) */
+.stok-list-cell {
+font-size: 14px !important;
+padding: 4px 3px;
+}
+
+/* Marka kolonu - 100px’den 85px’e daraltıldı */
+.stok-list-header-cell[data-col=“marka”] {
+width: 85px !important;
+min-width: 85px !important;
+}
+
+.stok-list-cell[data-col=“marka”] {
+width: 85px !important;
+min-width: 85px !important;
+}
+
+/* Bakım, Kaza, Durum kolonları - eşit genişlik 40px */
+.stok-list-header-cell[data-col=“bakim”],
+.stok-list-cell[data-col=“bakim”],
+.stok-list-header-cell[data-col=“kaza”],
+.stok-list-cell[data-col=“kaza”],
+.stok-list-header-cell[data-col=“durum”],
+.stok-list-cell[data-col=“durum”] {
+width: 40px !important;
+min-width: 40px !important;
+max-width: 40px !important;
+text-align: center !important;
+justify-content: center !important;
+}
+
+.stok-list-top-controls {
+display: flex;
+flex-direction: column;
+gap: 12px;
+padding-top: 0;
+}
+/* Sol ok satırının 2px altında ikon satırı (butonlar) */
+#reports-body:has(#stok-list-container .stok-list-top-controls) {
+padding-top: 2px !important;
+}
+#stok-list-container .stok-list-top-controls {
+padding-top: 0 !important;
+}
+/* Detay menü simgelerin altında (row-2 iç sırası: export-controls → detail-menu → date-controls) */
+#stok-list-container .stok-controls-row-2 > .stok-detail-menu {
+margin-top: 0 !important;
+}
+#stok-list-container .stok-controls-row-2 > .stok-detail-menu.stok-detail-menu-open {
+margin-top: 6px !important;
+}
+/* Mobilde header-altı slot: buton altı dikey boşluk azaltıldı */
+#reports-modal .reports-list-header-actions:not(:empty) {
+padding: 6px 16px 4px 16px !important;
+}
+.stok-controls-row-1 {
+display: flex;
+align-items: center;
+gap: 8px !important;
+justify-content: flex-start;
+width: 100%;
+}
+/* Row-2: ikonlar yatay sola yaslı, sonra detay menü, sonra tarihler */
+.stok-controls-row-2 {
+display: flex;
+flex-direction: column;
+width: 100%;
+gap: 6px;
+align-items: flex-start;
+}
+#stok-list-container .stok-controls-row-2 > .stok-export-controls {
+display: flex;
+flex-direction: row;
+justify-content: flex-start;
+align-items: center;
+gap: 8px;
+width: 100%;
+}
+#stok-list-container .stok-controls-row-2 .stok-export-left {
+align-items: center !important;
+}
+.stok-list-top-controls > .stok-controls-row-1 { order: 0; }
+.stok-list-top-controls > .stok-controls-row-2 { order: 2; margin-top: 0 !important; }
+.stok-back-btn,
+.back-btn {
+margin-top: 0;
+margin-left: 0;
+display: inline-flex !important;
+align-items: center;
+justify-content: center;
+padding: 10px !important;
+min-width: auto !important;
+min-height: auto !important;
+background: transparent !important;
+}
+.stok-back-btn svg,
+.back-btn svg {
+width: 24px !important;
+height: 24px !important;
+}
+/* Mobil: sol ok wrapper arka plansiz */
+.modal-back-bar {
+background: none !important;
+display: inline-flex !important;
+align-items: center !important;
+}
+.stok-detail-add-btn {
+font-size: 14px !important;
+margin-left: 0 !important;
+margin-top: 0;
+display: flex;
+align-items: center;
+line-height: 1.2;
+}
+.stok-date-range-controls {
+display: flex;
+flex-direction: row;
+gap: 6px !important;
+width: 100%;
+margin-left: 0;
+margin-top: 0;
+}
+.stok-date-input-group {
+flex: 1;
+min-width: 0 !important;
+}
+.stok-date-input-group label {
+font-size: 12px !important;
+text-align: center !important;
+}
+.stok-date-input {
+font-size: 15px !important;
+text-align: center !important;
+height: 32px !important;
+min-height: 32px !important;
+line-height: 32px !important;
+padding: 0 30px 0 8px !important;
+box-sizing: border-box !important;
+width: 100% !important;
+overflow: hidden !important;
+text-overflow: ellipsis !important;
+}
+#stok-date-start,
+#stok-date-end {
+height: 32px !important;
+min-height: 32px !important;
+}
+.stok-export-controls {
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+align-items: center;
+gap: 8px;
+}
+.stok-export-left {
+display: flex;
+gap: 8px;
+align-items: center;
+}
+.stok-export-btn { font-size: 15px !important; }
+.stok-search-btn { font-size: 19px !important; } /* Büyüteç Excel/yazıcıya yakın boyut */
+.stok-print-btn { font-size: 20px !important; }
+.stok-export-btn,
+.stok-print-btn { width: auto; }
+/* Büyüteç aynı satırda: wrap ve buton dikey ortalansın */
+#stok-list-container .stok-controls-row-2 .stok-search-wrap {
+display: flex !important;
+align-items: center !important;
+justify-content: center !important;
+}
+#stok-list-container .stok-controls-row-2 .stok-search-wrap .stok-search-btn {
+display: flex !important;
+align-items: center !important;
+justify-content: center !important;
+}
+.stok-list-container { margin-top: 4px; }
+
+/* Liste görünümü: üst (kontroller + export) ve sütun başlıkları sabit, sadece veri satırları kayar */
+/* Grid ile detay listesi iç içe girmesin: list view’de grid tamamen gizli, liste izole */
+#view-stok:has(#stok-list-container .stok-list-top-controls) #stok-branch-grid {
+display: none !important;
+visibility: hidden !important;
+position: absolute !important;
+width: 0 !important;
+height: 0 !important;
+overflow: hidden !important;
+pointer-events: none !important;
+}
+#reports-body:has(#stok-list-container .stok-list-top-controls) {
+display: flex;
+flex-direction: column;
+overflow: hidden;
+}
+#view-stok:has(#stok-list-container .stok-list-top-controls) {
+flex: 1;
+min-height: 0;
+display: flex;
+flex-direction: column;
+overflow: hidden;
+}
+#stok-list-container:has(.stok-list-top-controls) {
+display: flex !important;
+flex-direction: column;
+flex: 1;
+min-height: 0;
+overflow: hidden;
+isolation: isolate;
+}
+#stok-list-container:has(.stok-list-top-controls) > .stok-list-top-controls {
+flex-shrink: 0;
+}
+#stok-list-container:has(.stok-list-top-controls) > .stok-list-container {
+flex: 1;
+min-height: 0;
+overflow-y: auto;
+overflow-x: auto;
+-webkit-overflow-scrolling: touch;
+margin-top: 8px;
+contain: layout;
+padding-bottom: 16px;
+box-sizing: border-box;
+}
+#stok-list-container:has(.stok-list-top-controls) > .stok-list-container .stok-list-header {
+position: sticky;
+top: 0;
+z-index: 10;
+background: #080d16;
+}
+
+.stok-search-container { max-width: calc(100vw - 120px); }
+.stok-search-input { font-size: 15px !important; }
+.stok-search-container.open { width: 200px; }
+.stok-detail-menu-btn,
+.stok-detail-menu-btn span { font-size: 12px !important; }
+.stok-sort-icon { font-size: 11px !important; }
+.excel-icon { font-size: 14px !important; }
+
+/* Mobilde tam genişlik kullanım, yatayda alt çerçeve hizalı */
+#reports-modal .modal-body {
+padding-left: 8px !important;
+padding-right: 8px !important;
+box-sizing: border-box !important;
+}
+#view-stok:has(#stok-list-container .stok-list-top-controls) {
+box-sizing: border-box !important;
+max-width: 100% !important;
+}
+#reports-modal .reports-list-header-actions {
+padding-left: 8px !important;
+padding-right: 8px !important;
+width: 100% !important;
+box-sizing: border-box !important;
+}
+.stok-detail-menu {
+width: 100% !important;
+max-width: 100% !important;
+padding: 0 !important;
+margin-left: 0 !important;
+margin-right: 0 !important;
+grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
+gap: 4px;
+}
+.stok-detail-menu.stok-detail-menu-open {
+display: grid !important;
+}
+.stok-detail-menu-item {
+min-width: 0;
+}
+.stok-detail-menu-btn {
+width: 100% !important;
+max-width: 100% !important;
+overflow: hidden;
+text-overflow: ellipsis;
+white-space: nowrap;
+}
+.stok-date-range-controls {
+width: 100% !important;
+max-width: 100% !important;
+margin-left: 0 !important;
+margin-right: 0 !important;
+}
+.stok-export-controls {
+width: 100% !important;
+max-width: 100% !important;
+}
+.stok-list-table {
+width: 100% !important;
+max-width: 100% !important;
+}
+.stok-list-container {
+width: 100% !important;
+max-width: 100% !important;
+padding: 0 !important;
+}
+#stok-list-container {
+width: 100% !important;
+max-width: 100% !important;
+padding: 0 !important;
+}
+
+/* Kullanıcı */
+.kullanici-detail-section-title { font-size: 16px !important; }
+.kullanici-detail-label { font-size: 14px !important; }
+.kullanici-detail-value { font-size: 16px !important; }
+.kullanici-event-type { font-size: 14px !important; }
+.kullanici-event-date { font-size: 13px !important; }
+.kullanici-event-vehicle { font-size: 14px !important; }
+.kullanici-event-details { font-size: 14px !important; }
+.kullanici-detail-grid {
+grid-template-columns: 1fr;
+gap: 16px;
+padding: 16px;
+}
+.kullanici-list-item { padding: 6px 12px; }
+.kullanici-list-item-name { font-size: 13px; }
+.kullanici-list-item-plate { font-size: 12px; }
+.kullanici-list-item-brand { font-size: 11px; }
+}
+
+/* iOS PWA modal margin: style-core.css (.modal-overlay .modal-container) */
+
+/* Yazdır: sadece Excel ile aynı rapor tablosu görünsün (ekran görüntüsü değil) */
+@media print {
+/* Varsayılan: dikey sayfa (detay azken) */
+@page { size: portrait; }
+/* Sağ-sol siyah alanları kaldır: sayfa tam genişlik, beyaz arka plan */
+html, body {
+background: #fff !important;
+max-width: none !important;
+width: 100% !important;
+margin: 0 !important;
+padding: 0 !important;
+min-height: auto !important;
+}
+body * { visibility: hidden; }
+#stok-print-area, #stok-print-area * { visibility: visible; }
+#stok-print-area {
+position: absolute;
+left: 0;
+top: 0;
+width: 100%;
+max-width: 100%;
+padding: 12px;
+background: #fff;
+color: #000;
+box-sizing: border-box;
+}
+#stok-print-area .stok-print-title {
+font-size: 14pt;
+margin: 0 0 8px 0;
+font-weight: bold;
+}
+#stok-print-area .stok-print-date {
+font-size: 11pt;
+margin: 0 0 12px 0;
+}
+#stok-print-area .stok-print-table {
+width: 100%;
+border-collapse: collapse;
+font-size: 10pt;
+}
+#stok-print-area .stok-print-table th,
+#stok-print-area .stok-print-table td {
+border: 1px solid #333;
+padding: 4px 8px;
+text-align: center;
+}
+#stok-print-area .stok-print-table thead tr {
+background: #404040;
+color: #fff;
+}
+#stok-print-area .stok-print-table tbody tr.even { background: #fff; }
+#stok-print-area .stok-print-table tbody tr.odd { background: #e5e5e5; }
+}

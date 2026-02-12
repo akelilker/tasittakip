@@ -1,0 +1,1472 @@
+/* =========================================
+   AYARLAR MODAL CSS - FINAL (PWA FIX & DESKTOP 52PX & MOBIL HİZALAMA)
+   ========================================= */
+
+/* === AYARLAR MODAL OVERLAY (sınıf ile) === */
+.ayarlar-modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: transparent;
+    z-index: 9999;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    pointer-events: none;
+    padding-top: 0;
+    padding-bottom: 0;
+    height: 100vh;
+    overflow: hidden;
+    touch-action: pan-y;
+}
+
+.ayarlar-modal-overlay.active,
+.ayarlar-modal-overlay.open {
+    display: flex;
+    pointer-events: auto;
+}
+
+.ayarlar-modal-overlay::before {
+    display: none;
+}
+
+/* Ayarlar modalları: branch/user/data-management container style-core'da; küçük modallar aşağıda override */
+
+#cache-confirm-modal .modal-container {
+    background: #080d16; 
+    width: 100%;
+    max-width: 400px;
+    height: 210px !important;
+    max-height: 210px !important;
+    margin: 80px auto 52px auto;
+    border-radius: 10px;
+    border: 0.5px solid rgba(255, 255, 255, 0.5);
+    box-shadow: none; 
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+    z-index: 10002;
+    pointer-events: auto;
+}
+
+/* Cache Confirm Modal - Başlık ile içerik arası boşluk; altta 20px fazla (butonlar kesilmesin) */
+#cache-confirm-modal .modal-body {
+    padding-top: 2px !important;
+    padding-bottom: 32px !important;
+}
+
+/* Cache Confirm Modal - Mesaj ile butonlar arası boşluk */
+#cache-confirm-modal #cache-confirm-message {
+    margin-bottom: 18px !important;
+}
+
+/* Cache Confirm Modal Butonları - Hover Efekti (Sabit Yükseklik) */
+#cache-confirm-modal .modal-body button {
+    transition: background 0.2s, font-size 0.2s !important;
+    height: 28px !important; /* Sabit yükseklik - taşma engellendi */
+    overflow: hidden !important; /* Metin büyürse taşma gizlensin */
+    line-height: 1.2 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
+}
+
+/* EVET butonu (kırmızı) - 1. buton */
+#cache-confirm-modal .modal-body button:first-child:hover {
+    font-size: 15px !important;
+    background: rgba(225, 6, 27, 0.08) !important; /* Çok hafif kırmızı dolgu */
+}
+
+/* HAYIR butonu (yeşil) - 2. buton */
+#cache-confirm-modal .modal-body button:last-child:hover {
+    font-size: 15px !important;
+    background: rgba(40, 167, 69, 0.08) !important; /* Çok hafif yeşil dolgu */
+}
+
+/* === TESCİL TARİHİ MODALLARI === */
+#tescil-tarih-confirm-modal .modal-container {
+    background: #080d16; 
+    width: 100%;
+    max-width: 400px;
+    height: 190px !important;
+    max-height: 190px !important;
+    margin: 80px auto 52px auto;
+    border-radius: 10px;
+    border: 0.5px solid rgba(255, 255, 255, 0.5);
+    box-shadow: none; 
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+    z-index: 10002;
+    pointer-events: auto;
+}
+
+/* Tescil Tarihi Onay Modal - Başlık ile içerik arası boşluk */
+#tescil-tarih-confirm-modal .modal-body {
+    padding: 8px 20px 12px 20px !important;
+}
+
+/* Tescil Tarihi Onay Modal - Mesaj metni boşlukları */
+#tescil-tarih-confirm-modal #tescil-confirm-message {
+    margin-bottom: 10px !important;
+    line-height: 1.4 !important;
+    margin-top: 0 !important;
+}
+
+/* Tescil Tarihi Onay Modal Butonları - Hover Efekti */
+#tescil-tarih-confirm-modal .modal-body button {
+    transition: background 0.2s, font-size 0.2s !important;
+    height: 28px !important;
+    overflow: hidden !important;
+    line-height: 1.2 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
+}
+
+#tescil-tarih-confirm-modal .modal-body button:first-child:hover {
+    font-size: 15px !important;
+    background: rgba(225, 6, 27, 0.08) !important;
+}
+
+#tescil-tarih-confirm-modal .modal-body button:last-child:hover {
+    font-size: 15px !important;
+    background: rgba(40, 167, 69, 0.08) !important;
+}
+
+/* Tescil Tarihi Giriş Modalı */
+#tescil-tarih-input-modal .modal-container {
+    background: #080d16; 
+    width: 100%;
+    max-width: 400px;
+    height: 220px !important;
+    max-height: 220px !important;
+    margin: 80px auto 52px auto;
+    border-radius: 10px;
+    border: 0.5px solid rgba(255, 255, 255, 0.5);
+    box-shadow: none; 
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+    z-index: 10002;
+    pointer-events: auto;
+}
+
+/* Tescil Tarihi Input */
+#tescil-tarih-input-modal #tescil-tarih-input {
+    width: 140px;
+    text-align: center;
+    padding: 8px 12px;
+    background: #0d131f;
+    border: 0.3px solid rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+    color: #e0e0e0;
+    font-size: 14px;
+    font-family: inherit;
+    box-sizing: border-box;
+}
+
+#tescil-tarih-input-modal #tescil-tarih-input:focus {
+    outline: none;
+    border-color: rgba(255, 255, 255, 0.4);
+    background: #0f1622;
+}
+
+#tescil-tarih-input-modal #tescil-tarih-input.field-error {
+    border-color: #e1061b;
+}
+
+/* Tescil Tarihi Input Overlay (gg kısmını kırmızı göstermek için) */
+.tescil-input-wrapper {
+    position: relative;
+}
+
+.tescil-tarih-overlay {
+    position: absolute;
+    pointer-events: none;
+    white-space: nowrap;
+    color: #e0e0e0;
+    background: transparent;
+    overflow: visible;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.tescil-tarih-overlay .tescil-day {
+    color: #e1061b !important;
+}
+
+/* Input'un metnini overlay ile uyumlu yapmak için input'u görünür bırak, overlay üstte */
+#tescil-tarih-input-modal #tescil-tarih-input {
+    position: relative;
+    z-index: 1;
+    color: transparent !important; /* Metin görünmez, overlay gösterir */
+    /* background ve border korunur (mevcut stil) */
+    caret-color: #e0e0e0; /* Cursor görünür olsun */
+}
+
+#tescil-tarih-input-modal #tescil-tarih-input:focus {
+    color: transparent !important; /* Focus'ta da transparent kal */
+    /* background ve border stilleri korunur */
+    caret-color: #e0e0e0; /* Cursor görünür olsun */
+}
+
+#tescil-tarih-input-modal #tescil-tarih-input::placeholder {
+    color: transparent !important; /* Placeholder da görünmez */
+}
+
+#tescil-tarih-input-modal #tescil-tarih-overlay {
+    z-index: 2; /* Input'un üzerinde */
+    pointer-events: none; /* Tıklamalar input'a geçsin */
+}
+
+/* Tescil Tarihi Giriş Modal Butonları - Hover Efekti */
+.tescil-tarih-kaydet-btn,
+.tescil-tarih-vazgec-btn {
+    transition: background 0.2s, font-size 0.2s !important;
+    height: 28px !important;
+    overflow: hidden !important;
+    line-height: 1.2 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
+}
+
+.tescil-tarih-kaydet-btn:hover {
+    font-size: 15px !important;
+    background: rgba(40, 167, 69, 0.08) !important;
+}
+
+.tescil-tarih-vazgec-btn:hover {
+    font-size: 15px !important;
+    background: rgba(225, 6, 27, 0.08) !important;
+}
+
+/* Olay Ekle + içindeki tüm modallar: style-core default (500px, tam yükseklik) */
+/* event-menu, bakim, kaza, sigorta, kasko, muayene, anahtar, kredi, şube, satış hepsi aynı ölçü */
+/* Sadece z-index override gereken modallar aşağıda */
+#vehicle-history-modal .modal-container,
+#bakim-ekle-modal .modal-container,
+#kaza-ekle-modal .modal-container,
+#sigorta-guncelle-modal .modal-container,
+#kasko-guncelle-modal .modal-container,
+#muayene-guncelle-modal .modal-container,
+#anahtar-guncelle-modal .modal-container,
+#kredi-guncelle-modal .modal-container,
+#sube-degisiklik-modal .modal-container,
+#satis-pert-modal .modal-container {
+    z-index: 10002;
+    pointer-events: auto;
+}
+
+/* Tarihçe Tab Stilleri */
+.history-tab.active {
+    color: #e0e0e0 !important;
+    border-bottom-color: #e1061b !important;
+}
+
+.history-tab {
+    transition: color 0.2s, border-bottom-color 0.2s;
+}
+
+.history-tab:hover {
+    color: #f0f0f0 !important;
+}
+
+#info-modal .modal-container {
+    background: #080d16; 
+    width: 100%;
+    max-width: 400px;
+    height: auto !important;
+    max-height: calc(100vh - 80px - 52px);
+    margin: 80px auto 52px auto;
+    border-radius: 10px;
+    border: 0.5px solid rgba(255, 255, 255, 0.5);
+    box-shadow: none; 
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+    z-index: 10002;
+    pointer-events: auto;
+}
+
+/* Info Modal Body - içeriğe göre yükseklik; Tamam butonundan 8px sonra biter */
+#info-modal .modal-body {
+    padding: 2px 20px 8px 20px !important;
+    overflow-y: auto;
+    flex: 0 0 auto !important;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+#info-modal #info-message {
+    color: #ccc !important;
+    font-size: 14px !important;
+    line-height: 1.6 !important;
+    margin-bottom: 8px !important;
+    text-align: center !important;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+}
+
+/* Metin ile Tamam butonu arasındaki boşluğu kapat (margin-top: auto etkisini kaldır) */
+#info-modal .modal-body > div {
+    margin-top: 0 !important;
+}
+
+#info-modal .modal-body button {
+    padding: 10px 30px !important;
+    background: transparent !important;
+    border: 0.3px solid #28a745 !important;
+    color: #28a745 !important;
+    border-radius: 6px !important;
+    cursor: pointer !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    flex-shrink: 0;
+}
+
+/* Genel Modal Header Stili */
+.ayarlar-modal-overlay .modal-header {
+    background: linear-gradient(180deg, rgba(255, 0, 0, 0.30) 0%, rgba(255, 0, 0, 0.22) 25%, rgba(255, 0, 0, 0.16) 50%, rgba(255, 0, 0, 0.10) 75%, transparent 100%);
+    padding: 8px 20px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    position: relative;
+    border-bottom: none !important;
+}
+.ayarlar-modal-overlay .modal-header h2 {
+    text-align: center;
+}
+
+/* Header action buttons: form altında */
+
+.modal-header h2 {
+    font-size: 17px !important; /* 1px büyütüldü */
+    font-weight: 600 !important;
+    letter-spacing: 0.05em !important;
+    color: #f0f0f0 !important;
+    text-shadow: none !important;
+    opacity: 1 !important;
+    margin: 0;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    color: #aaa;
+    cursor: pointer;
+    position: absolute;
+    right: 15px;
+    font-size: 20px;
+}
+.modal-close:hover { color: #fff; }
+
+/* Header altı: sol ok + Ayarlar (Taşıtlar modalı okları ile aynı stil) */
+.ayarlar-back-bar {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 16px;
+    background: #080d16;
+    flex-shrink: 0;
+    margin-top: -16px;
+}
+.ayarlar-back-btn {
+    background: transparent;
+    border: none;
+    color: #999;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s;
+}
+.ayarlar-back-btn svg {
+    width: 20px;
+    height: 20px;
+}
+.ayarlar-back-btn:hover {
+    color: #fff;
+}
+.ayarlar-back-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #888;
+}
+
+/* Modal Body */
+#branch-modal .modal-body,
+#user-modal .modal-body,
+#branch-form-modal .modal-body,
+#user-form-modal .modal-body,
+#data-management-modal .modal-body {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 16px;
+    min-height: 0;
+    scrollbar-width: none;
+}
+
+/* Ayarlar içi bölümler: sola kaymayı önle, sol/sağ eşit */
+#branch-modal .modal-body > div,
+#user-modal .modal-body > div {
+    box-sizing: border-box;
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    padding: 16px;
+}
+
+/* Veri Yönetimi Butonları */
+.data-management-text-btn {
+    background: none;
+    border: none;
+    color: #b5b9c0; /* Daha açık gri - okunaklı */
+    padding: 8px 0;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 17px; /* 2 punto büyütüldü (15+2) */
+    text-align: center;
+    width: auto;
+    display: block;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 42px auto; /* Yatayda ortala, aralarındaki boşluk 12+30=42px */
+    transition: font-size 0.2s;
+    height: 32px;
+    overflow: hidden;
+    line-height: 1.2;
+    box-sizing: border-box;
+}
+
+/* Veri Yönetimi: Yedek Al / Yedekten Geri Yükle - modal üst/alt çerçeve dikkate alarak ortalanmış */
+#data-management-modal .modal-container {
+    position: relative;
+}
+#data-management-modal .modal-body {
+    flex: 1;
+    min-height: 0;
+}
+#data-management-modal .data-management-actions {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 16px;
+    box-sizing: border-box;
+    pointer-events: none;
+}
+#data-management-modal .data-management-actions .data-management-text-btn {
+    pointer-events: auto;
+}
+
+.data-management-text-btn:last-child { margin-bottom: 0; }
+.data-management-text-btn:hover { 
+    font-size: 18px;
+}
+
+/* Ayarlar Menüsü ve Listeler */
+.settings-dropdown {
+    position: absolute;
+    top: 25px; right: 4px; 
+    background: transparent; 
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    z-index: 2000;
+    display: none;
+    flex-direction: column;
+    min-width: 180px;
+    overflow: visible;
+    padding: 0;
+}
+.settings-dropdown.open { display: flex; }
+
+.settings-dropdown button {
+    background: #080d16;
+    border: 1px solid rgba(255, 255, 255, 0.3); 
+    color: #f0f0f0;
+    padding: 8px 20px;
+    height: 40px;
+    width: 100%;
+    text-align: center;
+    font-size: 15px; /* 1px büyütüldü */
+    cursor: pointer;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.settings-dropdown button:last-child { margin-bottom: 0; }
+
+/* Veri Yönetimi wrapper ve buton eşitleme */
+.settings-dropdown .has-submenu-wrapper {
+    width: 100%;
+    margin-bottom: 8px;
+}
+
+.settings-dropdown .has-submenu-wrapper:last-child {
+    margin-bottom: 0;
+}
+
+.settings-dropdown .has-submenu {
+    width: 100% !important;
+    height: 40px !important;
+    margin-bottom: 0 !important;
+    padding: 8px 20px !important;
+    box-sizing: border-box !important;
+}
+
+.settings-dropdown .has-submenu:hover {
+    border-color: rgba(255, 255, 255, 0.55) !important;
+}
+
+/* HR elementi boşluğu eşitleme - sadece alt boşluk */
+.settings-dropdown hr {
+    margin: 0 0 8px 0 !important;
+    border: none !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+    padding: 0 !important;
+    height: 0 !important;
+    width: 100% !important;
+}
+.settings-dropdown button:hover { 
+    background: #0f1418; 
+    color: #fff; 
+    border-color: rgba(255, 255, 255, 0.55); 
+    font-size: 16px; /* 1px büyütüldü */ 
+} 
+
+.settings-dropdown .cache-clear-btn {
+  border: 1px solid rgba(225, 6, 27, 0.5) !important;
+  overflow: visible !important; /* Hover'da metin büyüsün, kesilmesin */
+}
+.settings-dropdown .cache-clear-btn:hover {
+  border-color: rgba(225, 6, 27, 0.7) !important;
+  font-size: 17px !important;
+}
+
+.list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.02);
+}
+.list-item:last-child { border-bottom: none; }
+
+.item-info { display: flex; flex-direction: column; }
+.item-title { font-weight: 600; color: #f0f0f0; font-size: 15px; /* 1px büyütüldü */ margin-bottom: 2px; }
+.item-subtitle { font-size: 13px; /* 1px büyütüldü */ color: #888; }
+
+.item-actions { display: flex; gap: 8px; }
+.action-btn {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.2);
+    color: #ccc;
+    width: 28px; height: 28px;
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+}
+.action-btn.edit:hover { border-color: #dda410; color: #dda410; }
+.action-btn.delete:hover { border-color: #e1061b; color: #e1061b; }
+
+.settings-add-btn {
+    width: 100%;
+    background: rgba(255,255,255,0.05);
+    border: 1px dashed rgba(255,255,255,0.3);
+    color: #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+}
+.settings-add-btn:hover { background: rgba(255,255,255,0.1); color: #fff; border-color: #fff; }
+
+.settings-add-text-btn {
+    background: none;
+    border: none;
+    color: #fff;
+    padding: 8px 0;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 15px; /* 1px büyütüldü */
+    transition: font-size 0.2s;
+    text-align: center;
+    width: auto; /* İçeriğe göre genişlik */
+    display: inline-flex; /* İçeriğe göre genişlik */
+    align-items: center;
+    justify-content: center;
+    height: 32px; /* Sabit yükseklik - taşma engellendi */
+    overflow: hidden; /* Metin büyürse taşma gizlensin */
+    line-height: 1.2; /* Sabit line-height */
+    box-sizing: border-box;
+    margin: 0 auto; /* Yatayda ortala */
+}
+
+/* Yeni Şube/Kullanıcı butonlarını ortalamak için parent div */
+.modal-body > div:has(.settings-add-text-btn) {
+    text-align: center;
+}
+
+.settings-add-text-btn.user-add-btn { color: #888; }
+.settings-add-text-btn:hover { 
+    font-size: 16px; /* 1px büyütüldü */
+}
+
+/* Formlar */
+.settings-form-section { margin-bottom: 12px; }
+.settings-form-label { display: block; font-size: 13px; /* 1px büyütüldü */ color: #ccc; margin-bottom: 4px; }
+.settings-form-input, .settings-form-select {
+    width: 100%;
+    padding: 8px;
+    background: #0d131f;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 6px;
+    color: #fff;
+    font-size: 15px; /* 1px büyütüldü */
+    box-sizing: border-box;
+}
+
+/* Select Dropdown Option Stilleri - Normal ve Hover Renkleri */
+.settings-form-select option,
+select.settings-form-select option,
+#user-role option,
+#user-branch option {
+    background-color: #080d16 !important;
+    color: #e0e0e0 !important;
+}
+
+.settings-form-select option:checked,
+select.settings-form-select option:checked,
+#user-role option:checked,
+#user-branch option:checked {
+    background: #080d16 !important;
+    color: #fff !important;
+}
+
+.settings-form-select option:hover,
+select.settings-form-select option:hover,
+#user-role option:hover,
+#user-branch option:hover {
+    background: rgba(255, 255, 255, 0.1) !important; /* Açık gri, nötr */
+    color: #fff !important;
+}
+
+.settings-form-select option:focus,
+select.settings-form-select option:focus,
+#user-role option:focus,
+#user-branch option:focus {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: #fff !important;
+}
+
+.settings-form-select option:active,
+select.settings-form-select option:active,
+#user-role option:active,
+#user-branch option:active {
+    background: rgba(255, 255, 255, 0.15) !important;
+    color: #fff !important;
+}
+
+/* Select element için accent-color (bazı tarayıcılarda çalışır) */
+.settings-form-select,
+select.settings-form-select,
+#user-role,
+#user-branch {
+    accent-color: rgba(255, 255, 255, 0.1) !important;
+    color-scheme: dark;
+}
+
+/* Autofill (Otomatik Tamamlama) Stilleri - Beyaz Arka Planı Önle */
+input.settings-form-input:-webkit-autofill,
+input.settings-form-input:-webkit-autofill:hover,
+input.settings-form-input:-webkit-autofill:focus,
+input.settings-form-input:-webkit-autofill:active,
+#user-name:-webkit-autofill,
+#user-name:-webkit-autofill:hover,
+#user-name:-webkit-autofill:focus,
+#user-name:-webkit-autofill:active,
+#user-phone:-webkit-autofill,
+#user-phone:-webkit-autofill:hover,
+#user-phone:-webkit-autofill:focus,
+#user-phone:-webkit-autofill:active,
+#user-email:-webkit-autofill,
+#user-email:-webkit-autofill:hover,
+#user-email:-webkit-autofill:focus,
+#user-email:-webkit-autofill:active,
+#branch-name:-webkit-autofill,
+#branch-name:-webkit-autofill:hover,
+#branch-name:-webkit-autofill:focus,
+#branch-name:-webkit-autofill:active,
+#branch-city:-webkit-autofill,
+#branch-city:-webkit-autofill:hover,
+#branch-city:-webkit-autofill:focus,
+#branch-city:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 1000px #0d131f inset !important;
+    -webkit-text-fill-color: #fff !important;
+    background-color: #0d131f !important;
+    background-clip: content-box !important;
+    color: #fff !important;
+    caret-color: #fff !important;
+    transition: background-color 5000s ease-in-out 0s, color 5000s ease-in-out 0s !important;
+}
+
+/* Firefox için autofill */
+input.settings-form-input:-moz-autofill,
+#user-name:-moz-autofill,
+#user-phone:-moz-autofill,
+#user-email:-moz-autofill,
+#branch-name:-moz-autofill,
+#branch-city:-moz-autofill {
+    background-color: #0d131f !important;
+    color: #fff !important;
+    box-shadow: 0 0 0 1000px #0d131f inset !important;
+}
+/* Atanacak Taşıt - Dropdown (tıklanınca açılan liste) */
+.user-vehicles-dropdown-wrap {
+  position: relative;
+}
+.user-vehicles-trigger {
+  width: 100%;
+  height: 26px;
+  padding: 2px 8px;
+  background: #0d131f;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  color: #888;
+  font-size: 13px;
+  line-height: 22px;
+  cursor: pointer;
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.2s;
+  display: flex;
+  align-items: center;
+}
+.user-vehicles-trigger:hover {
+  border-color: rgba(255, 255, 255, 0.35);
+}
+.user-vehicles-trigger.user-vehicles-trigger-open {
+  border-color: var(--theme-color, #e1061b);
+  box-shadow: 0 0 0 1px var(--theme-color, #e1061b);
+}
+.user-vehicles-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: 4px;
+  background: #0f1418;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 8px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 10;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.user-vehicles-dropdown::-webkit-scrollbar {
+  display: none;
+}
+.user-vehicles-search-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 10px;
+  margin-bottom: 8px;
+  height: 26px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+.user-vehicles-search-icon {
+  font-size: 12px;
+  opacity: 0.7;
+}
+.user-vehicles-search-input {
+  flex: 1;
+  min-width: 0;
+  height: 24px;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  border: none;
+  color: #f0f0f0;
+  font-size: 14px;
+  outline: none;
+  box-sizing: border-box;
+  line-height: 1;
+}
+.user-vehicles-search-input::placeholder {
+  color: #888;
+}
+.user-vehicles-checkbox-list {
+  max-height: 184px;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.user-vehicles-checkbox-list::-webkit-scrollbar {
+  display: none;
+}
+
+.settings-form-buttons { 
+    display: flex;
+    justify-content: center; /* Butonları yatayda ortala */
+    gap: 10px; /* Butonlar arası 10px boşluk (scale büyümesi için yeterli) */
+    margin-top: 16px; 
+    flex-wrap: wrap; /* Gerekirse alt satıra geç */
+}
+
+/* DÜZELTME: Daha ince çerçeve (0.3px) */
+.settings-btn-save {
+    background: transparent;
+    border: 0.3px solid #28a745; 
+    color: #28a745;
+    padding: 0;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: font-size 0.2s, background 0.2s; /* Font-size ve background transition */
+    /* Yükseklik 4px azaltıldı: 36px → 32px */
+    height: 32px;
+    min-width: 120px; /* Minimum genişlik */
+    flex: 0 0 auto; /* Flex ile otomatik genişlik, eşit olmayacak */
+    font-size: 15px; /* 1px büyütüldü */
+    line-height: 32px; /* Yükseklik ile aynı, tek satırda ortalama */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    overflow: hidden; /* İçerik taşmasını önle */
+}
+.settings-btn-save:hover { 
+    font-size: 16px; /* 1px büyütüldü */
+    background: rgba(255, 165, 0, 0.08); /* Çok az saydam turuncu arka plan */
+    transform: none; /* Komple büyüme yok */
+}
+
+/* DÜZELTME: Daha ince çerçeve (0.3px) */
+.settings-btn-cancel {
+    background: transparent;
+    border: 0.3px solid #e1061b; 
+    color: #e1061b;
+    padding: 0;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: font-size 0.2s, background 0.2s; /* Font-size ve background transition */
+    /* Yükseklik 4px azaltıldı: 36px → 32px */
+    height: 32px;
+    min-width: 120px; /* Minimum genişlik */
+    flex: 0 0 auto; /* Flex ile otomatik genişlik, eşit olmayacak */
+    font-size: 15px; /* 1px büyütüldü */
+    line-height: 32px; /* Yükseklik ile aynı, tek satırda ortalama */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    overflow: hidden; /* İçerik taşmasını önle */
+}
+.settings-btn-cancel:hover { 
+    font-size: 16px; /* 1px büyütüldü */
+    background: rgba(255, 165, 0, 0.08); /* Çok az saydam turuncu arka plan */
+    transform: none; /* Komple büyüme yok */
+}
+
+/* Sil Butonu - Daha ince çerçeve (0.3px) */
+.settings-btn-delete {
+    background: transparent;
+    border: 0.3px solid #e1061b; 
+    color: #e1061b;
+    padding: 0;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: transform 0.2s, background 0.2s;
+    /* Sabit yükseklik - font-size değişmeyecek, sadece transform */
+    height: 36px;
+    min-width: 120px; /* Minimum genişlik */
+    flex: 0 0 auto; /* Flex ile otomatik genişlik, eşit olmayacak */
+    font-size: 15px; /* 1px büyütüldü */
+    line-height: 36px; /* Yükseklik ile aynı, tek satırda ortalama */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    overflow: hidden; /* İçerik taşmasını önle */
+}
+.settings-btn-delete:hover { 
+    transform: scale(1.05); /* Sadece transform, font-size sabit */
+    background: rgba(225, 6, 27, 0.1);
+}
+
+/* Alt Menü */
+.settings-submenu {
+    position: absolute;
+    left: 100%; top: 0;
+    margin-left: 2px;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    display: none;
+    flex-direction: column;
+    min-width: 150px;
+    overflow: hidden;
+}
+
+/* === KART YAPISI (GRID) === */
+#branch-list,
+#user-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-content: start;
+    /* 1-5 kart arası yatayda ortalanmış görünsün */
+    justify-content: center;
+}
+
+.settings-card {
+    /* DÜZELTME: Yükseklik %15 Küçüldü (100/85) */
+    aspect-ratio: 100 / 85; 
+    min-height: 0;
+    /* MASAÜSTÜ: Her kart sabit genişlik (5 kart için eşit dağılım) */
+    width: calc((100% - (4 * 8px)) / 5); /* 5 kart + 4 gap */
+    max-width: calc((100% - (4 * 8px)) / 5);
+    min-width: 0; /* Flexbox taşmasını önle */
+    flex: 0 0 calc((100% - (4 * 8px)) / 5); /* Flexbox'ta sabit genişlik */
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    padding: 8px 4px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+    box-sizing: border-box; /* Padding dahil hesaplama */
+}
+
+.settings-card-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    flex: 1;
+    gap: 2px;
+    /* Metinleri yatayda ortala */
+    text-align: center;
+}
+
+.settings-card:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: translateY(-2px);
+}
+
+.settings-card-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: #f0f0f0;
+    text-align: center !important; /* Yatayda ortala */
+    margin: 0 auto; /* Ortala */
+    line-height: 1.1;
+    width: 100%;
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2; 
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.settings-card-subtitle {
+    font-size: 11px;
+    color: #888;
+    text-align: center !important; /* Yatayda ortala */
+    margin: 0 auto; /* Ortala */
+    line-height: 1.1;
+    width: 100%;
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2; 
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.settings-card-gorev {
+    font-size: 10px;
+    color: #999;
+    text-align: center !important; /* Yatayda ortala */
+    margin: 0 auto; /* Ortala */
+    line-height: 1.1;
+    width: 100%;
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2; 
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.settings-card-count {
+    font-size: 10px;
+    color: #999;
+    text-align: center !important; /* Yatayda ortala */
+    margin: 0 auto; /* Ortala */
+    line-height: 1.1;
+    width: 100%;
+}
+
+/* Kart hover: kalem/çöp form modal header'da */
+.settings-card-actions {
+    display: none !important;
+}
+
+.settings-action-btn {
+    background: none;
+    border: none;
+    color: #ccc;
+    width: auto;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 14.08px;
+    transition: color 0.2s, transform 0.2s;
+    padding: 0;
+    transform: scale(0.88);
+}
+
+.settings-action-btn.edit:hover { color: #dda410; transform: scale(1.1); }
+.settings-action-btn.delete:hover { color: #e1061b; transform: scale(1.1); }
+
+/* === DETAY GÖRÜNÜMÜ === */
+.settings-detail-view { padding: 16px; }
+
+.settings-detail-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.settings-back-btn {
+    background: none;
+    border: none;
+    color: #ccc;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: color 0.2s;
+    flex-shrink: 0;
+    padding: 0;
+}
+
+.settings-back-btn:hover { color: #fff; }
+
+.settings-detail-title {
+    font-size: 17px;
+    font-weight: 600;
+    color: #e0e0e0;
+    margin: 0;
+}
+
+.settings-detail-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.settings-detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 12px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+}
+
+.settings-detail-label { font-size: 13px; font-weight: 600; color: #888; }
+.settings-detail-value { font-size: 14px; font-weight: 600; color: #e0e0e0; text-align: right; }
+.settings-detail-item { font-size: 16px; font-weight: 600; color: #e0e0e0; padding: 0; margin: 0; text-align: left; line-height: 1.2; }
+
+/* === MOBİL AYARLAR === */
+@media (max-width: 640px) {
+    /* ✨ MOBİL KONTRAST ARTIRMA ✨ */
+    .settings-card {
+        border-color: rgba(255, 255, 255, 0.4) !important; /* Ayarlar kartı border daha görünür */
+        background: rgba(255, 255, 255, 0.03) !important; /* Arka plan biraz daha açık */
+    }
+    
+    .settings-card-title {
+        color: #ffffff !important; /* Kart başlığı tam beyaz */
+    }
+    
+    .settings-card-subtitle {
+        color: rgba(255, 255, 255, 0.85) !important; /* Alt başlık daha parlak */
+    }
+    
+    .settings-card-gorev {
+        color: rgba(255, 255, 255, 0.75) !important; /* Görev metni daha görünür */
+    }
+    
+    /* Kaydet butonu - YEŞİL çerçeve + YEŞİL metin */
+    .settings-btn-save {
+        border-color: #28a745 !important;
+        color: #28a745 !important;
+    }
+    
+    /* Vazgeç butonu - KIRMIZI çerçeve + KIRMIZI metin */
+    .settings-btn-cancel {
+        border-color: #e1061b !important;
+        color: #e1061b !important;
+    }
+    
+    /* Sil butonu - KIRMIZI çerçeve + KIRMIZI metin */
+    .settings-btn-delete {
+        border-color: #e1061b !important;
+        color: #e1061b !important;
+    }
+    
+    .form-input {
+        color: #ffffff !important; /* Input metni beyaz */
+        border-color: rgba(255, 255, 255, 0.4) !important; /* Input border daha görünür */
+    }
+    #user-form-modal .user-vehicles-trigger {
+        border-color: rgba(255, 255, 255, 0.4) !important;
+        color: #888 !important; /* Placeholder benzeri soluk */
+    }
+    
+    .form-label {
+        color: rgba(255, 255, 255, 0.9) !important; /* Label daha parlak */
+    }
+    
+    /* Modal başlıkları mobilde 1.5 punto büyüt */
+    .modal-header h2 {
+        font-size: 19px !important; /* 17px + 1.5 punto (2px) */
+        color: #ffffff !important; /* Başlık tam beyaz */
+        text-shadow: none !important;
+    }
+    
+    /* Geri çubuğu: Taşıtlar modalı gibi büyük tıklanabilir alan */
+    .ayarlar-back-btn {
+        padding: 10px !important;
+        min-width: 44px !important;
+        min-height: 44px !important;
+    }
+    .ayarlar-back-btn svg {
+        width: 24px !important;
+        height: 24px !important;
+    }
+    
+    /* Kullanıcı / Şube / Veriler: modal'lar – style-core.css ile uyumlu */
+    #branch-modal.modal-overlay,
+    #user-modal.modal-overlay,
+    #data-management-modal.modal-overlay {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        padding-bottom: 0 !important;
+        align-items: stretch;
+        justify-content: center;
+        overflow: hidden !important;
+        overscroll-behavior: none !important;
+    }
+    #branch-modal .modal-container,
+    #user-modal .modal-container,
+    #data-management-modal .modal-container {
+        background: #080d16 !important;
+    }
+
+    #branch-form-modal.modal-overlay,
+    #user-form-modal.modal-overlay {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        padding-bottom: 0 !important;
+        align-items: stretch;
+        justify-content: center;
+        overflow: hidden !important;
+        overscroll-behavior: none !important;
+    }
+    #branch-form-modal .modal-container,
+    #user-form-modal .modal-container {
+        background: #080d16 !important;
+    }
+    
+    #branch-list, #user-list { 
+        gap: 8px; 
+        /* MOBİL: 3 kart yan yana, ortalanmış (flexbox zaten justify-content: center) */
+    }
+    .settings-card { 
+        /* MOBİL: Her kart sabit genişlik (3 kart için eşit dağılım) */
+        width: calc((100% - (2 * 8px)) / 3); /* 3 kart + 2 gap */
+        max-width: calc((100% - (2 * 8px)) / 3);
+        flex: 0 0 calc((100% - (2 * 8px)) / 3); /* Flexbox'ta sabit genişlik */
+        padding: 4px 2px;
+    }
+    
+    .settings-card-title { font-size: 15px; }
+    .settings-card-subtitle { font-size: 13px; }
+    .settings-card-gorev { font-size: 9px; }
+    
+    /* Liste altı Yeni Ekle butonu */
+    .settings-add-text-btn { font-size: 15px; }
+    
+    /* Düzenleme modalları (Şube & Kullanıcı): etiket, input, kaydet butonu */
+    #branch-form-modal .form-label,
+    #user-form-modal .form-label { font-size: 15px; }
+    
+    #branch-form-modal .form-input,
+    #user-form-modal .form-input,
+    #branch-form-modal select.form-input,
+    #user-form-modal select.form-input,
+    #user-form-modal .user-vehicles-trigger {
+        height: 26px !important;
+        padding: 2px 8px;
+        box-sizing: border-box;
+    }
+    
+    #branch-form-modal .settings-btn-save,
+    #user-form-modal .settings-btn-save {
+        height: 32px !important;
+        line-height: 30px;
+    }
+    
+    /* GENEL BUTTON SAĞA YASLAMA + MOBİL BOYUTLANDIRMA */
+    .settings-dropdown button { 
+        text-align: right !important; 
+        font-size: 16px !important;
+        height: 52px !important; /* DÜZELTME: Parmakla basmak için 52px */
+        margin-bottom: 8px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: flex-end !important;
+        padding: 8px 16px !important; /* Sol ve sağ padding eşit */
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+    
+    .settings-dropdown button:last-child {
+        margin-bottom: 0 !important;
+    }
+    
+    /* HR elementi mobil boşluğu eşitleme */
+    .settings-dropdown hr {
+        margin: 0 0 8px 0 !important;
+        border: none !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+        padding: 0 !important;
+        height: 0 !important;
+        width: 100% !important;
+    }
+    
+    /* DÜZELTME: Veri Yönetimi & Wrapper - Flex ile Sağa Yasla */
+    .settings-dropdown .has-submenu-wrapper {
+        width: 100% !important;
+        display: flex !important;
+        justify-content: flex-end !important;
+        margin-bottom: 8px !important;
+    }
+    
+    .settings-dropdown .has-submenu-wrapper:last-child {
+        margin-bottom: 0 !important;
+    }
+
+    .settings-dropdown .has-submenu {
+        width: 100% !important;
+        height: 52px !important;
+        justify-content: flex-end !important; /* Buton içeriğini sağa it */
+        text-align: right !important;
+        padding: 8px 16px !important;
+        display: flex !important; /* Flexbox hizalamayı garanti eder */
+        align-items: center !important;
+        margin-bottom: 0 !important;
+        box-sizing: border-box !important;
+    }
+
+    /* ESKİ KOD TEMİZLİĞİ: Ok işaretini kaldır */
+    .settings-dropdown .has-submenu::after,
+    .settings-dropdown .has-submenu::before {
+        display: none !important;
+        content: none !important;
+    }
+}
+
+/* === MASAÜSTÜ AYARLAR === */
+@media (min-width: 641px) {
+    .settings-dropdown button { text-align: center; }
+
+    /* Şube/Kullanıcı modalları: çerçeve genişliği style-core varsayıanı (500px); input/buton genişlikleri aşağıdaki kurallarda */
+
+    /* Kayıt modalları (Şube/Kullanıcı) – Taşıt modalı ile birebir aynı: header, body, form, butonlar */
+    #branch-form-modal .modal-header,
+    #user-form-modal .modal-header {
+        background: linear-gradient(180deg, rgba(255, 0, 0, 0.30) 0%, rgba(255, 0, 0, 0.22) 25%, rgba(255, 0, 0, 0.16) 50%, rgba(255, 0, 0, 0.10) 75%, transparent 100%);
+        padding: 2px 20px;
+        height: 60px;
+        border-top-left-radius: 12px;
+        border-top-right-radius: 12px;
+        border-bottom: none !important;
+    }
+    #branch-form-modal .modal-header h2,
+    #user-form-modal .modal-header h2 {
+        font-size: 17px !important;
+        font-weight: 600 !important;
+        letter-spacing: 0.05em !important;
+        color: #f0f0f0 !important;
+        text-shadow: none !important;
+        margin: 0;
+        text-align: center;
+    }
+    #branch-form-modal .modal-close,
+    #user-form-modal .modal-close {
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    #branch-form-modal .modal-body,
+    #user-form-modal .modal-body {
+        padding: 20px;
+        padding-top: 6px !important;
+        padding-bottom: 40px !important; /* Raporlar modalı formatı: footer boşluğu */
+    }
+    #branch-form-modal .modal-body #branch-form,
+    #user-form-modal .modal-body #user-form.user-form-inner {
+        padding: 0 !important;
+    }
+    #branch-form-modal .modal-body .form-section .form-label,
+    #user-form-modal .modal-body .form-section .form-label {
+        margin-top: 2px !important;
+        margin-bottom: 2px !important;
+    }
+    #branch-form-modal .modal-body .form-section,
+    #user-form-modal .modal-body .form-section {
+        margin-top: 4px;
+    }
+    #branch-form-modal .modal-body .form-section:first-child,
+    #user-form-modal .modal-body .form-section:first-child {
+        margin-top: 0;
+    }
+    #branch-form-modal .modal-body .form-input,
+    #user-form-modal .modal-body .form-input,
+    #branch-form-modal .modal-body select.form-input,
+    #user-form-modal .modal-body select.form-input {
+        height: 24px !important;
+        padding-top: 5px !important;
+        padding-bottom: 5px !important;
+        padding-left: 8px;
+        padding-right: 8px;
+        background: #0d131f;
+        border: 1.1px solid rgba(255, 255, 255, 0.20);
+        border-radius: 6px;
+        color: #888;
+        font-size: 10px;
+        box-sizing: border-box;
+    }
+    #branch-form-modal .modal-body .settings-form-buttons,
+    #user-form-modal .modal-body .settings-form-buttons {
+        margin-top: 3px;
+        padding: 1px 0;
+    }
+    #branch-form-modal .settings-btn-save,
+    #user-form-modal .settings-btn-save {
+        height: 30px !important;
+        font-size: 11px !important;
+        line-height: 1 !important;
+        border: 1px solid rgba(40, 167, 69, 0.5) !important;
+        color: #28a745 !important;
+        border-radius: 8px !important;
+        font-weight: 400 !important;
+    }
+    #branch-form-modal .settings-btn-save:hover,
+    #user-form-modal .settings-btn-save:hover {
+        background: rgba(40, 167, 69, 0.15) !important;
+        font-size: 11px !important;
+    }
+    #branch-form-modal .settings-btn-cancel,
+    #user-form-modal .settings-btn-cancel {
+        height: 30px !important;
+        font-size: 11px !important;
+        line-height: 1 !important;
+        border: 1px solid rgba(225, 6, 27, 0.5) !important;
+        color: #e1061b !important;
+        border-radius: 8px !important;
+        font-weight: 400 !important;
+    }
+    #branch-form-modal .settings-btn-cancel:hover,
+    #user-form-modal .settings-btn-cancel:hover {
+        background: rgba(225, 6, 27, 0.15) !important;
+        font-size: 11px !important;
+    }
+    #branch-form-modal .settings-btn-delete,
+    #user-form-modal .settings-btn-delete {
+        height: 30px !important;
+        font-size: 11px !important;
+        border-radius: 8px !important;
+    }
+}
+
+/* Masaüstü: Kullanıcı ekle modalında Ad Soyad header'a yakın */
+#user-form-modal #user-form.user-form-inner {
+  padding: 16px;
+}
+@media (min-width: 769px) {
+  #user-form-modal .modal-body {
+    padding-top: 6px !important;
+  }
+  #user-form-modal #user-form.user-form-inner {
+    padding-top: 8px !important;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-bottom: 16px;
+  }
+}

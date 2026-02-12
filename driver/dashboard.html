@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Dashboard - Medisa Kullanıcı</title>
+    <link rel="icon" type="image/svg+xml" href="../icon/favicon.svg">
+    <link rel="apple-touch-icon" href="../icon/apple-touch-icon.svg">
+    <link rel="apple-touch-icon" sizes="180x180" href="../icon/apple-touch-icon.svg">
+    <link rel="apple-touch-icon" sizes="192x192" href="../icon/icon-192.svg">
+    <link rel="apple-touch-icon" sizes="512x512" href="../icon/icon-512.svg">
+    <link rel="manifest" href="../manifest.json">
+    <meta name="theme-color" content="#080d16">
+    <meta name="msapplication-TileColor" content="#080d16">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Kullanıcı Paneli - Medisa">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style-core.css">
+    <link rel="stylesheet" href="driver-style.css?v=20260210">
+</head>
+<body class="dashboard-page">
+    <div class="app-container driver-dashboard-container">
+        <div class="driver-header-fixed">
+            <div class="hero">
+                <div class="hero-logo">
+                    <img src="../icon/logo-header2.svg" alt="MEDISA" class="logo-small">
+                </div>
+                <div class="hero-title-wrap">
+                    <h1>TAŞIT YÖNETİM SİSTEMİ</h1>
+                    <p class="driver-panel-subtitle hero-panel-subtitle">KULLANICI PANELİ</p>
+                </div>
+                <div class="hero-spacer"></div>
+            </div>
+
+            <div class="driver-below-hero">
+                <div class="driver-below-hero-row">
+                    <button type="button" onclick="showHistory()" class="driver-btn-history" title="Geçmiş Kayıtlarım" aria-label="Geçmiş Kayıtlarım">
+                        <svg class="driver-btn-history-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                            <polyline points="10 9 9 9 8 9"></polyline>
+                        </svg>
+                    </button>
+                    <span id="driver-user-name" class="driver-user-name-center"></span>
+                    <button type="button" onclick="logout()" class="driver-btn-logout" title="Çıkış" aria-label="Çıkış">
+                        <svg class="driver-btn-logout-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                            <polyline points="16 17 21 12 16 7"></polyline>
+                            <line x1="21" y1="12" x2="9" y2="12"></line>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <main class="content-wrap driver-content-wrap driver-scroll-area">
+            <div id="loading-spinner" class="driver-loading">
+                <div class="driver-spinner"></div>
+                <p>Veriler yükleniyor...</p>
+            </div>
+
+            <div id="vehicles-list" class="driver-vehicles-list"></div>
+
+            <div id="empty-state" class="driver-empty-state" style="display: none;">
+                <div class="driver-empty-icon">🚗</div>
+                <h3>Zimmetli Taşıt Bulunamadı</h3>
+                <p>Size Atanmış Taşıt Bulunmamaktadır. Lütfen Yöneticinizle İletişime Geçin.</p>
+            </div>
+        </main>
+
+        <a href="../" class="management-system-link" title="Yönetim Sistemi">
+            <span class="management-system-link-inner">
+                <svg class="management-system-link-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 6 9 12 15 18"></polyline>
+                </svg>
+                <span class="management-system-link-text">Yönetim Sistemi</span>
+            </span>
+        </a>
+        <footer id="app-footer">
+            <div class="footer-content">
+                <span class="version" id="version-display"></span>
+                <span class="brand"><img src="../icon/logo-footer.svg" alt="MEDISA" style="height: 12.5px; width: auto;"></span>
+                <span class="status status-ready">● Sistem Hazır</span>
+            </div>
+        </footer>
+
+        <div id="history-modal" class="driver-modal modal-overlay">
+        <div class="driver-modal-content modal-container">
+            <div class="modal-header">
+                <h2>Geçmiş Kayıtlarım</h2>
+                <button type="button" onclick="closeHistory()" class="modal-close" aria-label="Kapat">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+            </div>
+            <div style="padding: 8px 16px; display: flex; align-items: center; gap: 8px;">
+                <button type="button" onclick="closeHistory()" style="background: transparent; border: none; color: #ccc; cursor: pointer; display: flex; align-items: center; gap: 4px; padding: 0;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19l-7-7 7-7"/>
+                    </svg>
+                </button>
+                <span style="color: #999; font-weight: 700; font-size: 13.5px;">Kullanıcı Paneli</span>
+            </div>
+            <div class="modal-body">
+                <div class="history-filters">
+                    <div class="history-vehicle-dropdown-wrap">
+                        <label class="history-filter-label" for="history-vehicle-trigger">Taşıt Seç:</label>
+                        <div id="history-vehicle-trigger" class="history-vehicle-trigger" onclick="toggleHistoryVehicleDropdown(event)" role="button" tabindex="0" aria-haspopup="listbox" aria-expanded="false">
+                            <span class="history-vehicle-trigger-text">Tüm Taşıtlar</span>
+                            <span class="history-vehicle-chevron">▾</span>
+                        </div>
+                        <input type="hidden" id="history-vehicle-filter" value="">
+                        <div id="history-vehicle-dropdown" class="history-vehicle-dropdown" role="listbox" style="display:none"></div>
+                    </div>
+                </div>
+                <div id="history-list" class="history-container"></div>
+            </div>
+        </div>
+        </div>
+
+        <div id="edit-request-modal" class="driver-modal modal-overlay">
+        <div class="driver-modal-content modal-container">
+            <div class="modal-header">
+                <h2>Düzeltme Talebi</h2>
+                <button type="button" onclick="closeEditRequest()" class="modal-close" aria-label="Kapat">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="driver-current-km">
+                    Mevcut KM: <strong id="current-km">0</strong>
+                </p>
+                <div class="form-group">
+                    <label for="new-km">Yeni KM Değeri</label>
+                    <input type="number" id="new-km" placeholder="Örn: 54230">
+                </div>
+                <p class="driver-current-km">
+                    Mevcut Bakım: <strong id="current-bakim">-</strong>
+                </p>
+                <div class="form-group">
+                    <label for="new-bakim">Yeni Bakım Açıklama</label>
+                    <textarea id="new-bakim" rows="2" placeholder="Boş bırakırsanız 'Yok' sayılır"></textarea>
+                </div>
+                <p class="driver-current-km">
+                    Mevcut Kaza: <strong id="current-kaza">-</strong>
+                </p>
+                <div class="form-group">
+                    <label for="new-kaza">Yeni Kaza Açıklama</label>
+                    <textarea id="new-kaza" rows="2" placeholder="Boş bırakırsanız 'Yok' sayılır"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="edit-reason">Düzeltme Sebebi</label>
+                    <textarea id="edit-reason" placeholder="Neden düzeltmek istiyorsunuz?" rows="4" required></textarea>
+                </div>
+                <button type="button" onclick="submitEditRequest()" class="btn-submit">Talep Gönder</button>
+            </div>
+        </div>
+        </div>
+
+        <!-- Olay Ekle Menü Modal -->
+        <div id="driver-event-menu-modal" class="driver-modal modal-overlay" onclick="if(event.target === this) closeDriverEventMenu();">
+            <div class="driver-modal-content modal-container" onclick="event.stopPropagation();">
+                <div class="modal-header">
+                    <h2>OLAY EKLE</h2>
+                    <button type="button" onclick="closeDriverEventMenu()" class="modal-close" aria-label="Kapat">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="driver-event-menu-list" class="driver-event-menu-list"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Anahtar Güncelle Modal -->
+        <div id="driver-anahtar-modal" class="driver-modal modal-overlay" onclick="if(event.target === this) closeDriverEventModal('anahtar');">
+            <div class="driver-modal-content modal-container" onclick="event.stopPropagation();">
+                <div class="modal-header">
+                    <h2>YEDEK ANAHTAR BİLGİSİ GÜNCELLE</h2>
+                    <button type="button" onclick="closeDriverEventModal('anahtar')" class="modal-close" aria-label="Kapat"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label style="color: #ccc; font-size: 14px; display: block; margin-bottom: 8px;">Durum:</label>
+                        <div class="driver-radio-group">
+                            <button type="button" class="driver-radio-btn active" data-value="var" data-group="anahtar">Var</button>
+                            <button type="button" class="driver-radio-btn" data-value="yok" data-group="anahtar">Yok</button>
+                        </div>
+                    </div>
+                    <div id="driver-anahtar-detay-wrap" class="form-group" style="display: none;">
+                        <label for="driver-anahtar-detay" style="color: #ccc; font-size: 14px;">Açıklama:</label>
+                        <input type="text" id="driver-anahtar-detay" class="form-input" placeholder="Anahtar nerede?" style="width: 100%;">
+                    </div>
+                    <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
+                        <button type="button" class="btn-submit" onclick="saveDriverEvent('anahtar')">Kaydet</button>
+                        <button type="button" class="driver-modal-btn-secondary" onclick="closeDriverEventModal('anahtar')">Vazgeç</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lastik Güncelle Modal -->
+        <div id="driver-lastik-modal" class="driver-modal modal-overlay" onclick="if(event.target === this) closeDriverEventModal('lastik');">
+            <div class="driver-modal-content modal-container" onclick="event.stopPropagation();">
+                <div class="modal-header">
+                    <h2>YAZLIK/KIŞLIK LASTİK DURUMU GÜNCELLE</h2>
+                    <button type="button" onclick="closeDriverEventModal('lastik')" class="modal-close" aria-label="Kapat"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label style="color: #ccc; font-size: 14px; display: block; margin-bottom: 8px;">Durum:</label>
+                        <div class="driver-radio-group">
+                            <button type="button" class="driver-radio-btn" data-value="var" data-group="lastik">Var</button>
+                            <button type="button" class="driver-radio-btn active" data-value="yok" data-group="lastik">Yok</button>
+                        </div>
+                    </div>
+                    <div id="driver-lastik-adres-wrap" class="form-group" style="display: none;">
+                        <label for="driver-lastik-adres" style="color: #ccc; font-size: 14px;">Adres:</label>
+                        <input type="text" id="driver-lastik-adres" class="form-input" placeholder="Lastik adresi" style="width: 100%;">
+                    </div>
+                    <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
+                        <button type="button" class="btn-submit" onclick="saveDriverEvent('lastik')">Kaydet</button>
+                        <button type="button" class="driver-modal-btn-secondary" onclick="closeDriverEventModal('lastik')">Vazgeç</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- UTTS Güncelle Modal -->
+        <div id="driver-utts-modal" class="driver-modal modal-overlay" onclick="if(event.target === this) closeDriverEventModal('utts');">
+            <div class="driver-modal-content modal-container" onclick="event.stopPropagation();">
+                <div class="modal-header">
+                    <h2>UTTS BİLGİSİ GÜNCELLE</h2>
+                    <button type="button" onclick="closeDriverEventModal('utts')" class="modal-close" aria-label="Kapat"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label style="color: #ccc; font-size: 14px; display: block; margin-bottom: 8px;">UTTS Tanımlandı mı:</label>
+                        <div class="driver-radio-group">
+                            <button type="button" class="driver-radio-btn" data-value="evet" data-group="utts">Evet</button>
+                            <button type="button" class="driver-radio-btn active" data-value="hayir" data-group="utts">Hayır</button>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
+                        <button type="button" class="btn-submit" onclick="saveDriverEvent('utts')">Kaydet</button>
+                        <button type="button" class="driver-modal-btn-secondary" onclick="closeDriverEventModal('utts')">Vazgeç</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Muayene Güncelle Modal -->
+        <div id="driver-muayene-modal" class="driver-modal modal-overlay" onclick="if(event.target === this) closeDriverEventModal('muayene');">
+            <div class="driver-modal-content modal-container" onclick="event.stopPropagation();">
+                <div class="modal-header">
+                    <h2>MUAYENE BİLGİSİ GÜNCELLE</h2>
+                    <button type="button" onclick="closeDriverEventModal('muayene')" class="modal-close" aria-label="Kapat"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="driver-muayene-tarih" style="color: #ccc; font-size: 14px;">Yaptırılan Tarih (gg.aa.yyyy):</label>
+                        <input type="date" id="driver-muayene-tarih" class="form-input" style="width: 100%;">
+                    </div>
+                    <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
+                        <button type="button" class="btn-submit" onclick="saveDriverEvent('muayene')">Kaydet</button>
+                        <button type="button" class="driver-modal-btn-secondary" onclick="closeDriverEventModal('muayene')">Vazgeç</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script defer src="driver-script.js?v=20260210"></script>
+</body>
+</html>

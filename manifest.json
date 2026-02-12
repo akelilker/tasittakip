@@ -1,0 +1,82 @@
+{
+  "name": "Medisa Taşıt Yönetim Sistemi",
+  "short_name": "Medisa Taşıt",
+  "description": "Medisa Taşıt Yönetim Sistemi",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone"],
+  "orientation": "portrait-primary",
+  "background_color": "#080d16",
+  "theme_color": "#080d16",
+  "categories": ["business", "productivity"],
+  "lang": "tr",
+  "dir": "ltr",
+  "icons": [
+    {
+      "src": "./icon/favicon-16x16.png",
+      "sizes": "16x16",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icon/favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icon/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icon/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icon/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icon/icon-192-maskable.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "./icon/icon-512-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Taşıt Listesi",
+      "short_name": "Taşıtlar",
+      "description": "Tüm taşıtları görüntüle",
+      "url": "./?view=vehicles",
+      "icons": [{ "src": "./icon/otomobil.svg", "sizes": "any", "type": "image/svg+xml" }]
+    },
+    {
+      "name": "Yeni Kayıt",
+      "short_name": "Kayıt",
+      "description": "Yeni taşıt kaydı oluştur",
+      "url": "./?action=add",
+      "icons": [{ "src": "./icon/kaporta.svg", "sizes": "any", "type": "image/svg+xml" }]
+    },
+    {
+      "name": "Raporlar",
+      "short_name": "Raporlar",
+      "description": "Taşıt raporlarını görüntüle",
+      "url": "./?view=reports",
+      "icons": [{ "src": "./icon/marker.png", "sizes": "any", "type": "image/png" }]
+    }
+  ]
+}

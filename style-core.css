@@ -1,0 +1,1204 @@
+/* --- Scrollbar Gizleme --- */
+html, body, .modal-body, .modal-container {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+.modal-body::-webkit-scrollbar,
+.modal-container::-webkit-scrollbar {
+  display: none;
+}
+
+:root {
+  --theme-color: #e1061b;
+  --bg: #080d16;
+  --bg-2: #151515;
+  --card-bg: #1a1a1a;
+  --txt: #f0f0f0;
+  --muted: rgba(255, 255, 255, 0.5);
+  --br: #333;
+  --border-shiny: rgba(255, 255, 255, 0.25);
+
+  --modal-footer-gap: 12px;
+  --app-footer-height: 48px; /* footer-content yaklaşık yüksekliği */
+  --modal-footer-reserve: calc(var(--app-footer-height) + var(--modal-footer-gap));
+
+  /* --- MODAL ORTAK (tek yerden yönetim) --- */
+  --modal-bg: #080d16;
+  --modal-max-width: 500px;
+  --modal-radius: 10px;
+  --modal-margin-bottom-desktop: calc(var(--app-footer-height) + var(--modal-gap-above-footer));
+  --modal-gap-above-footer: 8px; /* modal ile footer arası boşluk (tek kaynak) */
+  --modal-margin-bottom-mobile: calc(var(--modal-gap-above-footer) + var(--app-footer-height)); /* 52px */
+
+  /* --- KIRMIZI ÇERÇEVE AYARLARI --- */
+  /* Çerçeve Rengi (0.6 = %60 Görünürlük) */
+  --border-red-tech: rgba(225, 6, 27, 0.3);
+  /* Işık Efekti (0.25 = %25 Parlaklık) */
+  --red-glow-subtle: rgba(225, 6, 27, 0.12);
+
+  --green: #4ade80;
+  --red: #ef4444;
+
+  /* --- HERO LOGO GENİŞLİK YÖNETİMİ --- */
+  --hero-logo-width: 69px;  /* Masaüstü logo genişliği */
+  --hero-spacer-width: 30px; /* Masaüstü spacer genişliği */
+}
+
+/* --- 1. SIFIRLAMA & ANA YAPI --- */
+html, body {
+  margin: 0;
+  padding: 0;
+  max-width: 500px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  height: 100%;
+  overflow: hidden;
+  overflow-x: hidden; /* Yatay taşma kesin kapalı */
+  font-family: 'Source Sans 3', sans-serif;
+  background-color: #080d16; /* Tüm sayfalarla aynı arka plan */
+  color: var(--txt);
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: none;
+  box-sizing: border-box;
+}
+html { overflow-x: hidden; }
+
+/* ANA KAPSAYICI - Havada durma (kırmızı çerçeve ile uyumlu), taşma yok */
+.app-container {
+    isolation: isolate; /* pseudo katman güvenli */
+    position: relative;
+    max-width: 500px;
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden; /* İçerik yan taşmasın */
+    box-sizing: border-box;
+    /* KIRMIZI ÇERÇEVE - sadece üst */
+    border-top: 1px solid var(--border-red-tech);
+    box-shadow: 0 2px 14px rgba(225, 6, 27, 0.1), inset 0 0 80px rgba(10, 13, 28, 0.22);  /* Havada: kırmızı gölge + iç parlaklık (#0a0d1c tonu) */
+    background: var(--bg);
+    transition: border-color 0.3s ease;
+}
+
+/* Kırmızı Işık Efekti (Overlay) */
+.app-container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    /* İçe vuran kırmızı ışık */
+    box-shadow: inset 0 0 25px var(--red-glow-subtle);
+    pointer-events: none; /* Tıklamayı engelleme */
+    z-index: 0; /* içerik altı */
+}
+
+/* İÇERİK ALANI - Havada durma (yan kırmızı çerçeve), taşma yok */
+.content-wrap {
+    flex: 1;
+    min-width: 0; /* Flex çocukta taşmayı önler */
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 4px;
+    padding-top: max(12px, env(safe-area-inset-top));
+    padding-bottom: 16px;
+    position: relative;
+    z-index: 10;
+    box-sizing: border-box;
+    /* YAN ÇİZGİLER CONTENT-WRAP'TE - footer'a gitmeyecek */
+    border-left: 1.2px solid var(--border-red-tech);
+    border-right: 1.2px solid var(--border-red-tech);
+    box-shadow: 0 0 24px var(--red-glow-subtle);
+    transition: border-color 0.3s ease;
+}
+
+/* Masaüstü: çerçeve kalınlığı */
+@media (min-width: 769px) {
+    .app-container {
+        border-top-width: 1.2px;
+    }
+    .content-wrap {
+        border-left-width: 1.5px;
+        border-right-width: 1.5px;
+    }
+    .hero {
+        border-width: 1.2px;
+    }
+}
+
+/* --- SCROLLBAR AYARLARI --- */
+@media (max-width: 768px) {
+    .content-wrap {
+        scrollbar-width: none; 
+        -ms-overflow-style: none;
+    }
+    .content-wrap::-webkit-scrollbar { display: none; }
+}
+
+@media (min-width: 769px) {
+    .content-wrap::-webkit-scrollbar {
+        width: 6px;
+    }
+    .content-wrap::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    .content-wrap::-webkit-scrollbar-thumb {
+        background-color: rgba(255, 255, 255, 0.2);
+        border-radius: 3px;
+    }
+    .content-wrap::-webkit-scrollbar-thumb:hover {
+        background-color: var(--theme-color);
+    }
+}
+
+/* HERO ALANI - Havada durma + kırmızı uyum, taşma yok */
+.hero {
+  position: relative;
+  min-width: 0;
+  overflow: hidden; /* Başlık ellipsis hero içinde kalsın */
+  background: linear-gradient(180deg, #060d16, #08090c);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 18px;
+  padding: 12px 16px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5), 0 4px 22px rgba(225, 6, 27, 0.12);
+  margin-bottom: 8px;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+}
+
+.hero-logo {
+  flex: 0 0 var(--hero-logo-width);
+  width: var(--hero-logo-width);
+  margin-left: -5px;  /* Sola kaydır */
+  transform: translateY(-1px);  /* Logo 1px yukarı (masaüstü) */
+  opacity: 1 !important;
+  filter: none !important;
+  backdrop-filter: none !important;
+}
+
+/* DÜZELTME: SVG ve IMG width ayarı */
+.hero-logo svg,
+.hero-logo img {
+  width: 100%; /* Container genişliğini doldur */
+  height: auto;
+  display: block;
+  opacity: 1 !important; /* Tam opak, zorla */
+  filter: brightness(0.88) !important; /* Koyu temada kırmızı biraz koyu, parlama azalsın */
+  object-fit: contain; /* Logo oranlarını koru */
+}
+
+.hero h1 {
+  /* Orta alan - esneyebilir, taşma yok; dar ekranda ellipsis */
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+  font-size: clamp(16px, 4.5vw, 24px);
+  font-weight: 800;
+  letter-spacing: clamp(1px, 0.5vw, 4px);
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 4px;
+
+  /* METALİK GRADYAN - Parlak krom */
+  background: linear-gradient(to bottom, #c2d4df 0%, #ffffff 40%, #9aadba 52%, #d6e0e8 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+
+  text-shadow: none;
+  filter: none;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+
+  margin: 0;
+  line-height: 1.6;
+  transform: translateY(-2px);
+}
+
+/* HERO SPACER - Logo yarısı genişlikte denge alanı */
+.hero-spacer {
+  flex: 0 0 var(--hero-spacer-width);
+}
+
+/* Kırmızı çizgi - Havada durma (kırmızı çerçeve ile eşit) */
+.animated-line {
+  position: absolute;
+  bottom: 22px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 74%;
+  height: 2.5px;
+  background: linear-gradient(90deg, transparent, var(--theme-color), transparent);
+  border-radius: 1.6px;
+  opacity: 0.6;
+  box-shadow: 0 2px 10px rgba(225, 6, 27, 0.3);  /* Havada: kırmızı glow */
+}
+
+/* İKON SATIRI – sağda kesilmesin */
+.icons-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  padding: 0 12px 0 8px;
+  margin-bottom: 8px;
+  position: relative;
+  min-width: 0;
+  max-width: 100%;
+  flex-shrink: 0;
+}
+.icons-row .icon-btn {
+  flex-shrink: 0;
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  color: #aaa;
+  cursor: pointer;
+  padding: 4px;
+  transition: color 0.2s, filter 0.2s;
+}
+.icon-btn:hover {
+  color: #fff;
+  filter: none;
+}
+
+/* Bildirim simgesi renkleri */
+.icon-btn.notification-red {
+  color: #e1061b !important;
+}
+.icon-btn.notification-orange {
+  color: #ff8c00 !important;
+}
+
+/* Bildirim simgesi pulse animasyonu */
+.icon-btn.notification-pulse {
+  animation: notificationPulse 2s ease-in-out infinite;
+}
+
+@keyframes notificationPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+/* Bildirim öğeleri çerçeve renkleri */
+.notification-item {
+  background: #080d16 !important; /* Masaüstü için opak arka plan */
+}
+
+.notification-item.date-warning-red-border {
+  border-color: rgba(225, 6, 27, 0.6) !important;
+  box-shadow: 0 0 8px rgba(225, 6, 27, 0.2);
+}
+
+.notification-item.date-warning-orange-border {
+  border-color: rgba(255, 140, 0, 0.6) !important;
+  box-shadow: 0 0 8px rgba(255, 140, 0, 0.2);
+}
+
+.notification-item:hover {
+  border-color: rgba(255, 255, 255, 0.5) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* MENÜ – hover scale taşma olmasın */
+.menu-container {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  overflow: visible;
+  max-width: 100%;
+}
+
+/* Menü butonları - Havada durma + kırmızı uyum */
+.menu-btn {
+  max-width: 500px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 18px;
+  background: linear-gradient(180deg, #060d16, #08090c); /* Hero ile aynı gradient */
+  border: 1px solid rgba(255, 255, 255, 0.3); /* Parlak gri çerçeve */
+  border-radius: 12px;
+  cursor: pointer;
+  text-align: center;
+  transition: border-color 0.2s, background 0.2s, transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2), 0 4px 16px rgba(225, 6, 27, 0.1);  /* Havada + kırmızı */
+  margin-bottom: 5px;
+  height: 54px; /* Sabit yükseklik - taşma engellendi */
+  overflow: hidden; /* Metin büyürse taşma gizlensin */
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-origin: center;
+}
+.menu-btn:last-child { margin-bottom: 0; }
+
+/* Hover efekti sadece masaüstü (mouse ile) – mobilde yok */
+@media (hover: hover) {
+  .menu-btn:hover {
+    border-color: rgba(255, 255, 255, 0.5); /* Çerçeve parlar – arka plan yok */
+    background: linear-gradient(180deg, #060d16, #08090c); /* Arka plan aynı kalır */
+    /* Clip-safe hover: yukarı taşıma yok (üstten kırpılmasın) */
+    transform: none;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.25), 0 6px 20px rgba(225, 6, 27, 0.12);
+  }
+  .menu-btn:hover .ttl {
+    color: #fff; /* Harfler beyazlaşır */
+    transform: scale(1.02); /* Hafif büyüme (buton içinde, kesilmez) */
+  }
+}
+
+/* Menü metinleri - taşma yok, uzun metin sığsın veya ellipsis */
+.menu-btn .ttl {
+  font-size: clamp(12px, 2.8vw, 14px);
+  font-weight: 700;
+  color: var(--txt);
+  letter-spacing: 0.06em;
+  transition: color 0.2s, transform 0.2s;
+  text-shadow: none;
+  transform-origin: center;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 0 6px;
+}
+
+/* DROPDOWN - Her buton ayrı çerçeve */
+.settings-dropdown {
+  display: none;
+  position: absolute;
+  top: 32px; /* Azaltıldı: 35px → 32px (daha yakın) */
+  right: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  width: 55%;
+  max-width: 275px;
+  z-index: 100;
+  padding: 0;
+  box-shadow: none;
+  overflow: visible; /* Submenu'nun dışarı çıkabilmesi için */
+}
+.settings-dropdown.open { display: block; }
+.settings-dropdown button {
+  max-width: 500px;
+  width: 100%;
+  margin: 0;
+  padding: 12px;
+  text-align: right;
+  background: #080d16;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+  color: #eee;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, font-size 0.2s ease, box-shadow 0.2s ease;
+  margin-bottom: 2px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  height: 48px;
+  overflow: hidden;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+.settings-dropdown button:last-child {
+  margin-bottom: 0;
+}
+.settings-dropdown button:hover {
+  background: #0f1418;
+  border-color: rgba(255, 255, 255, 0.4);
+  color: #fff;
+  font-size: 14px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+}
+
+/* SUB-MENU (Veri Yönetimi için sola açılan menü) */
+.settings-submenu {
+  display: none;
+  position: absolute;
+  right: 100%;
+  top: 0;
+  background: #080d16;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  width: 180px;
+  z-index: 101;
+  padding: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* Gölge efekti */
+  flex-direction: column;
+  gap: 4px; /* Butonlar arası boşluk */
+}
+
+.settings-submenu.open {
+  display: flex; /* Flex container olarak göster */
+}
+
+.settings-submenu button {
+  width: 100%;
+  padding: 12px;
+  text-align: right;
+  background: #080d16;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  color: #ddd;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, font-size 0.2s ease, box-shadow 0.2s ease;
+  margin: 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  height: 48px;
+  overflow: hidden;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.settings-submenu button:hover {
+  background: #0f1418;
+  border-color: rgba(255, 255, 255, 0.4);
+  color: #fff;
+  font-size: 14px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+}
+
+.has-submenu-wrapper {
+  position: relative;
+  padding-right: 8px; /* Submenu ile buton arasında görsel boşluk */
+}
+
+.has-submenu {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important; /* Ok solda olduğu için flex-start */
+  padding: 12px !important; /* Diğerleri ile aynı yükseklik */
+  width: 100%;
+}
+
+/* Önbellek Temizle Butonu - Kırmızı + Hover Büyüme */
+.settings-dropdown .cache-clear-btn {
+  color: #e1061b !important; /* Kırmızı metin */
+  border: 1px solid rgba(225, 6, 27, 0.5) !important; /* Kırmızı çerçeve */
+}
+
+.settings-dropdown .cache-clear-btn:hover {
+  font-size: 17px !important; /* Fare ile üzerine gidince metin büyüsün */
+  color: #ff0000 !important; /* Daha parlak kırmızı */
+  border-color: rgba(225, 6, 27, 0.7) !important; /* Hover'da daha parlak kırmızı */
+}
+
+/* Masaüstünde container'ın %45'i + metin ortalı */
+@media (min-width: 641px) {
+  .settings-dropdown {
+    width: 45%; /* Masaüstünde container'ın %45'i */
+    max-width: 225px;
+  }
+  .settings-dropdown button {
+    text-align: center; /* Masaüstünde ortalı */
+    justify-content: center; /* Flexbox için ortalama */
+  }
+  .has-submenu {
+    justify-content: center !important; /* Masaüstünde ok ve metin ortada */
+  }
+  .settings-submenu button {
+    text-align: center; /* Masaüstünde ortalı */
+    justify-content: center; /* Flexbox için ortalama */
+  }
+  
+  /* Footer MEDISA - Masaüstünde hafif soldur (0.7 -> 0.5) */
+  #app-footer.dimmed.delayed .brand img {
+    opacity: 0.5 !important;
+  }
+  /* Menü buton metinleri masaüstünde tertemiz (sis yok) */
+  .menu-btn .ttl {
+    text-shadow: none !important;
+  }
+}
+
+.view-section { display: none; }
+.card { background: var(--card-bg); padding: 16px; border-radius: 12px; border: 1px solid var(--br); }
+.btn.sec { background: transparent; border: 1px solid #555; color: #ccc; padding: 8px 16px; border-radius: 6px; cursor: pointer; margin-top: 10px; }
+
+.btn-secondary {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #ddd;
+}
+
+.btn-secondary:hover {
+    border-color: rgba(255, 255, 255, 0.5);
+    color: #fff;
+}
+
+/* --- MODALLAR: ORTAK OVERLAY + CONTAINER (tek yerden yönetim) --- */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(5px);
+  z-index: 9999;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
+  overflow: hidden; /* Yatay kayma engelle */
+  overscroll-behavior: none;
+}
+.modal-overlay.active,
+.modal-overlay.open {
+  display: flex !important;
+}
+.modal-overlay .modal-container {
+  position: relative;
+  background: var(--modal-bg);
+  width: 100%;
+  max-width: var(--modal-max-width);
+  margin: max(12px, env(safe-area-inset-top)) auto var(--modal-margin-bottom-desktop) auto;
+  height: calc(100vh - max(12px, env(safe-area-inset-top)) - var(--modal-margin-bottom-desktop));
+  max-height: calc(100vh - max(12px, env(safe-area-inset-top)) - var(--modal-margin-bottom-desktop));
+  border-radius: var(--modal-radius);
+  border: 0.5px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.9);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  overflow-x: hidden; /* Yatay scroll engelle */
+  box-sizing: border-box;
+  pointer-events: auto;
+  touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: none;
+  overscroll-behavior-x: none;
+}
+.modal-overlay .modal-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  flex-shrink: 0;
+  position: relative;
+}
+.modal-overlay .modal-header h2 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #f0f0f0;
+  letter-spacing: 1px;
+  text-align: center;
+}
+.modal-overlay .modal-close {
+  position: absolute;
+  right: 16px;
+  background: transparent;
+  border: none;
+  color: #888;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+}
+.modal-overlay .modal-close:hover {
+  color: var(--theme-color);
+}
+.modal-overlay .modal-body {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden; /* Yatay kayma engelle */
+  padding: 20px;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: none;
+  /* scrollbar gizleme: tek kaynak dosya başındaki html, body, .modal-body, .modal-container kuralı */
+}
+.modal-overlay .modal-footer {
+  flex-shrink: 0;
+}
+
+/* Modal body varyantları (inline stil yerine) */
+#cache-confirm-modal .modal-body { padding: 20px 20px 12px 20px; }
+#kaza-ekle-modal .modal-body { padding-top: 50px; }
+#vehicle-history-modal .modal-body { padding: 0; }
+#vehicle-history-modal #history-content { padding: 20px; }
+
+/* Modal Evet/Hayır ve Kaydet/Vazgeç butonları */
+.modal-btn-confirm,
+.modal-btn-cancel {
+  flex: 1;
+  background: transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 8px 16px;
+}
+.modal-btn-confirm { border: 0.3px solid #e1061b; color: #e1061b; }
+.modal-btn-cancel { border: 0.3px solid #28a745; color: #28a745; }
+.modal-btn--sm { padding: 6px 10px; line-height: 1.2; }
+
+/* Modal container: marker ikonu */
+.modal-container::after {
+  content: '';
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  width: 36px;
+  height: 36px;
+  background-image: url('icon/marker.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0.2;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Kullanıcı Paneli linki - footer üstünde, sağa yaslı */
+.user-panel-link {
+  position: fixed;
+  bottom: calc(var(--app-footer-height, 48px) + env(safe-area-inset-bottom, 0) + 12px);
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 500px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 6px 16px;
+  box-sizing: border-box;
+  color: rgba(225, 6, 27, 0.55);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  z-index: 9999;
+  transition: color 0.2s;
+}
+@media (min-width: 769px) {
+  .user-panel-link {
+    bottom: calc(var(--app-footer-height, 48px) + env(safe-area-inset-bottom, 0) + 6px);
+    font-size: 13px;
+    padding: 2px 12px;
+    transform: translateX(calc(-50% + 5px));
+  }
+}
+.user-panel-link-inner {
+  display: inline-flex;
+  align-items: center;
+  transition: color 0.2s;
+}
+.user-panel-link-inner:hover {
+  color: #e1061b;
+}
+/* Sadece anasayfada görünür; modal açıkken gizle */
+body.modal-open .user-panel-link {
+  display: none !important;
+}
+.user-panel-link-text {
+  margin-right: 6px;
+}
+.user-panel-link-arrow {
+  flex-shrink: 0;
+}
+
+/* 4. FOOTER (GÜÇLI KIRMIZI TEMA + AYRILIK) */
+#app-footer {
+    position: fixed;
+    bottom: 0;
+    flex-shrink: 0; 
+    max-width: 500px;
+    width: 100%;
+    margin: 0 auto;
+    background: #080d16;
+    z-index: 10000; /* Modal overlay (9999) üstünde */ 
+    border-top: 0.7px solid rgba(128, 128, 128, 0.5);  /* Gri çizgi */
+    border-left: 0.5px solid rgba(255, 255, 255, 0.20);  /* Masaüstü: ince + soluk */
+    border-right: 0.5px solid rgba(255, 255, 255, 0.20);
+    /* Footer'dan yukarı doğru ışık çıkıyor */
+    box-shadow: 0 -10px 20px rgba(225, 6, 27, 0.16);
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    max-width: 500px;
+    width: 100%;
+    margin: 0 auto;
+    
+    /* 👇 DİKEY YÜKSEKLİĞİ BURADAN KISABİLİRSİN 👇 */
+    padding: 12px 12px; 
+    /* Örneğin bunu 'padding: 8px 16px;' yaparsan footer incelir. */
+
+    padding-bottom: max(12px, env(safe-area-inset-bottom));
+    box-sizing: border-box;
+}
+
+#app-footer span {
+    transition: opacity 1s ease;
+    font-weight: 400; /* 300 → 400 daha belirgin */
+    letter-spacing: 0.5px;
+    font-size: 13px;
+    color: #bbb; /* #888 → #bbb daha belirgin */
+    white-space: nowrap;
+    opacity: 1; /* Varsayılan opacity */
+}
+
+/* Versiyon solda - daha belirgin */
+#app-footer .version {
+    text-align: left;
+    flex: 1;
+    color: #ccc; /* #999 → #ccc daha belirgin */
+    font-weight: 500;
+}
+
+/* MEDISA Brand SVG - Ortada, ince detay + ışık efekti */
+#app-footer .brand {
+    text-align: center;
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    letter-spacing: 2.5px; /* 1px → 2.5px daha geniş */
+}
+
+/* --- DÜZELTME: img olarak değiştirildi ve 13px yapıldı --- */
+#app-footer .brand img {
+    height: 12.5px; /* Masaüstü 12.5px */
+    width: auto;
+    opacity: 0.4; /* Başlangıç çok soluk */
+    filter: none;
+    transition: opacity 1s ease;
+    /* Harfler arası boşluk efekti için resmi yayvanlaştır */
+    transform: scaleX(1.1);
+}
+
+/* Durum sağda */
+#app-footer .status {
+    text-align: right;
+    flex: 1; /* Sağdaki boşluğu kapla */
+    display: flex;
+    justify-content: flex-end; /* İçeriği sağa it */
+    align-items: center;
+    gap: 4px; /* İkon ve yazı arası */
+    min-width: 0; /* Flexbox taşmasını önler */
+}
+
+/* Transition'ları her zaman aktif tut */
+#app-footer .version,
+#app-footer .status,
+#app-footer .brand img {
+  transition: opacity 1s ease !important;
+}
+
+/* Sayfa açıldığında: Versiyon ve durum normal, MEDISA soluk */
+#app-footer.dimmed .version,
+#app-footer.dimmed .version#version-display { 
+  opacity: 1 !important; 
+} 
+#app-footer.dimmed .status,
+#app-footer.dimmed .status.status-ready,
+#app-footer.dimmed .status.status-error { 
+  opacity: 1 !important; 
+} 
+#app-footer.dimmed .brand img { 
+  opacity: 0.3 !important; 
+} 
+
+/* 4 saniye sonra: Versiyon ve durum soluk, MEDISA normal */
+#app-footer.dimmed.delayed .version,
+#app-footer.dimmed.delayed .version#version-display { 
+  opacity: 0.3 !important; 
+} 
+#app-footer.dimmed.delayed .status,
+#app-footer.dimmed.delayed .status.status-ready,
+#app-footer.dimmed.delayed .status.status-error { 
+  opacity: 0.3 !important; 
+} 
+#app-footer.dimmed.delayed .brand img { 
+  opacity: 0.7 !important; 
+}
+.status-ready { 
+  color: var(--green) !important; /* Zorla yeşil */
+  font-weight: 600; /* Durum bilgisi kalın */
+  text-shadow: 0 0 8px rgba(74, 222, 128, 0.4); /* Yeşil glow */
+}
+.status-error { 
+  color: var(--red); 
+  font-weight: 600; /* Durum bilgisi kalın */
+  text-shadow: 0 0 8px rgba(239, 68, 68, 0.4); /* Kırmızı glow */
+}
+
+/* MOBİL AYARLARI */
+@media (max-width: 640px) {
+    /* ✨ MOBİL KONTRAST ARTIRMA ✨ */
+    :root {
+        /* Metin kontrastı artırıldı */
+        --txt: #ffffff; /* #f0f0f0 → #ffffff (daha parlak beyaz) */
+        --muted: rgba(255, 255, 255, 0.7); /* 0.5 → 0.7 (daha görünür) */
+        
+        /* Border kontrastı artırıldı */
+        --br: #444; /* #333 → #444 (daha açık gri) */
+        --border-shiny: rgba(255, 255, 255, 0.35); /* 0.25 → 0.35 (daha görünür) */
+        
+        /* Kırmızı çerçeve kontrastı artırıldı */
+        --border-red-tech: rgba(225, 6, 27, 0.45); /* 0.3 → 0.45 (daha belirgin) */
+        --red-glow-subtle: rgba(225, 6, 27, 0.18); /* 0.12 → 0.18 (daha parlak) */
+        
+        /* Arka plan tüm sayfalarda aynı (#080d16) */
+        --bg: #080d16;
+        --bg-2: #1a1a1a; /* #151515 → #1a1a1a (daha açık) */
+        --card-bg: #1f1f1f; /* #1a1a1a → #1f1f1f (daha açık) */
+        
+        /* Hero logo ve spacer genişlik ayarları */
+        --hero-logo-width: 54px;    /* Mobilde logo genişliği */
+        --hero-spacer-width: 1px;   /* Mobilde spacer genişliği (6px → 4px) */
+    }
+    
+    /* Mobil logo ve spacer genişlik ayarları */
+    /* ✨ iOS FOOTER ALTI RENK SORUNU ✨ - Body/container aynı renk */
+    html, body {
+        background-color: #080d16;
+        color: #ffffff !important; /* Metin rengi zorla beyaz */
+    }
+    
+    /* Tüm metin elementleri için kontrast artırma */
+    h1, h2, h3, h4, h5, h6, p, span, div, label, button {
+        color: inherit; /* Parent'tan renk al */
+    }
+    
+    /* Mobil Footer MEDISA yazısı */
+    #app-footer .brand img {
+        height: 13px !important; /* Mobil 13px */
+    }
+    
+    .hero-logo svg, 
+    .hero-logo img {
+        opacity: 1 !important;  /* Mobilde tam opak, zorla */
+        filter: none !important;
+    }
+    
+    /* Hero mobilde havada + kırmızı (anasayfa ile eşit), dikey yükseklik +5px */
+    .hero {
+        min-height: 65px !important;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45), 0 4px 24px rgba(225, 6, 27, 0.18);
+    }
+    
+    .hero-logo {
+        transform: translate(-2px, 1px);  /* 2px sola, 1px aşağı (mobil) */
+    }
+    
+    .hero h1 {
+        padding: 0 2px;  /* Mobilde logo–metin arası 2px */
+        letter-spacing: 2.5px;  /* Mobilde harfler arası boşluk 2.5px */
+        font-size: clamp(19px, 5.5vw, 23px); /* Uzun başlıkta minimum düzeyde küçülebilir */
+        /* Pırıl pırıl: sis yok, keskin metin */
+        text-shadow: none !important;
+        filter: none !important;
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+        transform: translateY(-2px);  /* Havada - kırmızı ile eşit */
+    }
+    
+    /* Modal başlıkları mobilde 19px */
+    .modal-header h2 {
+        font-size: 19px !important;
+    }
+    
+    /* Mobil: overlay footer+8px üstünde biter, 8px boşluk sayfa arka planıyla görünsün */
+    .modal-overlay {
+        top: 0 !important;
+        padding: 0 !important;
+        align-items: stretch !important;
+        justify-content: center !important;
+        overflow: hidden !important;
+        overscroll-behavior: none !important;
+        bottom: calc(var(--modal-gap-above-footer) + var(--app-footer-height) + env(safe-area-inset-bottom, 0)) !important;
+        height: auto !important; /* 100vh base kurallarını ezer, overlay top-bottom arası olur */
+        max-height: calc(100vh - var(--modal-gap-above-footer) - var(--app-footer-height) - env(safe-area-inset-bottom, 0)) !important;
+    }
+    #vehicle-modal.modal-overlay,
+    #reports-modal.modal-overlay {
+        top: 0 !important;
+        bottom: calc(var(--modal-gap-above-footer) + var(--app-footer-height) + env(safe-area-inset-bottom, 0)) !important;
+        height: auto !important;
+        max-height: calc(100vh - var(--modal-gap-above-footer) - var(--app-footer-height) - env(safe-area-inset-bottom, 0)) !important;
+    }
+
+    /* Modal container mobil: üst sıfır, overlay'ı doldur, 10px köşe, ince çerçeve */
+    .modal-overlay .modal-container {
+        position: relative !important;
+        max-width: 100% !important;
+        width: 100% !important;
+        left: 0 !important;
+        right: 0 !important;
+        margin-top: 0 !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        margin-bottom: 0 !important;
+        height: 100% !important;
+        max-height: 100% !important;
+        border-radius: 10px !important;
+        border: 1px solid rgba(255, 255, 255, 0.35) !important;
+        box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08);
+        background: var(--modal-bg) !important;
+        padding: 0 !important;
+        padding-top: 0 !important;
+        overflow: hidden !important;
+        overflow-x: hidden !important;
+        touch-action: pan-y !important;
+        -webkit-overflow-scrolling: touch !important;
+        overscroll-behavior: none !important;
+        overscroll-behavior-x: none !important;
+    }
+
+    /* Modal header: üstten nefes alması için 12px, üst köşeler 10px (container ile uyumlu) */
+    .modal-overlay .modal-header {
+        padding-top: 12px !important;
+        border-top-left-radius: 10px !important;
+        border-top-right-radius: 10px !important;
+    }
+
+    /* Mobil: modal body – sadece dikey scroll, yatay kayma yok */
+    .modal-overlay .modal-body {
+        padding-bottom: 40px !important;
+        overflow-x: hidden !important;
+        overscroll-behavior-x: none !important;
+    }
+
+    /* iOS PWA: modal footer üstünde ~10px boşlukla biter */
+    @media (display-mode: standalone) {
+        .modal-overlay {
+            padding-top: env(safe-area-inset-top) !important;
+            bottom: 10px !important;
+            max-height: none !important;
+        }
+        #vehicle-modal.modal-overlay,
+        #reports-modal.modal-overlay {
+            bottom: 10px !important;
+            max-height: none !important;
+        }
+        .tasitlar-modal-overlay {
+            padding-top: env(safe-area-inset-top) !important;
+            bottom: 10px !important;
+            max-height: none !important;
+        }
+        .tasitlar-modal-overlay::before {
+            top: 0 !important;
+            height: 100% !important;
+        }
+        .modal-overlay .modal-container {
+            margin-top: 0 !important;
+            margin-bottom: 0 !important;
+            height: 100% !important;
+            max-height: 100% !important;
+        }
+        /* Modal içeriği footer arkasında kalmasın */
+        .modal-overlay .modal-body {
+            padding-bottom: calc(var(--app-footer-height) + env(safe-area-inset-bottom, 0)) !important;
+        }
+    }
+    
+    /* Header ikonları (sağ üst): SVG 24px, padding artırıldı */
+    .icons-row .icon-btn svg {
+        width: 24px !important;
+        height: 24px !important;
+    }
+    .icons-row .icon-btn {
+        padding: 8px !important;
+    }
+    /* Modal geri/kapat butonları mobilde daha büyük tıklanabilir alan */
+    .modal-overlay .modal-close {
+        padding: 12px !important;
+        min-width: 44px !important;
+        min-height: 44px !important;
+    }
+    
+    /* Ana sayfa butonları mobilde: yükseklik +4px (60px), havada kırmızı gölge */
+    .menu-btn {
+        height: 60px !important; /* 56px + 4px */
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25), 0 4px 20px rgba(225, 6, 27, 0.14);
+    }
+    
+    /* Menü butonları arası dikey boşluk +2px */
+    .menu-container {
+        gap: 8px !important;
+    }
+    
+    /* MOBİLDE YAN ÇİZGİLER KIRMIZI - pseudo ile üstte (hero/menü üstüne çıkmasın) */
+    .content-wrap { 
+        border-left: none;
+        border-right: none;
+    }
+    .content-wrap::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border-left: 1px solid var(--border-red-tech);
+        border-right: 1px solid var(--border-red-tech);
+        pointer-events: none;
+        z-index: 20;
+        box-sizing: border-box;
+    }
+    
+    /* CONTAINER'DAN YAN ÇİZGİLER KALDIRILDI */
+    .app-container {
+        border-left: none;
+        border-right: none;
+    }
+    
+    /* Kırmızı çerçeve mobilde havada: iç ışık tam (kırmızı ile eşit) */
+    .app-container::after {
+        box-shadow: inset 0 0 25px var(--red-glow-subtle);
+    }
+    
+    /* FOOTER IŞIKLARI GÜÇLÜ - GÜNCELLENDİ (0.35 OPAK) */
+    #app-footer {
+        position: fixed;
+        bottom: 0;
+        box-shadow: 0 -9px 22px rgba(225, 6, 27, 0.35);  /* %35 Opaklık + Hafif yayılma */
+        border-left: none; /* Mobilde yan yok */
+        border-right: none;
+        border-top: 1px solid rgba(128, 128, 128, 0.5) !important; /* Gri çizgi */
+    }
+    
+    /* HEADER KIRMIZI ÇİZGİ - Havada (kırmızı çerçeve ile eşit) */
+    .animated-line {
+        opacity: 0.8;  /* Mobilde daha belirgin */
+        box-shadow: 0 2px 12px rgba(225, 6, 27, 0.4);  /* Havada: kırmızı glow */
+    }
+    
+    .menu-btn .ttl {
+        font-size: clamp(13.5px, 3vw, 15.5px) !important; /* +1.5pt */
+        text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);  /* Havada, metin berrak */
+    }
+    
+    /* Mobil bildirim çerçeveleri - arka plan opak */
+    .notification-item {
+        background: #080d16 !important; /* Saydam yerine opak arka plan */
+    }
+    
+    /* Mobil bildirimlerde plaka font boyutunu 2 punto küçült */
+    .notification-item > div:first-child {
+        font-size: 11px !important; /* 13px - 2pt (≈2px) = 11px */
+    }
+}
+
+/* --- iOS PWA: Kırmızı çerçeve ekran üstü + kıvrımlar paralel --- */
+@media (max-width: 768px) and (display-mode: standalone) {
+    html {
+        padding: 0 env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left) !important;
+        box-sizing: border-box !important;
+    }
+    body {
+        padding: 0 !important;
+        min-height: 100vh !important;
+        min-height: 100dvh !important;
+        box-sizing: border-box !important;
+    }
+    /* iOS PWA: anabaşlık kulaklık/sensör arkasında kalmasın - content-wrap üst padding */
+    .content-wrap {
+        padding-top: max(12px, env(safe-area-inset-top)) !important;
+    }
+    /* Çerçeve viewport içinde kalır; çift padding yok, content-wrap halleder */
+    .app-container {
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+        border-radius: 20px !important;
+        border-bottom-left-radius: 0 !important;
+        border-bottom-right-radius: 0 !important;
+        overflow: hidden !important;
+        border-top: 1.2px solid var(--border-red-tech) !important;
+        border-left: 1px solid var(--border-red-tech) !important;
+        border-right: 1px solid var(--border-red-tech) !important;
+        box-shadow: 0 2px 14px rgba(225, 6, 27, 0.1) !important;
+        min-height: calc(100vh - env(safe-area-inset-bottom)) !important;
+        min-height: calc(100dvh - env(safe-area-inset-bottom)) !important;
+    }
+    /* Admin rapor sayfası: kavislere uyumlu çerçeve (anasayfa ile aynı) */
+    .admin-app-container {
+        border-radius: 20px !important;
+        overflow: hidden !important;
+        border-top: 1.2px solid var(--border-red-tech) !important;
+        border-left: 1px solid var(--border-red-tech) !important;
+        border-right: 1px solid var(--border-red-tech) !important;
+        box-shadow: 0 2px 14px rgba(225, 6, 27, 0.1) !important;
+        min-height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom)) !important;
+        min-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom)) !important;
+    }
+    .content-wrap::before {
+        display: none !important;
+    }
+}
+
+/* İçerik pseudo overlay'in üstünde kalsın */
+.app-container > * { position: relative; z-index: 1; }
+/* Modal açıkken body kaymasını ve yatay kaymayı engelle */
+body.modal-open {
+    overflow: hidden;
+    overflow-x: hidden;
+    height: 100%;
+    max-width: 500px;
+    width: 100%;
+    margin: 0 auto;
+    overscroll-behavior: none;
+    touch-action: none;
+}
+
+/* --- YENİ EKLENEN KISIM: Modal açıkken çizgileri gizle --- */
+body.modal-open .app-container {
+    border-top-color: transparent !important;
+}
+
+/* === KÜÇÜK MODALLAR İÇİN STANDART HEADER (v79) === */
+#cache-confirm-modal .modal-header,
+#info-modal .modal-header,
+#tescil-tarih-confirm-modal .modal-header,
+#tescil-tarih-input-modal .modal-header {
+    background: linear-gradient(180deg, rgba(255, 0, 0, 0.30) 0%, rgba(255, 0, 0, 0.22) 25%, rgba(255, 0, 0, 0.16) 50%, rgba(255, 0, 0, 0.10) 75%, transparent 100%);
+    padding: 8px 20px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    position: relative;
+    border-bottom: none !important;
+}
+
+#cache-confirm-modal .modal-header h2,
+#info-modal .modal-header h2,
+#tescil-tarih-confirm-modal .modal-header h2,
+#tescil-tarih-input-modal .modal-header h2 {
+    font-size: 19px !important; /* 17px + 1.5 punto (2px) */
+    font-weight: 600 !important;
+    letter-spacing: 0.05em !important;
+    color: #f0f0f0 !important;
+    text-shadow: none !important;
+    opacity: 1 !important;
+    margin: 0;
+    text-align: center;
+}

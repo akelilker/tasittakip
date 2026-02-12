@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Aylık Kullanıcı Raporu</title>
+  <link rel="icon" type="image/svg+xml" href="../icon/favicon.svg">
+  <meta name="theme-color" content="#080d16">
+  <meta name="msapplication-TileColor" content="#080d16">
+  <link rel="manifest" href="../manifest.json">
+  <link rel="apple-touch-icon" href="../icon/apple-touch-icon.svg">
+  <link rel="apple-touch-icon" sizes="180x180" href="../icon/apple-touch-icon.svg">
+  <link rel="apple-touch-icon" sizes="192x192" href="../icon/icon-192.svg">
+  <link rel="apple-touch-icon" sizes="512x512" href="../icon/icon-512.svg">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Kullanıcı Raporları - Medisa">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style-core.css">
+  <link rel="stylesheet" href="admin-report.css">
+</head>
+<body class="admin-report-page">
+  <div class="admin-app-container">
+    <div class="admin-content-wrap">
+  <div class="hero admin-report-hero">
+    <div class="hero-logo">
+      <img src="../icon/logo-header2.svg" alt="MEDISA Logo">
+    </div>
+    <div class="hero-title-wrap admin-hero-title-wrap">
+      <h1>TAŞIT YÖNETİM SİSTEMİ</h1>
+      <p class="admin-report-subtitle">Kullanıcı Raporları</p>
+      <div class="animated-line admin-hero-line"></div>
+    </div>
+    <div class="hero-spacer"></div>
+  </div>
+
+  <div class="driver-report-page">
+    <div id="report-error" class="report-error" style="display:none; color:#c62828; margin-bottom:0.5rem;"></div>
+
+    <div class="report-stats">
+      <div class="report-stat-box">
+        <div class="label">Toplam Kullanıcı</div>
+        <div class="value" id="stat-total">0</div>
+      </div>
+      <div class="report-stat-box">
+        <div class="label">Toplam Bildirim</div>
+        <div class="value" id="stat-entered">0</div>
+      </div>
+      <div class="report-stat-box report-stat-box-pending">
+        <div class="label">Bekleyen Bildirim</div>
+        <div class="value" id="stat-pending">0</div>
+      </div>
+      <div class="report-stat-box">
+        <div class="label">Tamamlanan</div>
+        <div class="value" id="stat-percentage">0%</div>
+      </div>
+    </div>
+
+    <div class="report-filters">
+      <div class="report-filters-row">
+        <label>
+          Dönem:
+          <select id="report-period"></select>
+        </label>
+        <label>
+          Şube:
+          <select id="report-branch">
+            <option value="">Tüm Şubeler</option>
+          </select>
+        </label>
+        <label>
+          Durum:
+          <select id="report-status">
+            <option value="">Tümü</option>
+            <option value="girdi">Bildirildi</option>
+            <option value="girmedi">Bildirilmedi</option>
+            <option value="kaza">Kaza</option>
+            <option value="bakim">Bakım</option>
+          </select>
+        </label>
+      </div>
+    </div>
+
+    <div class="report-filters-actions">
+      <button type="button" id="report-refresh" class="report-icon-btn" title="Yenile" aria-label="Yenile">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+      </button>
+      <button type="button" id="report-export" class="report-icon-btn report-icon-excel" title="Excel İndir" aria-label="Excel İndir">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M8 13h2"/><path d="M8 17h2"/><path d="M14 13h2"/><path d="M14 17h2"/></svg>
+      </button>
+    </div>
+
+    <div class="report-table-wrap">
+      <table class="report-table">
+        <thead>
+          <tr>
+            <th>Kullanıcı</th>
+            <th>Marka</th>
+            <th>Plaka</th>
+            <th>KM</th>
+            <th>Bakım</th>
+            <th>Kaza</th>
+            <th>Durum</th>
+            <th>İşlem</th>
+          </tr>
+        </thead>
+        <tbody id="report-tbody"></tbody>
+      </table>
+    </div>
+
+    <section class="pending-section">
+      <h2 id="pending-section-title">Düzeltme Talepleri</h2>
+      <div id="pending-requests-list" class="pending-list"></div>
+    </section>
+  </div>
+    </div>
+
+    <footer id="app-footer" class="admin-footer">
+      <div class="footer-content">
+        <span id="version-display" class="version">Aylık Rapor</span>
+        <span class="brand"><img src="../icon/logo-footer.svg" alt="MEDISA" style="height: 12.5px; width: auto;"></span>
+        <span class="status status-ready">● Admin Panel</span>
+      </div>
+    </footer>
+  </div>
+
+  <script defer src="admin-report.js"></script>
+</body>
+</html>

@@ -1,0 +1,988 @@
+/* Admin Aylık Kullanıcı Raporu – koyu tema (style-core ile uyumlu) */
+
+/* --- Admin sayfa layout override --- */
+body.admin-report-page {
+  max-width: 100% !important;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+body.admin-report-page::-webkit-scrollbar {
+  display: none;
+}
+
+.report-table-wrap {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.report-table-wrap::-webkit-scrollbar {
+  display: none;
+}
+
+.admin-app-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background: var(--bg);
+  border-left: 1px solid var(--border-red-tech);
+  border-right: 1px solid var(--border-red-tech);
+  box-sizing: border-box;
+  overflow: visible;
+}
+
+.admin-content-wrap {
+  padding: 1rem;
+  padding-bottom: 60px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  overflow: visible;
+}
+
+.admin-content-wrap::-webkit-scrollbar {
+  display: none;
+}
+
+/* --- Admin Hero (ana sayfa ile aynı) --- */
+.admin-report-hero {
+  margin-bottom: 1rem;
+  margin-left: calc(-1rem + 3px);
+  margin-right: calc(-1rem + 3px);
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.admin-report-hero .hero-logo {
+  margin-top: 8px;
+}
+
+.admin-hero-title-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  position: relative;
+}
+
+.admin-hero-title-wrap h1 {
+  margin: 0;
+  white-space: nowrap;
+}
+
+.admin-hero-line {
+  display: none;
+}
+
+.admin-report-subtitle {
+  font-size: 18px;
+  font-weight: 800;
+  margin: 0;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  background: linear-gradient(to bottom,
+    #c2d4df 0%,
+    #ffffff 40%,
+    #9aadba 52%,
+    #d6e0e8 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  text-shadow: none;
+  filter: none;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* --- Ana içerik --- */
+.driver-report-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  overflow: visible;
+}
+
+.report-error {
+  color: #ef4444 !important;
+}
+
+/* --- Filtreler --- */
+.report-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  align-items: flex-end;
+  margin-top: 0;
+  margin-bottom: 0;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: visible;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 2px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.report-filters::-webkit-scrollbar {
+  display: none;
+}
+
+.report-filters-row {
+  flex-basis: 100%;
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 2px;
+  align-items: center;
+  justify-content: space-between;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.report-filters-row label:nth-child(1) {
+  flex: 0 0 auto;
+  justify-content: flex-start;
+}
+
+.report-filters-row label:nth-child(2) {
+  flex: 1;
+  justify-content: center;
+}
+
+.report-filters-row label:nth-child(3) {
+  flex: 0 0 auto;
+  justify-content: flex-end;
+}
+
+.report-filters-row::-webkit-scrollbar {
+  display: none;
+}
+
+.report-filters-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-top: 4px;
+  margin-bottom: 6px;
+}
+
+.report-filters label {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  font-size: 0.9rem;
+  color: var(--txt);
+  min-width: fit-content;
+}
+
+.report-filters label select {
+  width: fit-content;
+  min-width: 7em;
+  max-width: 100%;
+  margin: 0;
+  margin-left: -0.15em;
+  padding-left: 0;
+}
+
+.report-filters select {
+  padding: 0.35rem 1.25em 0.35rem 0;
+  border: none;
+  border-radius: 0;
+  font-size: 0.9rem;
+  background: transparent;
+  color: var(--muted);
+  flex: 0 0 auto;
+  color-scheme: dark;
+  width: fit-content;
+  min-width: 7em;
+  max-width: 100%;
+  text-align: center;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23e1061b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.35em center;
+  background-size: 0.65em;
+}
+
+.report-filters select option {
+  background: var(--card-bg);
+  color: var(--muted);
+}
+
+.report-filters select:focus {
+  outline: none;
+}
+
+.report-filters button {
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border: none;
+  cursor: pointer;
+  background: var(--theme-color);
+  color: #fff;
+}
+
+.report-icon-btn {
+  padding: 6px !important;
+  background: transparent !important;
+  border: none !important;
+  color: #86efac;
+  cursor: pointer;
+  opacity: 0.9;
+}
+
+.report-icon-btn:hover {
+  opacity: 1;
+  color: #a7f3d0;
+}
+
+.report-icon-btn svg {
+  display: block;
+}
+
+.report-filters-actions .report-icon-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.report-filters button.secondary {
+  background: #444;
+  color: #fff;
+}
+
+.report-filters button.report-icon-btn.secondary,
+.report-filters button.report-icon-excel {
+  background: transparent !important;
+  color: #86efac !important;
+}
+
+.report-filters button.report-icon-excel:hover,
+.report-filters-actions .report-icon-btn:hover {
+  color: #a7f3d0;
+}
+
+.report-filters button.secondary:hover {
+  background: #555;
+}
+
+/* --- Özet kartları --- */
+.report-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 3px;
+}
+
+.report-stat-box {
+  padding: 0.35rem 0.5rem;
+  border-radius: 8px;
+  background: transparent;
+  background-color: transparent;
+  border: 1px solid #3d3d3d;
+  height: 42px;
+  min-height: 42px;
+  max-height: 42px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.report-stat-box .label {
+  font-size: 0.8rem;
+  color: var(--txt);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.report-stat-box .value {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--muted);
+  text-align: center;
+}
+
+.report-stat-box-pending.has-data {
+  border-color: var(--theme-color);
+}
+
+.report-stat-box-pending.has-data .label,
+.report-stat-box-pending.has-data .value {
+  color: var(--theme-color);
+}
+
+/* --- Tablo --- */
+.report-table-wrap {
+  overflow-x: auto;
+  margin-bottom: 8px;
+  border-radius: 8px;
+  border: 1px solid #3d3d3d;
+  max-width: 100%;
+}
+
+.report-table {
+  width: 100%;
+  min-width: 0;
+  table-layout: auto;
+  border-collapse: collapse;
+  font-size: clamp(0.6rem, 2vw, calc(0.9rem - 3px));
+}
+
+.report-table th,
+.report-table td {
+  padding: 0.2rem 1px 0.2rem 3px;
+  text-align: left;
+  border-bottom: 1px solid #3d3d3d;
+  border-left: 0.5px solid rgba(255, 255, 255, 0.18);
+  color: var(--txt);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: clamp(0.6rem, 2vw, calc(0.9rem - 3px));
+}
+
+.report-table th:first-child,
+.report-table td:first-child {
+  border-left: none;
+}
+
+.report-table th {
+  white-space: nowrap;
+  background: transparent;
+  font-weight: 600;
+  text-align: center;
+}
+
+.report-table th:nth-child(3),
+.report-table td:nth-child(3) {
+  font-size: min(0.95em, 0.85rem);
+  text-align: center;
+}
+
+.report-table th:nth-child(4),
+.report-table td:nth-child(4) {
+  text-align: center;
+}
+
+.report-table th:nth-child(8) {
+  font-size: min(0.9em, 0.8rem);
+}
+
+/* Sütun Genişlikleri Güncellendi */
+.report-table th:nth-child(1),
+.report-table td:nth-child(1) { width: 13%; } /* Kullanıcı */
+
+.report-table th:nth-child(2),
+.report-table td:nth-child(2) { width: 11%; } /* Marka */
+
+.report-table th:nth-child(3),
+.report-table td:nth-child(3) { width: 9%; }  /* Plaka */
+
+.report-table th:nth-child(4),
+.report-table td:nth-child(4) { width: 8%; }  /* KM */
+
+.report-table th:nth-child(5),
+.report-table td:nth-child(5) { width: 4%; min-width: 2rem; } /* Bakım */
+.report-table th:nth-child(6),
+.report-table td:nth-child(6) { width: 4%; min-width: 2rem; } /* Kaza */
+.report-table th:nth-child(7),
+.report-table td:nth-child(7) { width: 5%; min-width: 2rem; } /* Durum */
+.report-table th:nth-child(8),
+.report-table td:nth-child(8) { width: 1%; white-space: nowrap; } /* İşlem – metne göre genişler */
+
+.report-table td:nth-child(8) {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.report-table td {
+  white-space: nowrap;
+}
+
+.report-table th:nth-child(1),
+.report-table td:nth-child(1) {
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  font-size: min(0.95em, calc(0.9rem - 2px));
+  text-overflow: clip;
+}
+
+.report-table th:nth-child(2),
+.report-table td:nth-child(2) {
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  text-overflow: clip;
+}
+
+.report-table th:nth-child(5),
+.report-table th:nth-child(6),
+.report-table th:nth-child(7) {
+  font-size: min(0.6em, 0.6rem);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: clip;
+}
+
+/* Masaüstü: Bakım, Kaza, Durum başlıkları daha okunaklı; Durum sütunu yatayda daha geniş */
+@media (min-width: 641px) {
+  .report-table th:nth-child(5),
+  .report-table th:nth-child(6),
+  .report-table th:nth-child(7) {
+    font-size: 0.8rem;
+    min-width: 2.5rem;
+  }
+  .report-table th:nth-child(7),
+  .report-table td:nth-child(7) {
+    width: 10%;
+    min-width: 4rem;
+  }
+  .pending-card {
+    padding: 0.65rem 0.5rem;
+  }
+  .pending-card .actions {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 12rem;
+  }
+}
+
+.report-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.report-table tr.row-success td {
+  color: #4ade80;
+}
+
+.report-table tr.row-pending td {
+  color: #fb923c;
+}
+
+.report-table tr.row-warning td {
+  color: #e1061b;
+}
+
+.report-table .action-cell button {
+  padding: 0.3rem 0.5rem; /* Guncellendi: Buton bosluklari kuculdu */
+  margin-right: 0.25rem;
+  font-size: 0.8rem;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  background: #25d366;
+  color: #fff;
+}
+
+.report-table .action-cell {
+  vertical-align: middle;
+}
+
+.report-table .action-cell .whatsapp-btn {
+  padding: 0.2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent !important;
+}
+
+.report-table .action-cell .whatsapp-btn .whatsapp-icon {
+  width: 16px; /* Guncellendi: İkon boyutu 16px */
+  height: 16px;
+  fill: #25d366;
+}
+
+.report-table .action-cell button.detail-btn {
+  background: #555;
+  color: #fff;
+}
+
+.report-table .durum-cell {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.report-table .durum-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.report-table .durum-icon .durum-svg {
+  display: block;
+  width: 15px; /* Guncellendi: İkon boyutu 15px */
+  height: 15px;
+}
+
+.report-table .durum-bildirilmedi {
+  color: #fb923c;
+}
+
+.report-table .durum-bildirildi {
+  color: #4ade80;
+}
+
+.report-table .cell-icon-wrap {
+  text-align: center;
+}
+
+.report-table .cell-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.report-table .cell-icon .cell-svg {
+  display: block;
+}
+
+.report-table .cell-icon.cell-yes {
+  color: #4ade80;
+}
+
+.report-table .cell-icon.cell-no {
+  color: #e1061b;
+}
+
+/* --- Bekleyen talepler --- */
+.pending-section {
+  padding-top: 4px;
+}
+
+.pending-section h2 {
+  font-size: calc(1.15rem - 2px);
+  margin-top: 4px;
+  margin-bottom: 6px;
+  color: var(--muted);
+  text-align: center;
+  transition: color 0.3s ease;
+}
+
+/* Bekleyen talep varsa başlık kırmızı olsun */
+.pending-section h2.has-pending {
+  color: var(--theme-color);
+}
+
+.pending-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 0;
+}
+
+.pending-card {
+  padding: 0.5rem;
+  border: 1px solid #3d3d3d;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.3);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.pending-card .actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+  justify-self: end;
+}
+
+.pending-card .actions button {
+  margin-left: 0;
+}
+
+.pending-card .info {
+  font-size: 0.9em;
+  color: var(--muted);
+}
+
+.pending-card .info strong {
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.pending-card .info .pending-name,
+.pending-card .info .pending-km-label,
+.pending-card .info .pending-sebep-label,
+.pending-card .info .pending-kaza-label {
+  color: var(--txt);
+}
+
+.pending-card .info .pending-muted {
+  color: var(--muted);
+}
+
+.pending-card .actions button {
+  padding: calc(0.2rem + 2.5px) calc(0.8rem + 3px);
+  margin-left: 0.35rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.7rem;
+  background: transparent;
+}
+
+.pending-card .actions button.approve-btn {
+  color: #2e7d32;
+  border: 1px solid #2e7d32;
+}
+
+.pending-card .actions button.reject-btn {
+  color: #c62828;
+  border: 1px solid #c62828;
+}
+
+/* --- Admin footer --- */
+.admin-footer {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 1200px;
+  background: #080d16;
+  border-top: 0.7px solid rgba(128, 128, 128, 0.5);
+  border-left: 0.5px solid rgba(255, 255, 255, 0.2);
+  border-right: 0.5px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 -10px 20px rgba(225, 6, 27, 0.16);
+  z-index: 1000;
+}
+
+.admin-footer .footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.admin-footer .brand img {
+  height: 12.5px;
+  width: auto;
+  opacity: 0.4;
+  filter: drop-shadow(0 0 6px rgba(225, 6, 27, 0.4));
+}
+
+.admin-footer .version,
+.admin-footer .status,
+.admin-footer .brand img {
+  transition: opacity 1s ease !important;
+}
+
+.admin-footer.dimmed .version,
+.admin-footer.dimmed .version#version-display {
+  opacity: 1 !important;
+}
+
+.admin-footer.dimmed .status,
+.admin-footer.dimmed .status.status-ready,
+.admin-footer.dimmed .status.status-error {
+  opacity: 1 !important;
+}
+
+.admin-footer.dimmed .brand img {
+  opacity: 0.3 !important;
+}
+
+.admin-footer.dimmed.delayed .version,
+.admin-footer.dimmed.delayed .version#version-display {
+  opacity: 0.3 !important;
+}
+
+.admin-footer.dimmed.delayed .status,
+.admin-footer.dimmed.delayed .status.status-ready,
+.admin-footer.dimmed.delayed .status.status-error {
+  opacity: 0.3 !important;
+}
+
+.admin-footer.dimmed.delayed .brand img {
+  opacity: 0.7 !important;
+}
+
+/* === KULLANICI SEKME STİLLERİ === */
+
+/* Kullanıcı Liste Item */
+.kullanici-list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 9px 1px;
+    margin-left: 1px;
+    margin-right: 1px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.02);
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.kullanici-list-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.kullanici-list-item-left {
+    flex: 1;
+}
+
+.kullanici-list-item-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #f0f0f0;
+}
+
+.kullanici-list-item-right {
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+}
+
+.kullanici-list-item-plate {
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    background: #000;
+    padding: 2px 6px;
+    border-radius: 3px;
+    border: 1px solid #333;
+}
+
+.kullanici-list-item-brand {
+    font-size: 12px;
+    color: #aaa;
+}
+
+/* Kullanıcı Liste Items Container */
+.kullanici-list-items {
+    padding: 0;
+    margin: 0;
+}
+
+/* Kullanıcı Liste Top Controls */
+.kullanici-list-top-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.kullanici-export-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+}
+
+/* --- Mobil --- */
+@media (max-width: 640px) {
+  .admin-report-subtitle {
+    font-size: 17px;
+  }
+  .report-stats {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+  }
+  .report-stat-box {
+    min-height: 38px;
+    max-height: none;
+    height: auto;
+    padding: 0.25rem 2px;
+    align-items: stretch;
+  }
+  .report-stat-box .label,
+  .report-stat-box .value {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  .report-stat-box .label {
+    white-space: normal;
+    word-break: break-word;
+    line-height: 1.2;
+    font-size: 0.7rem;
+  }
+  .report-stat-box .value {
+    font-size: 1rem;
+  }
+  .report-filters {
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 4px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .report-filters-row {
+    gap: 4px;
+    flex-wrap: nowrap;
+    min-width: 0;
+    justify-content: space-between;
+  }
+  .report-filters-row label:nth-child(1) {
+    justify-content: flex-start;
+  }
+  .report-filters-row label:nth-child(2) {
+    justify-content: center;
+  }
+  .report-filters-row label:nth-child(3) {
+    justify-content: flex-end;
+  }
+  .report-filters label {
+    align-items: center;
+    flex-shrink: 0;
+    font-size: 0.75rem;
+    gap: 2px;
+  }
+  .report-filters label select,
+  .report-filters select {
+    width: auto;
+    min-width: 4.5em;
+    max-width: 7.8em;
+    flex-shrink: 0;
+    font-size: 0.75rem;
+    padding: 0.3rem 0.5em 0.3rem 0;
+  }
+  .report-filters-row::-webkit-scrollbar {
+    display: none;
+  }
+  .report-table .cell-icon .cell-svg {
+    width: 16px;
+    height: 16px;
+  }
+  .report-table .durum-icon .durum-svg {
+    width: 13px;
+    height: 13px;
+  }
+  .report-table .action-cell .whatsapp-btn .whatsapp-icon {
+    width: 14px;
+    height: 14px;
+  }
+  .report-table th:nth-child(1),
+  .report-table td:nth-child(1),
+  .report-table th:nth-child(2),
+  .report-table td:nth-child(2),
+  .report-table th:nth-child(3),
+  .report-table td:nth-child(3),
+  .report-table th:nth-child(4),
+  .report-table td:nth-child(4),
+  .report-table th:nth-child(5),
+  .report-table td:nth-child(5),
+  .report-table th:nth-child(6),
+  .report-table td:nth-child(6),
+  .report-table th:nth-child(7),
+  .report-table td:nth-child(7),
+  .report-table th:nth-child(8),
+  .report-table td:nth-child(8) {
+    width: auto;
+    min-width: 0;
+  }
+  .pending-card {
+    grid-template-columns: 1fr auto;
+    align-items: center;
+  }
+  .admin-hero-title-wrap h1 {
+    font-size: 23px !important;
+    letter-spacing: 2.5px !important;
+  }
+  
+  /* Kullanıcı liste container: modal body padding'i override et */
+  .kullanici-list-items {
+    margin-left: -7px !important;
+    margin-right: -7px !important;
+  }
+  
+  /* Kullanıcı liste: sağ ve sol kenar boşluğu 1px */
+  .kullanici-list-item { 
+    padding: 7px 8px !important; 
+    margin-left: 1px;
+    margin-right: 1px;
+  }
+  .kullanici-list-item-name { font-size: 14px !important; }
+  .kullanici-list-item-plate { font-size: 13px !important; }
+  .kullanici-list-item-brand { font-size: 12px !important; }
+}
+
+/* --- iOS PWA: Kullanıcı Raporları sayfası - ekran kenarlarına sıfır çerçeve --- */
+@media (max-width: 768px) and (display-mode: standalone) {
+  html {
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left) !important;
+    box-sizing: border-box !important;
+  }
+  body.admin-report-page {
+    padding: 0 !important;
+    min-height: 100vh !important;
+    min-height: 100dvh !important;
+    box-sizing: border-box !important;
+  }
+  .admin-app-container {
+    border-radius: 38px !important;
+    overflow: hidden !important;
+    border-top: 1.2px solid var(--border-red-tech) !important;
+    border-left: 1px solid var(--border-red-tech) !important;
+    border-right: 1px solid var(--border-red-tech) !important;
+    box-shadow: 0 2px 14px rgba(225, 6, 27, 0.1) !important;
+    min-height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom)) !important;
+    min-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom)) !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+  }
+  .admin-content-wrap {
+    padding-top: 4px !important;
+  }
+  .admin-report-hero {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    border-top-left-radius: 30px !important;
+    border-top-right-radius: 30px !important;
+  }
+  .admin-footer {
+    max-width: 100% !important;
+    border-left: none !important;
+    border-right: none !important;
+    left: 0 !important;
+    transform: none !important;
+    padding-bottom: env(safe-area-inset-bottom, 0) !important;
+  }
+  .admin-footer .footer-content {
+    max-width: 100% !important;
+    padding-bottom: max(12px, env(safe-area-inset-bottom)) !important;
+  }
+}
+
+/* --- h1 Metalik Gradient (anasayfa ile aynı) --- */
+.admin-hero-title-wrap h1 {
+  font-size: 21px;
+  font-weight: 800;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  background: linear-gradient(to bottom,
+    #c2d4df 0%,
+    #ffffff 40%,
+    #9aadba 52%,
+    #d6e0e8 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  text-shadow: none;
+  filter: none;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  line-height: 1.6;
+}
