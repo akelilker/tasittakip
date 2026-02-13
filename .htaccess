@@ -1,5 +1,5 @@
-# Taşıt Takip - /medisa/ dizini Apache ayarları
-# ÖNEMLİ: Üst dizin (WordPress vb.) rewrite kurallarını ezer
+# Taşıt Takip - tasitmedisa klasörü (karmotors.com.tr/tasitmedisa/)
+# /medisa/ veya kök deploy için RewriteBase'i değiştir
 
 # Klasör istendiğinde index.html göster
 DirectoryIndex index.html index.php
@@ -10,7 +10,7 @@ Options -Indexes
 # Rewrite kuralları
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    RewriteBase /medisa/
+    RewriteBase /tasitmedisa/
 
     # Gerçek dosya veya klasör varsa DOĞRUDAN SUN (üst .htaccess kurallarını ezme)
     RewriteCond %{REQUEST_FILENAME} -f [OR]

@@ -2,9 +2,10 @@
    MEDISA KULLANICI MODÜLÜ - SCRIPT
    ========================================= */
 
-// API Base URL: /medisa/ altındaysa her zaman /medisa/driver/ (PHP'ler driver klasöründe)
+// API Base URL: /tasitmedisa/ veya /medisa/ altındaysa mutlak yol (PHP'ler driver klasöründe)
 const API_BASE = (function(){
   var p = document.location.pathname;
+  if (p.indexOf('/tasitmedisa') === 0) return '/tasitmedisa/driver/';
   if (p.indexOf('/medisa') === 0) return '/medisa/driver/';
   var base = '/';
   var driverIdx = p.indexOf('/driver');
@@ -17,10 +18,20 @@ const API_BASE = (function(){
 })();
 
 // İkon/kaporta SVG base path (sürücü paneli farklı dizinde)
-const ICON_BASE = (document.location.pathname.indexOf('/medisa') === 0) ? '/medisa/icon/' : '../icon/';
+const ICON_BASE = (function(){
+  var p = document.location.pathname;
+  if (p.indexOf('/tasitmedisa') === 0) return '/tasitmedisa/icon/';
+  if (p.indexOf('/medisa') === 0) return '/medisa/icon/';
+  return '../icon/';
+})();
 
-// Sayfa yönlendirmeleri: /medisa/ altında değilse relative path (localhost/driver için)
-const DRIVER_PAGE_BASE = (document.location.pathname.indexOf('/medisa') === 0) ? '/medisa/driver/' : '';
+// Sayfa yönlendirmeleri: subpath altında değilse relative path (localhost/driver için)
+const DRIVER_PAGE_BASE = (function(){
+  var p = document.location.pathname;
+  if (p.indexOf('/tasitmedisa') === 0) return '/tasitmedisa/driver/';
+  if (p.indexOf('/medisa') === 0) return '/medisa/driver/';
+  return '';
+})();
 
 // Uygulama sürümü (footer #version-display tek kaynak)
 const APP_VERSION = 'v78.2';
@@ -1073,7 +1084,7 @@ window.logout = function() {
 /* Service Worker (PWA cache) – driver sayfaları doğrudan açıldığında da çalışır */
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function() {
-    var swPaths = ['../sw.js', '/sw.js', '/medisa/sw.js'];
+    var swPaths = ['../sw.js', '/sw.js', '/tasitmedisa/sw.js', '/medisa/sw.js'];
     var currentPathIndex = 0;
     function tryRegisterSW() {
       if (currentPathIndex >= swPaths.length) return;

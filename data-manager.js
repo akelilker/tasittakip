@@ -2,10 +2,11 @@
    SUNUCU VERİ YÖNETİMİ - DATA MANAGER
    ========================================= */
 
-// API Base: canlı sitede /medisa/ altındaysa mutlak yol kullan (404 önleme)
+// API Base: /tasitmedisa/ veya /medisa/ altındaysa mutlak yol kullan (404 önleme)
 const API_BASE = (function() {
     try {
         var p = (typeof document !== 'undefined' && document.location && document.location.pathname) ? document.location.pathname : '';
+        if (p.indexOf('/tasitmedisa') === 0) return '/tasitmedisa/';
         if (p.indexOf('/medisa') === 0) return '/medisa/';
         return '';
     } catch (e) { return ''; }
