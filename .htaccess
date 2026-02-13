@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 # Taşıt Takip - tasitmedisa klasörü (karmotors.com.tr/tasitmedisa/)
 # /medisa/ veya kök deploy için RewriteBase'i değiştir
+=======
+# Taşıt Takip - Subdomain (medisa.karmotors.com.tr) veya kök deploy
+# karmotors klasörüne dokunulmaz - tasitmedisa ayrı subdomain
+>>>>>>> 98bf72fffee29837b52162bc3bccf55de0b12c75
 
 # Klasör istendiğinde index.html göster
 DirectoryIndex index.html index.php
@@ -10,7 +15,11 @@ Options -Indexes
 # Rewrite kuralları
 <IfModule mod_rewrite.c>
     RewriteEngine On
+<<<<<<< HEAD
     RewriteBase /tasitmedisa/
+=======
+    RewriteBase /
+>>>>>>> 98bf72fffee29837b52162bc3bccf55de0b12c75
 
     # Gerçek dosya veya klasör varsa DOĞRUDAN SUN (üst .htaccess kurallarını ezme)
     RewriteCond %{REQUEST_FILENAME} -f [OR]
