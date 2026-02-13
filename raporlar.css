@@ -472,28 +472,34 @@ z-index: 10;
 border-bottom: 2px solid rgba(255, 255, 255, 0.1);
 }
 
+/* Taşıtlar listesi formatı: grid, gap, esnek sütunlar */
 .stok-list-header-row {
-display: flex;
+display: grid;
 background: rgba(255, 255, 255, 0.03);
-gap: 0;
+gap: 4px;
+align-items: center;
+padding: 4px 2px;
+border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .stok-list-header-cell {
-padding: 6px 4px;
-font-size: 11px;
+padding: 2px 1px;
+font-size: clamp(9px, 1.2vw, 12px);
 font-weight: 700;
 color: #888;
 text-transform: uppercase;
 text-align: center;
-white-space: normal;
-word-wrap: break-word;
-border-right: 1px solid rgba(255, 255, 255, 0.05);
+white-space: nowrap;
+border-right: 1px solid rgba(255, 255, 255, 0.1);
 display: flex;
 align-items: center;
 justify-content: center;
 gap: 2px;
-line-height: 1.1;
+line-height: 1.2;
 transition: background 0.2s;
+min-width: 0;
+overflow: hidden;
+text-overflow: ellipsis;
 }
 
 .stok-list-header-cell {
@@ -549,148 +555,141 @@ color: #999;
 color: #e1061b;
 }
 
+/* Taşıtlar listesi formatı: grid, gap */
 .stok-list-row {
-display: flex;
-border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+display: grid;
+border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 transition: background 0.2s;
-gap: 0;
+gap: 4px;
 min-height: 32px;
+align-items: center;
+padding: 4px 2px;
+background: rgba(255, 255, 255, 0.01);
 }
 
 .stok-list-row:hover {
-background: rgba(255, 255, 255, 0.02);
+background: rgba(255, 255, 255, 0.04);
 }
 
 .stok-list-cell {
-padding: 4px 4px;
-font-size: 11px;
-color: #ccc;
+padding: 2px 1px;
+font-size: clamp(9px, 1.2vw, 12px);
+color: #b5b9c0;
 text-align: center;
-white-space: normal;
-word-wrap: break-word;
-overflow-wrap: break-word;
-border-right: 1px solid rgba(255, 255, 255, 0.05);
+border-right: 1px solid rgba(255, 255, 255, 0.1);
 display: flex;
 align-items: center;
 justify-content: center;
 overflow: hidden;
-line-height: 1.2;
+line-height: 1.3;
+min-width: 0;
 }
 
 .stok-list-cell:last-child {
 border-right: none;
 }
 
-/* Sütun genişlikleri - 8 sütun sığacak şekilde optimize edildi */
-.stok-list-header-cell[data-col=“sira”],
-.stok-list-cell[data-col=“sira”] {
-width: 20px;
-min-width: 20px;
-max-width: 20px;
+/* Taşıtlar formatı: grid sütun genişlikleri inline style ile gelir */
+.stok-list-header-cell[data-col="sira"],
+.stok-list-cell[data-col="sira"] {
+justify-content: center;
+padding: 2px 1px;
+}
+
+.stok-list-header-cell[data-col="sube"],
+.stok-list-cell[data-col="sube"] {
+justify-content: center;
+}
+
+.stok-list-header-cell[data-col="yil"],
+.stok-list-cell[data-col="yil"] {
 justify-content: center;
 padding: 4px 2px;
 }
 
-.stok-list-header-cell[data-col=“sube”],
-.stok-list-cell[data-col=“sube”] {
-width: 65px;
-min-width: 65px;
-}
-
-.stok-list-header-cell[data-col=“yil”],
-.stok-list-cell[data-col=“yil”] {
-width: auto;
-min-width: 35px;
-max-width: 45px;
+/* Marka: ikinci satıra inebilir (Taşıtlar list-brand gibi) */
+.stok-list-header-cell[data-col="marka"] {
 justify-content: center;
-padding: 4px 3px;
+white-space: normal;
+word-break: break-word;
+overflow-wrap: break-word;
+-webkit-line-clamp: 2;
+line-clamp: 2;
 }
 
-.stok-list-header-cell[data-col=“marka”] {
-width: 90px;
-min-width: 90px;
+.stok-list-cell[data-col="marka"] {
 justify-content: center;
+text-align: center;
+white-space: normal;
+word-break: break-word;
+overflow-wrap: break-word;
+display: -webkit-box;
+-webkit-line-clamp: 2;
+line-clamp: 2;
+-webkit-box-orient: vertical;
+overflow: hidden;
+text-overflow: clip;
+padding: 2px 1px;
 }
 
-.stok-list-cell[data-col=“marka”] {
-width: 90px;
-min-width: 90px;
-justify-content: flex-start;
-text-align: left;
-}
-
-.stok-list-header-cell[data-col=“plaka”],
-.stok-list-cell[data-col=“plaka”] {
-width: 80px;
-min-width: 80px;
+.stok-list-header-cell[data-col="plaka"],
+.stok-list-cell[data-col="plaka"] {
 justify-content: center;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
 }
 
-.stok-list-header-cell[data-col=“sanziman”],
-.stok-list-cell[data-col=“sanziman”] {
-width: 55px;
-min-width: 55px;
+.stok-list-header-cell[data-col="sanziman"],
+.stok-list-cell[data-col="sanziman"] {
 justify-content: center;
 }
 
-.stok-list-header-cell[data-col=“km”] {
-width: auto;
-min-width: 50px;
-max-width: 70px;
+.stok-list-header-cell[data-col="km"],
+.stok-list-cell[data-col="km"] {
 justify-content: center;
-padding: 6px 3px;
-}
-
-.stok-list-cell[data-col=“km”] {
-width: auto;
-min-width: 50px;
-max-width: 70px;
-justify-content: flex-start;
-text-align: left;
-padding: 4px 3px;
+padding: 4px 2px;
 }
 
 /* Detay sütunları */
-.stok-list-header-cell[data-col=“sigorta”],
-.stok-list-cell[data-col=“sigorta”],
-.stok-list-header-cell[data-col=“kasko”],
-.stok-list-cell[data-col=“kasko”],
-.stok-list-header-cell[data-col=“muayene”],
-.stok-list-cell[data-col=“muayene”] {
-width: 70px;
-min-width: 70px;
+.stok-list-header-cell[data-col="sigorta"],
+.stok-list-cell[data-col="sigorta"],
+.stok-list-header-cell[data-col="kasko"],
+.stok-list-cell[data-col="kasko"],
+.stok-list-header-cell[data-col="muayene"],
+.stok-list-cell[data-col="muayene"] {
 justify-content: center;
 }
 
-.stok-list-header-cell[data-col=“kredi”],
-.stok-list-cell[data-col=“kredi”],
-.stok-list-header-cell[data-col=“lastik”],
-.stok-list-cell[data-col=“lastik”],
-.stok-list-header-cell[data-col=“utts”],
-.stok-list-cell[data-col=“utts”],
-.stok-list-header-cell[data-col=“takip”],
-.stok-list-cell[data-col=“takip”],
-.stok-list-header-cell[data-col=“tramer”],
-.stok-list-cell[data-col=“tramer”],
-.stok-list-header-cell[data-col=“boya”],
-.stok-list-cell[data-col=“boya”] {
-width: 60px;
-min-width: 60px;
+.stok-list-header-cell[data-col="kredi"],
+.stok-list-cell[data-col="kredi"],
+.stok-list-header-cell[data-col="lastik"],
+.stok-list-cell[data-col="lastik"],
+.stok-list-header-cell[data-col="utts"],
+.stok-list-cell[data-col="utts"],
+.stok-list-header-cell[data-col="takip"],
+.stok-list-cell[data-col="takip"],
+.stok-list-header-cell[data-col="tramer"],
+.stok-list-cell[data-col="tramer"],
+.stok-list-header-cell[data-col="boya"],
+.stok-list-cell[data-col="boya"] {
 justify-content: center;
 }
 
-.stok-list-header-cell[data-col=“kullanici”],
-.stok-list-cell[data-col=“kullanici”] {
-width: 80px;
-min-width: 80px;
+.stok-list-header-cell[data-col="kullanici"],
+.stok-list-cell[data-col="kullanici"] {
 justify-content: center;
 }
 
-.stok-list-header-cell[data-col=“tescil”],
-.stok-list-cell[data-col=“tescil”] {
-width: 70px;
-min-width: 70px;
+.stok-list-header-cell[data-col="tescil"],
+.stok-list-cell[data-col="tescil"] {
 justify-content: center;
+}
+
+/* Tek satır hücreler: metin taşmasın */
+.stok-list-cell:not([data-col="marka"]) {
+white-space: nowrap;
+text-overflow: ellipsis;
 }
 
 /* === DETAY EKLEME BUTONU === */
@@ -1438,51 +1437,39 @@ transform: none !important;
 .stok-branch-name { font-size: 14px; }
 .stok-branch-count { font-size: 13px; }
 
-/* === MOBİL LİSTE İYİLEŞTİRMELERİ === */
-
-/* Liste container - sağ sol boşluk 1px’e düşürüldü */
-.stok-list-container {
-margin-left: 1px !important;
-margin-right: 1px !important;
-padding-left: 0 !important;
-padding-right: 0 !important;
+/* MOBİL LİSTE - TÜM SÜTUNLAR EKRANA SIGMALI (SCROLL YOK!) */
+.stok-list-table {
+width: 100% !important; /* Tam genişlik, scroll yok */
+min-width: unset !important;
 }
 
-/* Başlıklar - 1.5 punto büyütüldü (13px -> 14.5px) */
+.stok-list-header-row,
+.stok-list-row {
+width: 100% !important;
+}
+
+/* MOBİL LİSTE - Taşıtlar formatı: grid inline style ile, font daraldıkça küçülsün */
+.stok-list-header-row,
+.stok-list-row {
+display: grid !important;
+gap: 4px !important;
+width: 100% !important;
+/* grid-template-columns inline style ile gelir (getStokGridTemplate) */
+}
+
 .stok-list-header-cell {
-font-size: 14.5px !important;
-padding: 5px 3px;
+font-size: clamp(10px, 2.5vw, 13px) !important;
+padding: 4px 2px !important;
 }
-
-/* İçerik - 1 punto büyütüldü (13px -> 14px) */
 .stok-list-cell {
-font-size: 14px !important;
-padding: 4px 3px;
+font-size: clamp(10px, 2.5vw, 13px) !important;
+padding: 4px 2px !important;
 }
 
-/* Marka kolonu - 100px’den 85px’e daraltıldı */
-.stok-list-header-cell[data-col=“marka”] {
-width: 85px !important;
-min-width: 85px !important;
-}
-
-.stok-list-cell[data-col=“marka”] {
-width: 85px !important;
-min-width: 85px !important;
-}
-
-/* Bakım, Kaza, Durum kolonları - eşit genişlik 40px */
-.stok-list-header-cell[data-col=“bakim”],
-.stok-list-cell[data-col=“bakim”],
-.stok-list-header-cell[data-col=“kaza”],
-.stok-list-cell[data-col=“kaza”],
-.stok-list-header-cell[data-col=“durum”],
-.stok-list-cell[data-col=“durum”] {
-width: 40px !important;
-min-width: 40px !important;
-max-width: 40px !important;
-text-align: center !important;
-justify-content: center !important;
+/* Grid sütunları - taşma önleme */
+.stok-list-header-cell,
+.stok-list-cell {
+min-width: 0 !important;
 }
 
 .stok-list-top-controls {

@@ -404,6 +404,39 @@
         attachStokSortListeners();
         // Mobil: liste tek hamlede ya yatay ya dikey kaysın (eksen kilidi)
         setupStokListTouchAxisLock();
+        // Marka hücreleri: sütun daraldıkça font küçülsün (Taşıtlar gibi)
+        adjustStokMarkaFontSizes();
+    }
+
+    // Marka hücreleri: taşma durumunda font küçült (Taşıtlar formatı)
+    function adjustStokMarkaFontSizes() {
+        const listContainer = document.getElementById('stok-list-container');
+        if (!listContainer) return;
+        const brandCells = listContainer.querySelectorAll('.stok-list-cell[data-col="marka"]');
+        const minFontSize = 9;
+        const baseFontSize = 12;
+        brandCells.forEach(cell => {
+            if (cell.offsetHeight === 0) return; /* Gizli container'da çalışmasın */
+            cell.style.fontSize = baseFontSize + 'px';
+            while (cell.scrollHeight > cell.offsetHeight && parseInt(cell.style.fontSize) > minFontSize) {
+                const current = parseInt(cell.style.fontSize) || baseFontSize;
+                cell.style.fontSize = (current - 1) + 'px';
+            }
+        });
+        // Resize'da tekrar hesapla
+        if (!window._stokMarkaResize) {
+            window._stokMarkaResize = true;
+            let resizeTimer;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(() => {
+                    const container = document.getElementById('stok-list-container');
+                    if (container && container.querySelector('.stok-list-cell[data-col="marka"]')) {
+                        adjustStokMarkaFontSizes();
+                    }
+                }, 100);
+            });
+        }
     }
 
     // Sütun başlık satırı oluştur
