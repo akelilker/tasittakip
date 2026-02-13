@@ -1,0 +1,37 @@
+# karmotors.com.tr - Otomatik Deployment
+# Push sonrası sunucuya rsync ile dosya aktarımı
+
+name: Deploy to karmotors.com.tr
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Deploy via SSH
+        uses: easingthemes/ssh-deploy@v4
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+          REMOTE_USER: ${{ secrets.REMOTE_USER }}
+          TARGET: /var/www/karmotors.com.tr/
+          SOURCE: ./
+          EXCLUDE: ".git/**, node_modules/**, .env, .env.*"
+
+      # Alternatif: rsync ile manuel
+      # - name: Setup SSH
+      #   run: |
+      #     mkdir -p ~/.ssh
+      #     echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
+      #     chmod 600 ~/.ssh/deploy_key
+      # - name: Deploy
+      #   run: |
+      #     rsync -avz --delete -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no" \
+      #       ./ ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }}:/var/www/karmotors.com.tr/
