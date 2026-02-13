@@ -12,3 +12,4 @@ deployment:
     - /bin/cp -R .htaccess $DEPLOYPATH
     - /bin/chmod -R 755 $DEPLOYPATH
     - /bin/chmod -R 777 $DEPLOYPATH/data
+
