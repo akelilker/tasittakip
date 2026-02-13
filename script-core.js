@@ -263,7 +263,7 @@ if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     // Service Worker kaydını güvenli şekilde dene
     // Önce mevcut dizinde dene, sonra root'ta dene
-    const swPaths = ['./sw.js', '/sw.js', '/medisa/sw.js'];
+    const swPaths = ['./sw.js', '/sw.js', '/tasitmedisa/sw.js', '/medisa/sw.js'];
     let currentPathIndex = 0;
     
     function tryRegisterSW() {

@@ -1,5 +1,6 @@
 # karmotors.com.tr - Otomatik Deployment
 # Push sonrası sunucuya rsync ile dosya aktarımı
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
 
 name: Deploy to karmotors.com.tr
 
@@ -17,7 +18,7 @@ jobs:
 
       - name: Deploy via SSH
         uses: easingthemes/ssh-deploy@v4
-        env:
+        with:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
           REMOTE_USER: ${{ secrets.REMOTE_USER }}

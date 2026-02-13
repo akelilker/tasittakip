@@ -320,7 +320,7 @@
   /* Service Worker (PWA cache) – admin sayfası doğrudan açıldığında da çalışır */
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function () {
-      var swPaths = ['../sw.js', '/sw.js', '/medisa/sw.js'];
+      var swPaths = ['../sw.js', '/sw.js', '/tasitmedisa/sw.js', '/medisa/sw.js'];
       var currentPathIndex = 0;
       function tryRegisterSW() {
         if (currentPathIndex >= swPaths.length) return;
