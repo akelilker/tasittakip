@@ -18,13 +18,13 @@ jobs:
 
       - name: Deploy via SSH
         uses: easingthemes/ssh-deploy@v4
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
-          REMOTE_USER: ${{ secrets.REMOTE_USER }}
-          TARGET: /home/karmotor/public_html/tasitmedisa/
-          SOURCE: ./
-          EXCLUDE: ".git/**, node_modules/**, .env, .env.*"
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          remote-host: ${{ secrets.REMOTE_HOST }}
+          remote-user: ${{ secrets.REMOTE_USER }}
+          target: /home/karmotor/public_html/tasitmedisa/
+          source: ./
+          exclude: ".git/**, node_modules/**, .env, .env.*"
 
       # Alternatif: rsync ile manuel
       # - name: Setup SSH
