@@ -439,6 +439,32 @@
         }
     }
 
+    // Sütun genişliklerini hesapla
+    function getColumnWidths(allColumns) {
+        const columnWidths = {
+            'sira': '40px',
+            'sube': '90px',
+            'yil': '55px',
+            'marka': '2.5fr',
+            'plaka': '80px',
+            'sanziman': '80px',
+            'km': '70px',
+            'sigorta': '90px',
+            'kasko': '90px',
+            'muayene': '90px',
+            'kredi': '70px',
+            'lastik': '70px',
+            'utts': '60px',
+            'takip': '70px',
+            'tramer': '60px',
+            'boya': '70px',
+            'kullanici': '90px',
+            'tescil': '90px'
+        };
+
+        return allColumns.map(col => columnWidths[col.key] || '80px').join(' ');
+    }
+
     // Sütun başlık satırı oluştur
     function createStokHeaderRow() {
         const baseColumns = [
@@ -450,7 +476,7 @@
             { key: 'sanziman', sortable: true },
             { key: 'km', sortable: true }
         ];
-        
+
         const detailColumns = [
             { key: 'sigorta', sortable: true },
             { key: 'kasko', sortable: true },
@@ -464,16 +490,16 @@
             { key: 'kullanici', sortable: true },
             { key: 'tescil', sortable: true }
         ];
-        
+
         // Tüm sütunları birleştir (temel + aktif detay)
         const allColumns = [];
-        
+
         // Temel sütunları sıraya göre ekle
         stokBaseColumnOrder.forEach(colKey => {
             const col = baseColumns.find(c => c.key === colKey);
             if (col) allColumns.push(col);
         });
-        
+
         // Aktif detay sütunlarını sıraya göre ekle
         if (stokColumnOrder.length > 0) {
             stokColumnOrder.forEach(colKey => {
@@ -496,10 +522,13 @@
                 }
             });
         }
-        
+
         let columns = allColumns;
-        
-        return `<tr class="stok-list-header-row">${columns.map(col => {
+
+        // Grid sütun genişliklerini hesapla
+        const gridTemplateColumns = getColumnWidths(columns);
+
+        return `<tr class="stok-list-header-row" style="grid-template-columns: ${gridTemplateColumns}">${columns.map(col => {
             const sortState = stokSortState[col.key] || null;
             const sortIcon = sortState === 'asc' ? '↑' : sortState === 'desc' ? '↓' : '↕';
             const sortClass = sortState ? 'active' : '';
@@ -545,7 +574,7 @@
     function createStokDataRow(vehicle, rowNum, branches) {
         const branch = vehicle.branchId ? branches.find(b => b.id === vehicle.branchId) : null;
         const branchName = branch ? branch.name : '-';
-        
+
         // Base cell'leri stokBaseColumnOrder sırasına göre oluştur
         const baseCellData = {
             'sira': rowNum,
@@ -556,12 +585,12 @@
             'sanziman': vehicle.transmission === 'manuel' ? 'Manuel' : vehicle.transmission === 'otomatik' ? 'Otomatik' : '-',
             'km': vehicle.km ? formatNumber(vehicle.km) : '-'
         };
-        
+
         const baseCells = stokBaseColumnOrder.map(key => ({
             key: key,
             value: baseCellData[key] || '-'
         }));
-        
+
         const detailCells = [
             { key: 'sigorta', value: vehicle.sigortaDate ? formatDate(vehicle.sigortaDate) : '-' },
             { key: 'kasko', value: vehicle.kaskoDate ? formatDate(vehicle.kaskoDate) : '-' },
@@ -575,9 +604,9 @@
             { key: 'kullanici', value: getVehicleUser(vehicle) },
             { key: 'tescil', value: vehicle.tescilDate ? formatDate(vehicle.tescilDate) : '-' }
         ];
-        
+
         let cells = [...baseCells];
-        
+
         // Aktif detay sütunlarını sıraya göre ekle
         if (stokColumnOrder.length > 0) {
             // Kaydedilmiş sıraya göre ekle
@@ -601,8 +630,12 @@
                 }
             });
         }
-        
-        return `<tr class="stok-list-row">${cells.map(cell => 
+
+        // Grid sütun genişliklerini hesapla (header ile aynı sütun yapısı)
+        const columnKeys = cells.map(c => ({ key: c.key }));
+        const gridTemplateColumns = getColumnWidths(columnKeys);
+
+        return `<tr class="stok-list-row" style="grid-template-columns: ${gridTemplateColumns}">${cells.map(cell =>
             `<td class="stok-list-cell" data-col="${cell.key}">${escapeHtml(cell.value)}</td>`
         ).join('')}</tr>`;
     }

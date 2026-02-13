@@ -1,0 +1,14 @@
+---
+# cPanel Git Version Control Deployment
+# karmotors.com.tr/tasitmedisa klasörüne deployment
+#
+# Bu dosya cPanel'in Git arayüzünden "Pull" veya "Update" yaptığınızda çalışır
+# GitHub Actions ile farklı bir sistemdir - bu cPanel sunucusunda yerel olarak çalışır
+
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/karmotor/public_html/tasitmedisa/
+    - /bin/cp -R * $DEPLOYPATH
+    - /bin/cp -R .htaccess $DEPLOYPATH
+    - /bin/chmod -R 755 $DEPLOYPATH
+    - /bin/chmod -R 777 $DEPLOYPATH/data
