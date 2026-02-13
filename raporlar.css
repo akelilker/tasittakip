@@ -459,7 +459,7 @@ background: rgba(128, 128, 128, 0.5);
 
 .stok-list-table {
 width: 100%;
-min-width: 800px;
+/* min-width kaldırıldı - tablo ekrana sığmalı, sadece detay sütunları eklenince scroll olsun */
 border-collapse: separate;
 border-spacing: 0;
 }
