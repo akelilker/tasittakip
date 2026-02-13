@@ -439,30 +439,32 @@
         }
     }
 
-    // Sütun genişliklerini hesapla
+    // Sütun genişliklerini hesapla (Taşıtlar modalı ile uyumlu: daha az px, daha çok fr)
     function getColumnWidths(allColumns) {
         const columnWidths = {
-            'sira': '40px',
-            'sube': '90px',
-            'yil': '55px',
-            'marka': '2.5fr',
-            'plaka': '80px',
-            'sanziman': '80px',
-            'km': '70px',
-            'sigorta': '90px',
-            'kasko': '90px',
-            'muayene': '90px',
-            'kredi': '70px',
-            'lastik': '70px',
-            'utts': '60px',
-            'takip': '70px',
+            // Temel sütunlar - Taşıtlar formatı: 40px 70px 3.5fr 60px 65px 2fr (toplam: 235px + 5.5fr)
+            'sira': '35px',         // Sadece numara, dar
+            'sube': '1.5fr',        // Esnek, şube adları
+            'yil': '50px',          // Yıl: 4 rakam
+            'marka': '3fr',         // En geniş, marka/model
+            'plaka': '80px',        // Plaka numaraları
+            'sanziman': '1fr',      // Esnek: Manuel/Otomatik
+            'km': '70px',           // KM değerleri
+            // Detay sütunları - daha dar, bazıları esnek
+            'sigorta': '0.8fr',
+            'kasko': '0.8fr',
+            'muayene': '0.8fr',
+            'kredi': '60px',
+            'lastik': '60px',
+            'utts': '55px',
+            'takip': '60px',
             'tramer': '60px',
-            'boya': '70px',
-            'kullanici': '90px',
-            'tescil': '90px'
+            'boya': '60px',
+            'kullanici': '0.9fr',
+            'tescil': '0.8fr'
         };
 
-        return allColumns.map(col => columnWidths[col.key] || '80px').join(' ');
+        return allColumns.map(col => columnWidths[col.key] || '70px').join(' ');
     }
 
     // Sütun başlık satırı oluştur
